@@ -1706,6 +1706,21 @@ $("#me").onclick = async e => {
     compareList=[]; updateCompareBar();
     put("ab_sess",null); loadFavs(); view="all";
   }
+  else if(b.dataset.v=="admin"){
+    if(view === 'admin') {
+      view = 'all'; 
+      adminTab = 'all';
+      toast("از پنل مدیریت خارج شدید.");
+    } else {
+      view = 'admin'; 
+      adminTab = 'all';
+      toast("به پنل مدیریت وارد شدید.");
+    }
+    cat=0; wholesaleCat=0; currentPage=1; wholesaleCurrentPage=1; 
+    $("#me").close();
+    draw();
+    return;
+  }
   else view=b.dataset.v;
   if(b.dataset.v==="all"){
     $("#q").value=""; $("#pmin").value=""; $("#pmax").value="";
