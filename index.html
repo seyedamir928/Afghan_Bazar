@@ -6,10 +6,10 @@
 <title>افغان‌بازار | عمده، پرچون، امتیازدهی، نقشه شعاعی و مقایسه کالاها</title>
 <meta name="description" content="پلتفرم پیشرفته آگهی‌های عمده و پرچون در ۳۴ ولایت افغانستان با امتیازدهی، نقشه شعاعی و مقایسه کالاها">
 <meta name="theme-color" content="#0e7a4b">
-<meta property="og:title" content="افغان‌بازار | آگهی‌های عمده و پرچون"><meta property="og:description" content="خرید و فروش در ۳۴ ولایت افغانستان با فروشگاه‌های رسمی، نقشه شعاعی و مقایسه کالاها.">
+<meta property="og:title" content="افغان‌بازار | آگهی‌های عمده و پرچون"><meta property="og:description" content="خرید و فروش در ۳۴ ولایت افغانستان با امتیازدهی، نقشه شعاعی و مقایسه کالاها">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🛒%3C/text%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <!-- Supabase JS (برای سیستم پیامک) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -21,7 +21,7 @@ body{margin:0;background:var(--bg);color:var(--tx);font-family:Vazirmatn,Tahoma,
 button,input,select,textarea{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--gd);outline-offset:2px}
 
-header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card) 95%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:8px 16px;gap:10px}
+header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card) 95%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:8px 14px;gap:10px}
 .header-right{display:flex;align-items:center;flex-shrink:0;gap:4px}
 .header-province-selector{display:flex;align-items:center;background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:2px 4px;gap:2px}
 .header-province-selector span{font-size:11px;color:var(--mu);white-space:nowrap}
@@ -30,7 +30,7 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card)
 .notif-badge{position:absolute;top:-4px;right:-4px;background:#d6324a;color:#fff;font-size:9px;padding:1px 4px;border-radius:99px;font-weight:bold;}
 .header-center{display:flex;align-items:center;justify-content:center;flex:0 0 auto;text-align:center}
 .brand-group{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:var(--tx);cursor:pointer}
-.logo-box{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:var(--gd);display:grid;place-items:center;font-size:13px;font-weight:bold;box-shadow:var(--sh)}
+.logo-box{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:var(--gd);display:grid;place-items:center;font-size:13px;font-weight:bold;box-shadow:0 8px 20px rgba(14,122,75,.3)}
 .brand-title{font-weight:800;font-size:11px;letter-spacing:-0.3px;line-height:1.1}
 .brand-title span,.brand-title b{color:var(--ac)}
 .header-left{display:flex;align-items:center;flex-shrink:0}
@@ -41,7 +41,7 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card)
 .capsule-btn.primary{background:var(--ac);color:#fff}
 .capsule-btn.primary:hover{background:#0a5e3a}
 
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:65px;background:var(--card);border-top:1px solid var(--bd);display:flex;z-index:120;box-shadow:0 -4px 20px rgba(0,0,0,.08);padding-bottom:calc(10px + env(safe-area-inset-bottom, 0px));}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:65px;background:var(--card);border-top:1px solid var(--bd);display:flex;z-index:120;box-shadow:0 -4px 20px rgba(0,0,0,.08);padding-bottom:calc(env(safe-area-inset-bottom, 0px) + 4px)}
 .bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:none;border:0;cursor:pointer;color:var(--mu);font-size:11px;font-weight:600;gap:2px;transition:color .15s, background .15s}
 .bnav-item span.icon{font-size:17px;line-height:1}
 .bnav-item.active{color:var(--ac);background:var(--chip)}
@@ -76,7 +76,7 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card)
 .tile span{display:block;font-size:28px;line-height:1.4}
 .tile:hover{transform:translateY(-3px)}
 .cities { display: flex; flex-wrap: wrap; gap: 8px; }
-.ccity { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--bd); background: var(--card); border-radius: 12px; padding: 6px 14px; cursor: pointer; font-size: 13px; color:var(--tx); }
+.ccity { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--bd); background: var(--card); border-radius: 12px; padding: 6px 14px; cursor: pointer; font-size: 13px; color:var(--tx); transition:transform .15s, border-color .15s; }
 .ccity:hover { border-color: var(--ac); transform: translateY(-2px); }
 .ccity span { background: var(--chip); color: var(--ac); border-radius: 8px; padding: 1px 8px; font-size: 11px; font-weight: 700; }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tile{background:hsl(var(--h) 28% 19%);color:var(--tx)}}
@@ -91,7 +91,7 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card)
 .wholesale-cat.on{background:#1b3b6f!important;border-color:#1b3b6f!important;color:#fff!important}
 
 .layout{display:grid;grid-template-columns:230px 1fr;gap:24px;margin-top:6px}
-.filters{align-self:start;position:sticky;top:72px;font-size:13px;background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:14px;box-shadow:var(--sh);max-height:calc(100vh - 90px);overflow:auto}
+.filters{align-self:start;position:sticky;top:72px;font-size:13px;background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:14px;box-shadow:var(--sh);max-height:calc(100vh - 90px);overflow-y:auto}
 .filters h3{margin:0 0 4px;font-size:13px}
 .filters label{display:block;color:var(--mu);margin:12px 0 4px;font-size:12px}
 .filters input[type=number], .filters select{width:100%;border:1px solid var(--bd);background:var(--bg);border-radius:10px;padding:6px 10px;font-size:13px}
@@ -107,7 +107,7 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card)
 .bar-actions {display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}
-.ad{background:var(--card);border:1px solid var(--bd);border-radius:16px;overflow:hidden;cursor:pointer;display:block;text-align:right;position:relative;box-shadow:var(--sh);transition:transform .15s ease, border-color .15s ease}
+.ad{background:var(--card);border:1px solid var(--bd);border-radius:16px;overflow:hidden;cursor:pointer;display:block;text-align:right;position:relative;box-shadow:var(--sh);transition:transform .15s,border-color .15s}
 .ad:hover{transform:translateY(-4px);border-color:var(--ac)}
 .ph{aspect-ratio:4/3;background:linear-gradient(135deg,hsl(var(--h,150) 75% 92%),hsl(calc(var(--h,150) + 28) 70% 83%));display:grid;place-items:center;font-size:46px;position:relative;overflow:hidden}
 .ph img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
@@ -148,7 +148,7 @@ dialog input,dialog select,dialog textarea{width:100%;border:1px solid var(--bd)
 .tabs{display:flex;gap:16px;margin:8px 0 0;border-bottom:1px solid var(--bd)}
 .tabs button{background:none;border:0;padding:6px 0;cursor:pointer;color:var(--mu);border-bottom:2px solid transparent;font-size:13px}
 .tabs button.on{color:var(--ac);border-color:var(--ac);font-weight:600}
-.mtabs{display:flex;gap:16px;margin:8px 0 0;border-bottom:1px solid var(--bd)}.mtabs button{background:none;border:0;padding:6px 0;cursor:pointer;color:var(--mu);border-bottom:2px solid transparent;font-size:13px}.mtabs button.on{color:var(--ac);border-color:var(--ac);font-weight:600}
+.mtabs{display:flex;gap:16px;margin:8px 0 0;border-bottom:1px solid var(--bd)}.mtabs button{background:none;border:0;padding:6px 0;cursor:pointer;color:var(--mu);border-bottom:2px solid transparent;font-size:13px}
 .menu button{display:block;width:100%;text-align:right;background:none;border:0;border-bottom:1px solid var(--bd);padding:11px 0;cursor:pointer;font-size:13px}
 .err{color:#d6324a;font-size:12px;min-height:18px;margin-top:6px}
 .toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:8px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .2s ease}
@@ -173,7 +173,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
 .preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(65px, 1fr)); gap: 8px; margin-top: 8px; }
 .preview-item { position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; border: 1px solid var(--bd); background: var(--card); }
 .preview-item img { width: 100%; height: 100%; object-fit: cover; }
-.preview-item .del-img { position: absolute; top: 2px; left: 2px; background: rgba(0,0,0,0.6); color: #fff; border: 0; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; display: grid; place-items:center; }
+.preview-item .del-img { position: absolute; top: 2px; left: 2px; background: rgba(0,0,0,0.6); color: #fff; border: 0; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; display: grid; place-items:center; cursor:pointer; }
 .preview-item .badge-type { position: absolute; bottom: 2px; right: 2px; background: var(--ac); color: #fff; font-size: 8px; padding: 1px 3px; border-radius: 4px; }
 
 .thumbs-row{display:flex;gap:6px;overflow-x:auto;margin-top:8px;padding-bottom:4px}
@@ -186,12 +186,12 @@ dialog#add[open] { display: flex; flex-direction: column; }
 .pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .badge-verified { background: #0e7a4b; color: #fff; font-size: 11px; padding: 2px 7px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; }
-.seller-card { background: var(--bg); border: 1px solid var(--bd); border-radius: 12px; padding: 12px; margin-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; } 
+.seller-card { background: var(--bg); border: 1px solid var(--bd); border-radius: 12px; padding: 12px; margin-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap:wrap; gap:8px; }
 .seller-card > div:first-child { min-width: 0; flex: 1; }
 .seller-card > div:first-child b { word-break: break-word; }
 .stat-box { display: flex; gap: 12px; font-size: 12px; color: var(--mu); margin-top: 6px; }
 
-.shop-banner { background: linear-gradient(135deg, var(--ac2), var(--ac)); color: #fff; padding: 16px; border-radius: 14px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+.shop-banner { background: linear-gradient(135deg, var(--ac2), var(--ac)); color: #fff; padding: 16px; border-radius: 14px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 .shop-banner h3 { margin: 0; font-size: 18px; }
 .shop-banner p { margin: 4px 0 0; opacity: 0.85; font-size: 12px; }
 
@@ -200,7 +200,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
 #map-picker-container { width: 100%; height: 200px; border-radius: 10px; border: 1px solid var(--bd); margin-top: 6px; z-index: 10; }
 #radius-map-container { width: 100%; height: 240px; border-radius: 10px; border: 1px solid var(--bd); margin-top: 6px; z-index: 10; }
 
-.compare-floating-bar { position: fixed; bottom: calc(75px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%); background: var(--card); border: 2px solid var(--ac); border-radius: 14px; padding: 8px 12px; display:none; align-items:center; gap:10px; box-shadow:var(--sh); z-index:130; }
+.compare-floating-bar { position: fixed; bottom: calc(75px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%); background: var(--card); border: 2px solid var(--ac); border-radius: 999px; padding: 8px 12px; display: none; gap: 10px; align-items:center; box-shadow: var(--sh); z-index:150; }
 .compare-floating-bar.active { display: flex; }
 
 .multi-province-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 6px; max-height: 130px; overflow-y: auto; background: var(--bg); border: 1px solid var(--bd); border-radius: 10px; padding: 8px; }
@@ -217,7 +217,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
   .hero, .wholesale-hero{padding:28px 14px 58px}
   .wrap{padding:0 12px}
   .layout{grid-template-columns:1fr;gap:0}
-  .filters{display:none;position:fixed;top:60px;left:10px;right:10px;bottom:calc(75px + env(safe-area-inset-bottom, 0px));z-index:250;max-height:none;box-shadow:0 15px 50px rgba(0,0,0,.4);border-radius:18px;}
+  .filters{display:none;position:fixed;top:60px;left:10px;right:10px;bottom:calc(75px + env(safe-area-inset-bottom, 0px));z-index:250;max-height:none;box-shadow:0 15px 50px rgba(0,0,0,.4);border-radius:16px;}
   .filters.o{display:block}
   .fbtn{display:inline-block}
   .filter-mobile-close { display: flex !important; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--bd); padding-bottom: 8px; margin-bottom: 10px; font-weight: 700; }
@@ -230,6 +230,28 @@ dialog#add[open] { display: flex; flex-direction: column; }
 .filter-mobile-close { display: none; }
 :root[data-theme="dark"]{--bg:#0b110e;--card:#151d18;--tx:#eaf2ed;--mu:#93a39a;--bd:#25322b;--chip:#1d2923;--ac:#37b676;--ac2:#0a3322;--on:#06130c;--hl:#37b676;--sh:none}
 :root[data-theme="dark"] .tile{background:hsl(var(--h) 28% 19%);color:var(--tx)}
+
+/* =========================================
+   🛡️ استایل اختصاصی پنل ادمین
+   ========================================= */
+.admin-dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 15px; }
+.admin-stat-card { background: var(--card); border: 1px solid var(--bd); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: var(--sh); position: relative; overflow: hidden; }
+.admin-stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+.admin-stat-card.users::before { background: #3b82f6; }
+.admin-stat-card.ads::before { background: #10b981; }
+.admin-stat-card.pending::before { background: #f59e0b; }
+.admin-stat-card b { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
+.admin-stat-card span { font-size: 12px; color: var(--mu); }
+.admin-tabs-container { display: flex; gap: 8px; overflow-x: auto; margin-bottom: 16px; padding-bottom: 4px; border-bottom: 1px solid var(--bd); }
+.admin-tab { background: none; border: none; padding: 8px 16px; font-size: 13px; font-weight: 600; color: var(--mu); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; }
+.admin-tab:hover { color: var(--tx); }
+.admin-tab.active { color: var(--ac); border-bottom-color: var(--ac); }
+.admin-action-btn { padding: 6px 12px; font-size: 11px; font-weight: 700; border-radius: 8px; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 4px; transition: transform 0.1s; }
+.admin-action-btn:hover { transform: scale(1.05); }
+.admin-action-btn.approve { background: #d1fae5; color: #065f46; }
+.admin-action-btn.reject { background: #fee2e2; color: #991b1b; }
+:root[data-theme="dark"] .admin-action-btn.approve { background: #064e3b; color: #34d399; }
+:root[data-theme="dark"] .admin-action-btn.reject { background: #7f1d1d; color: #f87171; }
 </style>
 </head>
 <body>
@@ -338,7 +360,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
       <div class="step"><b>۳</b><h3>تماس یا چت</h3><p>خریداران مستقیماً از طریق چت یا تماس با شما ارتباط می‌گیرند.</p></div></div></div>
     <div class="safe"><h2>🛡️ نکات خرید امن</h2>
       <div>پیش از پرداخت بیعانه، کالا را حضوری بررسی کنید.</div><div>برای محل ملاقات، مکان‌های عمومی و پرتردد انتخاب کنید.</div>
-      <div>هرگز پول پیش از تحویل کالا کارت‌به‌کارت نکنید.</div><div>قیمت بسیار پایین‌تر از نرخ بازار نشانه‌ی احتیاط و بررسی بیشتر است.</div>
+      <div>هرگز پول پیش از تحویل کالا کارت‌به‌کارت نکنید.</div><div>قیمت بسیار پایین‌تر از نرخ بازار نشانه‌ی احتیاط و بررسی دقیق است.</div>
   </div>
 </div>
 
@@ -376,7 +398,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
   <button class="capsule-btn" id="clear-compare-btn" style="padding:4px 6px;font-size:11px;color:#d6324a;">پاک‌کردن</button>
 </div>
 
-<footer><b>افغان‌بازار</b> — بازار آگهی‌های رایگان افغانستان (نقشه شعاعی و مقایسه کالاها)<br>نسخه ۲۴<br><button class="link" id="terms-btn" style="margin-top:10px;">قوانین و حریم خصوصی</button></footer>
+<footer><b>افغان‌بازار</b> — بازار آگهی‌های رایگان افغانستان (نقشه شعاعی و مقایسه کالاها)<br>نسخه ۲۴<br><button class="link" id="terms-btn">قوانین و حریم خصوصی</button></footer>
 
 <nav class="bottom-nav">
   <button class="bnav-item active" data-target="retail">
@@ -404,7 +426,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
 <dialog id="radius-dlg">
   <div class="dialog-content-pad">
     <h2>📍 تنظیم جستجوی شعاعی روی نقشه</h2>
-    <div class="mu" style="font-size:12px;margin-bottom:8px;">روی نقطه دلخواه در نقشه کلیک کنید یا شعاع جستجو را تغییر دهید تا فقط آگهی‌های نزدیک به مکان شما نمایش داده شوند.</div>
+    <div class="mu" style="font-size:12px;margin-bottom:8px;">روی نقطه دلخواه در نقشه کلیک کنید یا شعاع جستجو را تغییر دهید تا فقط آگهی‌های نزدیک نمایش داده شوند.</div>
     <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px;">
       <label for="radius-slider" style="margin:0;font-size:12px;white-space:nowrap;">شعاع (ک‌م):</label>
       <input id="radius-slider" type="range" min="5" max="200" step="5" value="50" style="flex:1;">
@@ -542,7 +564,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
 
     <label for="f-p" style="margin-top:10px;" id="price-label-text">قیمت (افغانی، ۰ = توافقی)</label>
     <input id="f-p" type="number" min="0" inputmode="numeric" placeholder="مثلاً: ۸۵۰۰۰۰">
-    <div style="display:flex;gap:8px;align-items:center;margin-top:6px;"><select id="f-cur" style="flex:1"><option value="AFN">افغانی</option><option value="USD">دلار</option></select><label class="chk" style="margin:0;white-space:nowrap;"><input type="checkbox" id="f-neg"> قابل مذاکره</label></div>
+    <div style="display:flex;gap:8px;align-items:center;margin-top:6px;"><select id="f-cur" style="flex:1"><option value="AFN">افغانی</option><option value="USD">دلار</option></select><label class="chk" style="margin:0;flex:0 0 auto;"><input type="checkbox" id="f-neg"> قابل مذاکره</label></div>
 
     <div style="margin-top:12px; background:var(--bg); border:1px solid var(--bd); padding:10px; border-radius:10px;" id="shop-box-container">
       <h4 style="margin:0 0 6px; font-size:13px; color:var(--ac);" id="shop-box-title">🚀 ابزارهای تجاری و فروشگاهی</h4>
@@ -574,7 +596,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
 <dialog id="terms-dlg"><div class="dialog-content-pad"><h2>قوانین و حریم خصوصی</h2><div style="font-size:13px;line-height:2">
 <b>اقلام ممنوعه:</b> سلاح و مهمات، مواد مخدر، اسناد و تذکره، کالای دزدی، اقلام تاریخی قاچاق و هر کالای خلاف قانون.<br>
 <b>مسئولیت:</b> افغان‌بازار فقط محل نمایش آگهی است؛ بررسی کالا و معامله به عهده خریدار و فروشنده است.<br>
-<b>حریم خصوصی:</b> شماره موبایل برای ورود با پیامک و نمایش در آگهی‌های شما استفاده می‌شود. کد پیامک و اطلاعات شخصی شما فقط برای احراز هویت و تماس‌های ضروری به‌کار می‌رود.<br>
+<b>حریم خصوصی:</b> شماره موبایل برای ورود با پیامک و نمایش در آگهی‌های شما استفاده می‌شود. کد پیامک و اطلاعات شخصی شما فقط برای احراز هویت و ارتباطات لازم نگهداری می‌شود.<br>
 <div class="row"><button class="capsule-btn primary" id="close-terms">متوجه شدم</button></div></div></dialog>
 <div class="toast" id="toast" role="status"></div>
 
@@ -586,9 +608,10 @@ let supabaseClient = null;
 try {
   if (window.supabase) supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 } catch(e) { console.error("خطا در اتصال به سرور:", e); }
+const sb = () => supabaseClient;
 
-const cats=[["همه","🗂️"],["املاک","🏠"],["وسایل نقلیه","🚗"],["موبایل و تبلت","📱"],["کمپیوتر و لپ‌تاپ","💻"],["لوازم خانگی","🏡"],["کالای شخصی و پوشاک","👕"],["مبلمان و دکوراسیون","🛋️"],["صنعت و ماشین‌آلات","🏭"],["خدمات و کسب‌وکار","💼"],["حیوانات و کشاورزی","🐄"],["وسایل ورزشی","🏅"]];
-const wholesaleCats=[["همه عمده","📦"],["مواد غذایی و خواربار عمده (برنج، روغن، آرد)","🌾"],["خشکبار و میوه خشک تناژ بالا (کشمش، بادام)","🥭"],["لوازم الکترونیکی و موبایل عمده","📱"],["پوشاک و البسه عمده","👕"],["لوازم خانگی و آشپزخانه","🏠"],["مواد ساختمانی و ابزار","🧰"],["کود و سموم کشاورزی","🌱"],["لوازم اداری و چاپ","🖨️"],["تجهیزات و ملزومات رستوران","🍽️"]];
+const cats=[["همه","🗂️"],["املاک","🏠"],["وسایل نقلیه","🚗"],["موبایل و تبلت","📱"],["کمپیوتر و لپ‌تاپ","💻"],["لوازم خانگی","🏡"],["لوازم شخصی و زیبایی","💄"],["مبلمان و دکور","🪑"],["خدمات و کسب‌وکار","🧰"],["مواد غذایی و آشپزی","🍲"],["کتاب و وسایل آموزشی","📚"],["ورزشی و تفریحی","🏅"],["حیوانات و باغچه","🐄"]];
+const wholesaleCats=[["همه عمده","📦"],["مواد غذایی و خواربار عمده (برنج، روغن، آرد)","🌾"],["خشکبار و میوه خشک تناژ بالا (کشمش، توت خشک)","🥭"],["لوازم الکترونیکی و موبایل عمده","📱"],["پوشاک و پارچه عمده","👕"],["آرایشی و بهداشتی عمده","🧴"],["دکور و لوازم خانه عمده","🏠"],["مواد شوینده و بهداشتی عمده","🧼"],["محصولات کشاورزی و دانه‌ها","🌱"],["لوازم اداری و چاپ","🖨️"]];
 
 const provinceCoords = [
   {name: "کابل", lat: 34.5553, lng: 69.2075},
@@ -629,18 +652,18 @@ const provinceCoords = [
 const cities = provinceCoords.map(p => p.name);
 
 const seed=[
-  {id:"s0", t:"خانه دو منزله در شهرک ۱۵", c:1, ci:0, p:6500000, d:"چهار اتاق، حویلی و چاه آب. سند شرعی دارد.", age:1, u:1, ph:"0770011223", imgs:[], views:142, calls:11, cond:"new", sellerName:"خانم احمدی", verified:true, isShop:false, isWholesale:false, cur:"AFN", lat:34.5553, lng:69.2075, owner:"demo"},
-  {id:"s1", t:"تویوتا کرولا، مدل ۲۰۱۲", c:2, ci:1, p:850000, d:"موتر پاک و سالم، گمرک‌شده، کارکرد کم.", age:2, u:0, ph:"0791122334", imgs:[], views:210, calls:25, cond:"used", sellerName:"عبدالله", verified:true, isShop:false, isWholesale:false, cur:"AFN", lat:34.3529, lng:62.2040, owner:"demo"},
-  {id:"s2", t:"سامسونگ گلکسی A54", c:3, ci:0, p:14500, d:"۱۲۸ گیگ، یک ماه کارکرده، همراه جعبه.", age:3, u:0, ph:"0782233445", imgs:[], views:310, calls:18, cond:"used", sellerName:"فرید", verified:true, isShop:false, isWholesale:false, cur:"AFN", lat:34.5667, lng:69.2175, owner:"demo"},
-  {id:"s3", t:"لپ‌تاپ HP، رم ۸", c:4, ci:2, p:32000, d:"حافظه ۲۵۶ گیگ SSD، کارتن دارد.", age:9, u:0, ph:"0703344556", imgs:[], views:75, calls:4, cond:"used", sellerName:"احمد", verified:false, isShop:false, isWholesale:false, cur:"AFN", lat:36.7062, lng:67.1106, owner:"demo"},
-  {id:"w1", t:"کارتن عمده گوشی‌های شیائومی (تعداد ۵۰ عددی)", c:3, ci:0, p:650000, d:"فروش عمده و مستقیم کارتن گوشی شیائومی رد-متعادل.", age:1, u:1, ph:"0779988776", imgs:[], views:66, calls:7, cond:"new", sellerName:"شرکت پخش افغان", verified:true, isShop:true, isWholesale:true, wholesaleCat:4, cur:"AFN", provinces:[0,1,2], owner:"demo"},
-  {id:"w2", t:"برنج اعلای پاکستانی تناژ بالا (کیسه ۵۰ کیلویی)", c:9, ci:1, p:3800, d:"فروش تناژ بالا برای فروشگاه‌ها و مارکت‌ها.", age:2, u:1, ph:"0796655443", imgs:[], views:101, calls:14, cond:"new", sellerName:"تجارت ملی", verified:true, isShop:true, isWholesale:true, wholesaleCat:1, cur:"AFN", provinces:[1,2,3], owner:"demo"}
-].map(a => ({...a, views: a.views || 45, calls: a.calls || 3, cond: a.cond || 'used', sellerName: a.sellerName || 'کاربر بازار', verified: a.verified !== undefined ? a.verified : true, isShop: !!a.isShop, isWholesale: !!a.isWholesale, cur: a.cur || 'AFN', status: a.status || 'approved'}));
+  {id:"s0", t:"خانه دو منزله در شهرک ۱۵", c:1, ci:0, p:6500000, d:"چهار اتاق، حویلی و چاه آب. سند شرعی دارد.", age:1, u:1, ph:"0770011223", imgs:[], views:160, calls:12, cond:"used", sellerName:"کاربر بازار", verified:true, isShop:false, isWholesale:false, cur:"AFN", status:"approved"},
+  {id:"s1", t:"تویوتا کرولا، مدل ۲۰۱۲", c:2, ci:1, p:850000, d:"موتر پاک و سالم، گمرک‌شده، کارکرد کم.", age:2, u:0, ph:"0791122334", imgs:[], views:210, calls:20, cond:"used", sellerName:"کاربر بازار", verified:true, isShop:false, isWholesale:false, cur:"AFN", status:"approved"},
+  {id:"s2", t:"سامسونگ گلکسی A54", c:3, ci:0, p:14500, d:"۱۲۸ گیگ، یک ماه کارکرده، همراه جعبه.", age:3, u:0, ph:"0782233445", imgs:[], views:310, calls:18, cond:"used", sellerName:"کاربر بازار", verified:true, isShop:false, isWholesale:false, cur:"AFN", status:"approved"},
+  {id:"s3", t:"لپ‌تاپ HP، رم ۸", c:4, ci:2, p:32000, d:"حافظه ۲۵۶ گیگ SSD، کارتن دارد.", age:9, u:0, ph:"0703344556", imgs:[], views:75, calls:4, cond:"used", sellerName:"کاربر بازار", verified:true, isShop:false, isWholesale:false, cur:"AFN", status:"approved"},
+  {id:"w1", t:"کارتن عمده گوشی‌های شیائومی (تعداد ۵۰ عددی)", c:3, ci:0, p:650000, d:"فروش عمده و مستقیم کارتن گوشی شیائومی رد-مت��، مناسب فروشگاه‌ها و مغازه‌ها.", age:1, u:1, ph:"0790001111", imgs:[], views:120, calls:7, cond:"new", sellerName:"پخش افغان", verified:true, isShop:true, isWholesale:true, cur:"AFN", unit:"کارتن", wholesalecat:1, provinces:[0,1], status:"approved"},
+  {id:"w2", t:"برنج اعلای پاکستانی تناژ بالا (کیسه ۵۰ کیلویی)", c:9, ci:1, p:3800, d:"فروش تناژ بالا برای فروشگاه‌ها و مارکت‌ها، کیفیت عالی.", age:2, u:0, ph:"0781002200", imgs:[], views:95, calls:6, cond:"new", sellerName:"تجارت آریا", verified:true, isShop:true, isWholesale:true, cur:"AFN", unit:"کیسه", wholesalecat:1, provinces:[1,2], status:"pending"}
+].map(a => ({...a, views: a.views || 45, calls: a.calls || 3, cond: a.cond || 'used', sellerName: a.sellerName || 'کاربر بازار', verified: a.verified !== undefined ? a.verified : true, isShop: !!a.isShop, isWholesale: !!a.isWholesale, status: a.status || 'approved', whCategory: a.whCategory || a.wholesalecat || 0 }));
 
 const $=s=>document.querySelector(s),nf=n=>n.toLocaleString("fa-IR"),fmt=n=>n?nf(n)+" افغانی":"توافقی";
 const esc=s=>{const d=document.createElement("div");d.textContent=(s==null)?"":String(s);return d.innerHTML};
 const ago=h=>h<2?"چند دقیقه پیش":h<24?nf(Math.floor(h))+" ساعت پیش":h<48?"دیروز":nf(Math.floor(h/24))+" روز پیش";
-const mem={};const S=(()=>{try{localStorage.setItem("__ab_test__","1");localStorage.removeItem("__ab_test__");return localStorage}catch(e){return{getItem:k=>mem[k]??null,setItem:(k,v)=>{mem[k]=v},removeItem:k=>{delete mem[k]}}}})();
+const mem={};const S=(()=>{try{localStorage.setItem("__ab_test__","1");localStorage.removeItem("__ab_test__");return localStorage}catch(e){return{getItem:k=>mem[k]??null,setItem:(k,v)=>{mem[k]=v},removeItem:k=>delete mem[k]}}})();
 const get=(k,d)=>{try{return JSON.parse(S.getItem(k))??d}catch(e){return d}},put=(k,v)=>{try{S.setItem(k,JSON.stringify(v));return true}catch(e){console.warn("ذخیره‌سازی انجام نشد.",e);return false}};
 const normDigits=s=>String(s??"").replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d));
 const normFa=s=>normDigits(s).replace(/ي/g,"ی").replace(/ك/g,"ک").replace(/[\u064B-\u065F\u200c]/g,"").toLowerCase();
@@ -663,6 +686,7 @@ let notifications=Array.isArray(get(UK("ab_notifs"),[]))?get(UK("ab_notifs"),[])
 let cat=0,wholesaleCat=0,view="all",mode="in",after=null;
 let currentPage=1, wholesaleCurrentPage=1, itemsPerPage=8;
 let currentAppTab = "retail";
+let adminTab = 'all';
 let compareList = [];
 let radiusFilterActive = false;
 let radiusCenterLat = 34.5553;
@@ -735,11 +759,57 @@ function drawCats(){
   $("#wholesale-cats").innerHTML=wholesaleCats.map((x,i)=>`<button class="cat wholesale-cat ${i==wholesaleCat?'on':''}" data-i="${i}" role="tab" aria-selected="${i==wholesaleCat}"><i>${x[1]}</i>${x[0]}</button>`).join("");
 }
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("s");setTimeout(()=>t.classList.remove("s"),2200)}
-function getShopAverageRating(ownerPhone) { const revs = shopReviews[ownerPhone] || []; if(revs.length === 0) return { avg: "—", count: 0 }; const sum = revs.reduce((acc, r) => acc + r.rating, 0); return { avg: (sum / revs.length).toFixed(1), count: revs.length }; }
+function getShopAverageRating(ownerPhone) { const revs = shopReviews[ownerPhone] || []; if(revs.length === 0) return { avg: "—", count: 0 }; const sum = revs.reduce((acc, r) => acc + r.rating, 0); const avg = (sum / revs.length).toFixed(1); return { avg, count: revs.length }; }
 function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
   var R = 6371; var dLat = deg2rad(lat2-lat1); var dLon = deg2rad(lon2-lon1); var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon/2) * Math.sin(dLon/2); var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); return R * c;
 }
 function deg2rad(deg) { return deg * (Math.PI/180); }
+
+function renderReports(){
+  const box = document.createElement('div');
+  box.id = 'admin-reports-box';
+  box.style.cssText = 'background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px;margin-top:10px;';
+  box.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+      <h3 style="margin:0;font-size:16px;">🚩 گزارش‌های تخلف</h3>
+      <span class="mu">برای بررسی و اقدام مدیر</span>
+    </div>
+    <div style="display:grid;gap:8px;">
+      <div style="background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:10px;">
+        <b>گزارش ۱:</b> آگهی «خرید و فروش خودرو» با اطلاعات ناهماهنگ.
+      </div>
+      <div style="background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:10px;">
+        <b>گزارش ۲:</b> استفاده مکرر از شماره تماس نامعتبر.
+      </div>
+    </div>
+  `;
+  $("#list").appendChild(box);
+}
+
+function updateAdStatus(id, status) {
+  const target = mine.find(a => String(a.id) === String(id));
+  if (target) {
+    target.status = status;
+    put('ab_ads', mine);
+  }
+  const seedItem = seed.find(a => String(a.id) === String(id));
+  if (seedItem) seedItem.status = status;
+  toast(status === 'approved' ? 'آگهی تایید شد.' : 'آگهی رد شد.');
+  draw();
+}
+
+document.addEventListener('click', (e) => {
+  const approveBtn = e.target.closest('[data-approve]');
+  if (approveBtn) {
+    updateAdStatus(approveBtn.dataset.approve, 'approved');
+  }
+
+  const rejectBtn = e.target.closest('[data-reject]');
+  if (rejectBtn) {
+    updateAdStatus(rejectBtn.dataset.reject, 'rejected');
+  }
+});
+
 function renderCard(a){
   const mainImg = (Array.isArray(a.imgs) && a.imgs.length > 0) ? a.imgs[0] : (a.img || "");
   const shopRatingInfo = a.isShop ? getShopAverageRating(a.ph) : null;
@@ -757,9 +827,19 @@ function renderCard(a){
     ${a.isWholesale?'<span class="badge wholesale-badge" style="top:10px;left:70px;right:auto;">📦 عمده</span>':(a.isShop?`<span class="badge" style="background:var(--ac);color:#fff;top:10px;left:70px;right:auto;">🏪 رسمی</span>`:'')}
     <button class="fav ${favs.includes(a.id)?'on':''}" data-f="${a.id}" aria-label="نشان‌کردن">${favs.includes(a.id)?'♥':'♡'}</button>
     ${!a.isWholesale ? `<button class="compare-checkbox ${isCompared?'checked':''}" data-comp="${a.id}" aria-label="مقایسه" aria-pressed="${isCompared}" title="افزودن به مقایسه">✓</button>` : ''}
-    <div class="i"><b>${esc(a.t)}</b><div class="price">${fmtAd(a)}</div><div class="mu">${ago(a.age)} · ${locLabel}</div>${(view==="mine"||view==="admin")?`<div class="mu" style="margin-top:4px;">${a.status ? (a.status==='pending'?'در انتظار تایید':(a.status==='rejected'?'رد شده':'تأیید شده')) : 'تأیید شده'}</div>`:''}${a.isShop && shopRatingInfo ? `<div class="mu" style="margin-top:4px;">⭐ ${shopRatingInfo.avg} (${shopRatingInfo.count} نظر)</div>` : ''}</div>
+    <div class="i"><b>${esc(a.t)}</b><div class="price">${fmtAd(a)}</div><div class="mu">${ago(a.age)} · ${locLabel}</div>${(view==="mine"||view==="admin")?`<div class="mu" style="margin-top:4px;">${a.owner?`مالک: ${esc(users[a.owner]?.name || 'کاربر')}`:'مالک: بازار'}</div>`:''}${a.isShop && shopRatingInfo ? `<div class="mu" style="margin-top:4px;">امتیاز فروشگاه: ${shopRatingInfo.avg} ★</div>` : ''}
+    ${view==="admin"?`<div style="margin-top:8px;display:flex;gap:6px;align-items:center;flex-wrap:wrap;border-top:1px dashed var(--bd);padding-top:8px;">
+      <span style="font-size:10px;padding:3px 8px;border-radius:6px;font-weight:bold;background:${(a.status||"approved")==="approved"?"#e0f2fe":((a.status||"approved")==="pending"?"#fef3c7":"#fee2e2")};color:${(a.status||"approved")==="approved"?"#0369a1":((a.status||"approved")==="pending"?"#92400e":"#991b1b")};">
+        ${(a.status||"approved")==="approved"?"✓ منتشرشده":((a.status||"approved")==="pending"?"⏳ در انتظار":"✕ رد شده")}
+      </span>
+      ${!seed.some(x=>String(x.id)===String(a.id))?
+        `${(a.status||"approved")!="approved"?`<button class="admin-action-btn approve" data-approve="${a.id}">✅ تایید</button>`:''}
+         ${(a.status||"approved")!="rejected"?`<button class="admin-action-btn reject" data-reject="${a.id}">❌ رد</button>`:''}`
+        :`<span style="font-size:10px;color:var(--mu);">نمونه</span>`}
+    </div>`:''}
   </div>`;
 }
+
 function draw(){
   const q=$("#q").value.trim(),city=+$("#header-city-select").value,s=$("#sort").value;
   const pminV = $("#pmin").value, pmaxV = $("#pmax").value;
@@ -798,22 +878,48 @@ function draw(){
   });
 
   if(view=="admin"){ 
-    r = allAds; 
+    if(adminTab === 'pending') r = allAds.filter(a => (a.status||"approved") === "pending");
+    else if(adminTab === 'rejected') r = allAds.filter(a => (a.status||"approved") === "rejected");
+    else r = allAds;
+
     setTimeout(async () => {
-      renderReports();
+      const box = $("#dynamic-shop-banner");
+      let bannerHTML = '';
       if(sb() && adminFlag) {
         const { data } = await sb().rpc('get_admin_stats');
         if(data) {
-          $("#dynamic-shop-banner").innerHTML = `
-            <div class="shop-banner" style="justify-content:space-around; margin-bottom:10px; background:linear-gradient(135deg, #1b3b6f, #152c48);">
-              <div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(data.users)}</b><span style="font-size:11px;">کل کاربران</span></div>
-              <div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(data.ads)}</b><span style="font-size:11px;">کل آگهی‌ها</span></div>
-              <div style="text-align:center;"><b style="font-size:20px;display:block;color:#ffc107;">${nf(data.pending)}</b><span style="font-size:11px;">در انتظار تایید</span></div>
+          bannerHTML += `
+            <div class="admin-dashboard-grid">
+              <div class="admin-stat-card users"><b>${nf(data.users)}</b><span>کل کاربران</span></div>
+              <div class="admin-stat-card ads"><b>${nf(data.ads)}</b><span>کل آگهی‌ها</span></div>
+              <div class="admin-stat-card pending"><b>${nf(data.pending)}</b><span>در انتظار تایید</span></div>
             </div>
           `;
         }
       }
-    }, 50); 
+      bannerHTML += `
+        <div class="admin-tabs-container">
+          <button class="admin-tab ${adminTab==='all'?'active':''}" data-atab="all">همه آگهی‌ها</button>
+          <button class="admin-tab ${adminTab==='pending'?'active':''}" data-atab="pending">⏳ در انتظار تایید</button>
+          <button class="admin-tab ${adminTab==='rejected'?'active':''}" data-atab="rejected">✕ رد شده‌ها</button>
+          <button class="admin-tab ${adminTab==='reports'?'active':''}" data-atab="reports">🚩 گزارش‌های تخلف</button>
+        </div>
+      `;
+      box.innerHTML = bannerHTML;
+      box.querySelectorAll('.admin-tab').forEach(t => {
+        t.onclick = (e) => {
+          adminTab = e.target.dataset.atab;
+          currentPage = 1;
+          draw();
+        };
+      });
+      if(adminTab === 'reports') {
+        $("#list").innerHTML = '';
+        $("#pagination").innerHTML = '';
+        renderReports();
+        return;
+      }
+    }, 50);
   }
 
   if(view=="admin"){
@@ -825,7 +931,7 @@ function draw(){
   else if(s=="pop") r.sort((a,b)=>(b.views||0)-(a.views||0));
   else r.sort((a,b)=>a.age-b.age);
 
-  const titleMap = {all:cat?(cats[cat]?.[0]||"همه"):"همه آگهی‌های پرچون", mine:"آگهی‌های من و آمار بازدید", fav:"نشان‌شده‌ها و یادداشت‌ها", admin:"پنل مدیریت", shop:"فروشگاه رسمی من"};
+  const titleMap = {all:cat?(cats[cat]?.[0]||"همه"):"همه آگهی‌های پرچون", mine:"آگهی‌های من و آمار بازدید", fav:"نشان‌شده‌ها و یادداشت‌ها", shop:"فروشگاه رسمی", admin:"پنل مدیریت کل"};
   $("#title").innerHTML = titleMap[view] + `<span>${nf(r.length)} آگهی</span>`;
 
   if(view == "shop" && me && users[me]) {
@@ -844,7 +950,7 @@ function draw(){
         </div>
         <div style="width:100%;background:rgba(255,255,255,0.1);padding:10px;border-radius:10px;font-size:12px;">
           <b>آخرین نظرات مشتریان:</b>
-          ${myRevs.length ? myRevs.map(rv=>`<div style="margin-top:5px;border-top:1px solid rgba(255,255,255,0.2);padding-top:3px;">⭐ ${rv.rating}/5 — <b>${esc(rv.buyer||'کاربر')}:</b> ${esc(rv.text||'')}</div>`).join("") : '<div style="margin-top:5px;">هنوز هیچ بازخوردی ثبت نشده است.</div>'}
+          ${myRevs.length ? myRevs.map(rv=>`<div style="margin-top:5px;border-top:1px solid rgba(255,255,255,0.2);padding-top:3px;">⭐ ${rv.rating}/5 — <b>${esc(rv.buyer||'کاربر')}:</b> ${esc(rv.text||'')}</div>`).join('') : '<div style="margin-top:5px;">هنوز نظری ثبت نشده است.</div>'}
         </div>
       </div>
     `;
@@ -855,7 +961,7 @@ function draw(){
         if(newName) {
           users[me].shopName = newName;
           put("ab_users", users);
-          mine.forEach(ad => { if(ad.owner === me && ad.isShop){ ad.shopName = newName; syncAd(ad); } });
+          mine.forEach(ad => { if(ad.owner === me && ad.isShop){ ad.shopName = newName; } });
           put("ab_ads", mine);
           toast("نام فروشگاه به‌روز شد.");
           draw();
@@ -866,7 +972,7 @@ function draw(){
     const myAds = mine.filter(x=>x.owner===me);
     const tv = myAds.reduce((s,x)=>s+(Number(x.views)||0),0);
     const tc = myAds.reduce((s,x)=>s+(Number(x.calls)||0),0);
-    $("#dynamic-shop-banner").innerHTML = `<div class="shop-banner" style="justify-content:space-around;"><div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(myAds.length)}</b><span style="font-size:11px;">کل آگهی‌های من</span></div><div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(tv)}</b><span style="font-size:11px;">بازدید</span></div><div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(tc)}</b><span style="font-size:11px;">تماس</span></div></div>`;
+    $("#dynamic-shop-banner").innerHTML = `<div class="shop-banner" style="justify-content:space-around;"><div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(myAds.length)}</b><span style="font-size:11px;">کل آگهی‌ها</span></div><div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(tv)}</b><span style="font-size:11px;">بازدید</span></div><div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(tc)}</b><span style="font-size:11px;">تماس</span></div></div>`;
   } else if(view !== "admin") {
     $("#dynamic-shop-banner").innerHTML = "";
   }
@@ -876,7 +982,7 @@ function draw(){
   const start = (currentPage - 1) * itemsPerPage;
   const paginatedItems = r.slice(start, start + itemsPerPage);
 
-  $("#list").innerHTML = paginatedItems.length ? paginatedItems.map(renderCard).join("") : `<div class="empty">${view=="mine"?"هنوز آگهی‌ای ثبت نکرده‌اید.":view=="shop"?"فروشگاهی برای نمایش وجود ندارد.":view=="fav"?"هیچ آگهی نشان‌شده‌ای ندارید.":"هیچ آگهی مطابق فیلترها پیدا نشد."}</div>`;
+  $("#list").innerHTML = paginatedItems.length ? paginatedItems.map(renderCard).join("") : `<div class="empty">${view=="mine"?"هنوز آگهی‌ای ثبت نکرده‌اید.":view=="shop"?"هنوز فروشگاه رسمی ثبت نکرده‌اید.":view=="fav"?"هیچ آگهی نشان‌شده‌ای ندارید.":"هیچ آگهی در این حالت یافت نشد."}</div>`;
 
   let paginationHTML = '';
   if(totalPages > 1) {
@@ -959,23 +1065,6 @@ function draw(){
 
   $("#compare-count").textContent = compareList.length;
   $("#compare-bar").classList.toggle("active", compareList.length > 0);
-
-  if(view === "admin") {
-    if($("#list").innerHTML) {
-      const repBox = document.getElementById('admin-reports-box');
-      if(repBox) repBox.remove();
-    }
-    if(adminTab === 'reports') {
-      $("#list").innerHTML = '';
-      $("#pagination").innerHTML = '';
-      renderReports();
-    } else {
-      const repBox = document.getElementById('admin-reports-box');
-      if(repBox) repBox.remove();
-    }
-    return;
-    const totalPages = Math.ceil(r.length / itemsPerPage) || 1;
-  }
 }
 
 function changePage(p){ if(p<1) return; currentPage=p; draw(); }
