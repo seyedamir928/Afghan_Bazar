@@ -312,7 +312,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
         <button class="link" id="reset">پاک‌کردن فیلترها</button>
       </aside>
       <section>
-        <div id="admin-tabs-box"></div><div id="dynamic-shop-banner"></div>
+        <div id="dynamic-shop-banner"></div>
         <div class="bar">
           <h2 id="title"></h2>
           <div class="bar-actions">
@@ -842,25 +842,35 @@ function draw(){
     return true;
   });
   
-  if(view=="admin"){ 
-    r = allAds;
-  if(adminTab==='pending') r = r.filter(a=>(a.status||"approved")==="pending");
-  else if(adminTab==='rejected') r = r.filter(a=>(a.status||"approved")==="rejected"); 
-    setTimeout(async () => {
-        if(adminTab==='reports') renderReports();
-        if(sb() && adminFlag) {
-            const { data } = await sb().rpc('get_admin_stats');
-            if(data) {
-                $("#dynamic-shop-banner").innerHTML = `
-                  <div class="shop-banner" style="justify-content:space-around; margin-bottom:10px; background:linear-gradient(135deg, #1b3b6f, #152c48);">
-                    <div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(data.users)}</b><span style="font-size:11px;">کل کاربران</span></div>
-                    <div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(data.ads)}</b><span style="font-size:11px;">کل آگهی‌ها</span></div>
-                    <div style="text-align:center;"><b style="font-size:20px;display:block;color:#ffc107;">${nf(data.pending)}</b><span style="font-size:11px;">در انتظار تایید</span></div>
-                  </div>
-                `;
-            }
-        }
-    }, 50); 
+  if(view === "admin"){ 
+    if(adminTab === 'pending') r = r.filter(a => (a.status||"approved") === "pending");
+    else if(adminTab === 'rejected') r = r.filter(a => (a.status||"approved") === "rejected");
+    
+    const targetBanner = (currentAppTab === 'wholesale') ? $("#dynamic-shop-banner-wholesale") : $("#dynamic-shop-banner");
+    if(targetBanner) {
+      targetBanner.innerHTML = `
+        <div class="shop-banner" style="justify-content:space-around; margin-bottom:10px; background:linear-gradient(135deg, #1b3b6f, #152c48);">
+          <div style="text-align:center;"><b id="adm-users" style="font-size:20px;display:block;">...</b><span style="font-size:11px;">کل کاربران</span></div>
+          <div style="text-align:center;"><b id="adm-ads" style="font-size:20px;display:block;">...</b><span style="font-size:11px;">کل آگهی‌ها</span></div>
+          <div style="text-align:center;"><b id="adm-pending" style="font-size:20px;display:block;color:#ffc107;">...</b><span style="font-size:11px;">در انتظار تایید</span></div>
+        </div>
+        <div class="mtabs" style="margin:6px 0 10px;">
+          <button type="button" data-atab="all" class="${adminTab==='all'?'on':''}">همه آگهی‌ها</button>
+          <button type="button" data-atab="pending" class="${adminTab==='pending'?'on':''}">⏳ در انتظار</button>
+          <button type="button" data-atab="rejected" class="${adminTab==='rejected'?'on':''}">✕ رد شده</button>
+          <button type="button" data-atab="reports" class="${adminTab==='reports'?'on':''}">🚩 گزارش‌ها</button>
+        </div>
+      `;
+      if(sb() && adminFlag) {
+        sb().rpc('get_admin_stats').then(({data}) => {
+          if(data) {
+            const u = document.getElementById('adm-users'); if(u) u.textContent = nf(data.users);
+            const a = document.getElementById('adm-ads'); if(a) a.textContent = nf(data.ads);
+            const p = document.getElementById('adm-pending'); if(p) p.textContent = nf(data.pending);
+          }
+        });
+      }
+    }
   }
   
   if(view==="admin"){
@@ -918,6 +928,17 @@ function draw(){
     $("#dynamic-shop-banner").innerHTML = "";
   }
   
+  if(view === "admin" && adminTab === 'reports') {
+    if(currentAppTab === 'wholesale') {
+        $("#wholesale-list").innerHTML = '';
+        $("#wholesale-pagination").innerHTML = '';
+    } else {
+        $("#list").innerHTML = '';
+        $("#pagination").innerHTML = '';
+    }
+    renderReports();
+    return;
+  }
   const totalPages = Math.ceil(r.length / itemsPerPage) || 1;
   if(currentPage > totalPages) currentPage = totalPages;
   const start = (currentPage - 1) * itemsPerPage;
@@ -1046,6 +1067,7 @@ document.querySelectorAll(".bnav-item").forEach(btn => {
       postBtn.style.background = "#1b3b6f";
     }
     window.scrollTo({top: 0, behavior: 'smooth'});
+    draw();
   };
 });
 
@@ -2269,14 +2291,13 @@ document.body.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&
   window.__fromHash=fromHash; window.addEventListener("hashchange",fromHash); fromHash();
 })();
 
-function renderAdminTabs(){
-  const b=$("#admin-tabs-box"); if(!b) return;
-  if(view!=="admin"||!adminFlag){ b.innerHTML=""; return; }
-  const T=[["all","همه"],["pending","در انتظار"],["rejected","رد شده"],["reports","گزارش‌ها"]];
-  b.innerHTML='<div class="mtabs" style="margin:6px 0 10px;">'+T.map(([k,v])=>'<button type="button" data-atab="'+k+'" class="'+(adminTab===k?'on':'')+'">'+v+'</button>').join("")+'</div>';
-}
-const _origDraw=draw; draw=function(){ _origDraw.apply(this,arguments); renderAdminTabs(); };
-document.addEventListener("click",e=>{ const t=e.target.closest("[data-atab]"); if(!t) return; adminTab=t.dataset.atab; draw(); });
+document.body.addEventListener("click", e => {
+  const tabBtn = e.target.closest("[data-atab]");
+  if(tabBtn) {
+    adminTab = tabBtn.dataset.atab;
+    draw();
+  }
+});
 async function loadInbox() {
   const box = $("#inbox-list");
   if(!sb() || !myId) return;
