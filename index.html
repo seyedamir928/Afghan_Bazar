@@ -915,6 +915,7 @@ function draw(){
     $("#dynamic-shop-banner").innerHTML = "";
   }
   
+  if(view === "admin" && adminTab === 'reports') return;
   const totalPages = Math.ceil(r.length / itemsPerPage) || 1;
   if(currentPage > totalPages) currentPage = totalPages;
   const start = (currentPage - 1) * itemsPerPage;
@@ -976,6 +977,7 @@ function draw(){
   const wholesaleCategoryName = wholesaleCat ? (wholesaleCats[wholesaleCat]?.[0]||"همه") : "همه آگهی‌های عمده";
   $("#wholesale-title").innerHTML = `${wholesaleCategoryName} <span>${nf(filteredWholesale.length)} آگهی</span>`;
 
+  if(view === "admin" && adminTab === 'reports') return;
   const wholesaleTotalPages = Math.ceil(filteredWholesale.length / itemsPerPage) || 1;
   if(wholesaleCurrentPage > wholesaleTotalPages) wholesaleCurrentPage = wholesaleTotalPages;
   const wStart = (wholesaleCurrentPage - 1) * itemsPerPage;
@@ -1643,13 +1645,19 @@ $("#acc").onclick=()=>{
   $("#me-verified-badge-box").innerHTML = isPhone
     ? '<span class="badge-verified">✓ شماره تاییدشده</span>'
     : '<span class="badge-verified" style="background:#1b3b6f;">✓ حساب تاییدشده</span>';
-  $("#admin-btn").hidden = !adminFlag;
+    
+  const adminBtn = $("#admin-btn");
+  adminBtn.hidden = !adminFlag;
+  if(adminFlag) {
+      adminBtn.textContent = (view === 'admin') ? '🔙 خروج از پنل مدیریت' : '🛡️ ورود به پنل مدیریت';
+  }
   $("#me").showModal();
 };
 
 $("#me").onclick = async e => {
   if(e.target==$("#me"))return $("#me").close();
   const b=e.target.closest("button");if(!b)return;
+  
   if(b.dataset.v=="edit-profile"){
     const newName = prompt("نام جدید خود را وارد کنید:", users[me]?.name || "");
     if(newName && newName.trim().length >= 2){
@@ -1661,12 +1669,30 @@ $("#me").onclick = async e => {
     }
     return;
   }
+  
   if(b.dataset.v=="inbox"){
     $("#me").close();
     loadInbox();
     $("#inbox-dlg").showModal();
     return;
   }
+  
+  if(b.dataset.v=="admin"){
+    if(view === 'admin') {
+      view = 'all'; 
+      adminTab = 'all';
+      toast("از پنل مدیریت خارج شدید.");
+    } else {
+      view = 'admin'; 
+      adminTab = 'all';
+      toast("به پنل مدیریت وارد شدید.");
+    }
+    cat=0; wholesaleCat=0; currentPage=1; wholesaleCurrentPage=1; 
+    $("#me").close();
+    draw();
+    return;
+  }
+
   if(b.dataset.v=="out"){
     if(supabaseClient) await supabaseClient.auth.signOut().catch(()=>{});
     S.removeItem("ab_ad_draft_" + me);
@@ -1677,6 +1703,7 @@ $("#me").onclick = async e => {
     put("ab_sess",null); loadFavs(); view="all";
   }
   else view=b.dataset.v;
+  
   if(b.dataset.v==="all"){
     $("#q").value=""; $("#pmin").value=""; $("#pmax").value="";
     $("#q-wholesale").value=""; $("#wmin").value=""; $("#wmax").value="";
@@ -1687,10 +1714,7 @@ $("#me").onclick = async e => {
     $("#radius-status-badge").textContent="شعاع فعال نیست";
   }
   cat=0; wholesaleCat=0; currentPage=1; wholesaleCurrentPage=1; $("#me").close();
-  if(view=="admin"){
-    const retailBtn = document.querySelector('.bnav-item[data-target="retail"]');
-    if(retailBtn) retailBtn.click();
-  }
+  
   draw();
 };
 
@@ -2046,7 +2070,7 @@ $("#save").onclick=async()=>{
     $("#form-urg").checked = false;
     combinedImagesList = [];
     updatePreviewGrid();
-    cat=0; wholesaleCat=0; view="all"; currentPage=1; wholesaleCurrentPage=1; draw();
+    cat=0; wholesaleCat=0; view=(view === 'admin' ? 'admin' : 'all'); currentPage=1; wholesaleCurrentPage=1; draw();
   } catch(err) {
     toast("خطا در ذخیره‌سازی.");
   }
