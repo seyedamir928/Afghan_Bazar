@@ -627,7 +627,7 @@ const seed=[
 ].map(a => ({...a, views: a.views || 45, calls: a.calls || 3, cond: a.cond || 'used', sellerName: a.sellerName || 'کاربر بازار', verified: a.verified !== undefined ? a.verified : true, isWholesale: a.isWholesale || false, wholesaleCat: a.wholesaleCat || 1}));
 
 const $=s=>document.querySelector(s),nf=n=>n.toLocaleString("fa-IR"),fmt=n=>n?nf(n)+" افغانی":"توافقی";
-const esc=s=>{const d=document.createElement("div");d.textContent=s;return d.innerHTML};
+const esc=s=>{const d=document.createElement("div");d.textContent=(s==null)?"":String(s);return d.innerHTML};
 const ago=h=>h<2?"چند دقیقه پیش":h<24?nf(Math.floor(h))+" ساعت پیش":h<48?"دیروز":nf(Math.floor(h/24))+" روز پیش";
 const mem={};const S=(()=>{try{localStorage.setItem("__ab_test__","1");localStorage.removeItem("__ab_test__");return localStorage}catch(e){return{getItem:k=>mem[k]??null,setItem:(k,v)=>{mem[k]=v},removeItem:k=>{delete mem[k]}}}})();
 const get=(k,d)=>{try{return JSON.parse(S.getItem(k))??d}catch(e){return d}},put=(k,v)=>{try{S.setItem(k,JSON.stringify(v));return true}catch(e){console.warn("ذخیره‌سازی انجام نشد:",k,e);return false}};
@@ -786,7 +786,7 @@ function renderCard(a){
     ${a.isWholesale?'<span class="badge wholesale-badge" style="top:10px;left:70px;right:auto;">📦 عمده</span>':(a.isShop?`<span class="badge" style="background:var(--ac);color:#fff;top:10px;left:70px;right:auto;">🏪 فروشگاه (${shopRatingInfo?.avg || '—'} ★)</span>`:'')}
     <button class="fav ${favs.includes(a.id)?'on':''}" data-f="${a.id}" aria-label="نشان‌کردن">${favs.includes(a.id)?'♥':'♡'}</button>
     ${!a.isWholesale ? `<button class="compare-checkbox ${isCompared?'checked':''}" data-comp="${a.id}" aria-label="مقایسه" aria-pressed="${isCompared}" title="افزودن به مقایسه">⚖️</button>` : ''}
-    <div class="i"><b>${esc(a.t)}</b><div class="price">${fmtAd(a)}</div><div class="mu">${ago(a.age)} · ${locLabel}</div>${(view==="mine"||view==="admin")?`<div class="mu" style="margin-top:4px;font-size:11px;">👁️ ${nf(a.views||0)} · 📞 ${nf(a.calls||0)}</div>`:''}${(view==="fav"&&notes[me]&&notes[me][a.id])?`<div style="margin-top:4px;background:var(--chip);padding:3px 6px;border-radius:4px;font-size:11px;">📝 ${esc(notes[me][a.id])}</div>`:''}${view==="admin"?`<div style="margin-top:6px;display:flex;gap:4px;align-items:center;flex-wrap:wrap;"><span style="font-size:10px;padding:2px 6px;border-radius:4px;background:${(a.status||"approved")==="approved"?"var(--chip)":((a.status||"approved")==="pending"?"#fff3cd":"#f8d7da")};color:${(a.status||"approved")==="approved"?"var(--ac)":((a.status||"approved")==="pending"?"#856404":"#721c24")};">${(a.status||"approved")==="approved"?"✓ منتشرشده":((a.status||"approved")==="pending"?"⏳ در انتظار":"✕ رد شده")}</span>${(a.status||"approved")!=="approved"?`<button class="capsule-btn" data-approve="${a.id}" style="padding:2px 8px;font-size:10px;background:#0e7a4b;color:#fff;">✅ تایید</button>`:''}${(a.status||"approved")!=="rejected"?`<button class="capsule-btn" data-reject="${a.id}" style="padding:2px 8px;font-size:10px;background:#d6324a;color:#fff;">❌ رد</button>`:''}</div>`:''}${view==="mine" && (a.status||"approved")!=="approved"?`<div style="margin-top:4px;font-size:10px;padding:2px 6px;border-radius:4px;display:inline-block;background:${(a.status||"approved")==="pending"?"#fff3cd":"#f8d7da"};color:${(a.status||"approved")==="pending"?"#856404":"#721c24"};">${(a.status||"approved")==="pending"?"⏳ در انتظار تایید ادمین":"✕ رد شده توسط ادمین"}</div>`:''}</div>
+    <div class="i"><b>${esc(a.t)}</b><div class="price">${fmtAd(a)}</div><div class="mu">${ago(a.age)} · ${locLabel}</div>${(view==="mine"||view==="admin")?`<div class="mu" style="margin-top:4px;font-size:11px;">👁️ ${nf(a.views||0)} · 📞 ${nf(a.calls||0)}</div>`:''}${(view==="fav"&&notes[me]&&notes[me][a.id])?`<div style="margin-top:4px;background:var(--chip);padding:3px 6px;border-radius:4px;font-size:11px;">📝 ${esc(notes[me][a.id])}</div>`:''}${view==="admin"?`<div style="margin-top:6px;display:flex;gap:4px;align-items:center;flex-wrap:wrap;"><span style="font-size:10px;padding:2px 6px;border-radius:4px;background:${(a.status||"approved")==="approved"?"var(--chip)":((a.status||"approved")==="pending"?"#fff3cd":"#f8d7da")};color:${(a.status||"approved")==="approved"?"var(--ac)":((a.status||"approved")==="pending"?"#856404":"#721c24")};">${(a.status||"approved")==="approved"?"✓ منتشرشده":((a.status||"approved")==="pending"?"⏳ در انتظار":"✕ رد شده")}</span>${!seed.some(x=>String(x.id)===String(a.id))?`${(a.status||"approved")!=="approved"?`<button class="capsule-btn" data-approve="${a.id}" style="padding:2px 8px;font-size:10px;background:#0e7a4b;color:#fff;">✅ تایید</button>`:''}${(a.status||"approved")!=="rejected"?`<button class="capsule-btn" data-reject="${a.id}" style="padding:2px 8px;font-size:10px;background:#d6324a;color:#fff;">❌ رد</button>`:''}`:`<span style="font-size:9px;color:var(--mu);">نمونه</span>`}</div>`:''}${view==="mine" && (a.status||"approved")!=="approved"?`<div style="margin-top:4px;font-size:10px;padding:2px 6px;border-radius:4px;display:inline-block;background:${(a.status||"approved")==="pending"?"#fff3cd":"#f8d7da"};color:${(a.status||"approved")==="pending"?"#856404":"#721c24"};">${(a.status||"approved")==="pending"?"⏳ در انتظار تایید ادمین":"✕ رد شده توسط ادمین"}</div>`:''}</div>
   </div>`;
 }
 
@@ -1625,7 +1625,10 @@ $("#me").onclick = async e => {
   }
   if(b.dataset.v=="out"){
     if(supabaseClient) await supabaseClient.auth.signOut().catch(()=>{});
+    S.removeItem("ab_ad_draft_" + me);
+    S.removeItem("ab_ad_draft_anon");
     me=null; myId=null; adminFlag=false;
+    mine=[]; put("ab_ads", mine);
     compareList=[]; updateCompareBar();
     put("ab_sess",null); loadFavs(); view="all";
   }
@@ -1687,7 +1690,7 @@ $("#f-ci").onchange = function() {
   }
 };
 
-const DRAFT_KEY = "ab_ad_draft";
+const DRAFT_KEY = () => "ab_ad_draft_" + (me || "anon");
 function saveFormDraft() {
   if(!$("#add").open) return;
   const draft = {
@@ -1697,10 +1700,11 @@ function saveFormDraft() {
     spec: $("#form-spec").value, d: $("#f-d").value, cond: $("#form-cond").value,
     mapLoc: $("#form-map").value, shopName: $("#form-shop-name").value,
     lat: $("#form-lat").value, lng: $("#form-lng").value,
-    isShop: $("#form-is-shop").checked, urg: $("#form-urg").checked, w: $("#form-is-wholesale-hidden").value
+    isShop: $("#form-is-shop").checked, urg: $("#form-urg").checked, w: $("#form-is-wholesale-hidden").value,
+    provinces: [...document.querySelectorAll(".multi-prov-chk:checked")].map(c=>+c.value)
   };
   if(!draft.t && !draft.d) return;
-  put(DRAFT_KEY, draft);
+  put(DRAFT_KEY(), draft);
 }
 
 ["#f-t","#f-ph","#f-c","#f-ci","#f-p","#f-cur","#f-neg","#f-moq","#f-unit","#form-brand","#form-spec","#f-d","#form-cond","#form-map","#form-shop-name","#form-is-shop","#form-urg"].forEach(sel => {
@@ -1714,12 +1718,12 @@ $("#header-post-btn").onclick = () => need(()=>{
   $("#modal-header-bg").style.background = isWholesaleMode ? "linear-gradient(135deg, #1b3b6f, #152c48)" : "linear-gradient(135deg, var(--ac), var(--ac2))";
   $("#edit-ad-id").value = "";
   
-  $("#f-ph").value = /^07\d{8}$/.test(me)?me:(get("ab_last_ph","")||"");
-  const draft = get(DRAFT_KEY, null);
+  $("#f-ph").value = /^07\d{8}$/.test(me)?me:(get("ab_last_ph_"+me,"")||"");
+  const draft = get(DRAFT_KEY(), null);
   if(draft && String(draft.w||"false")===String(isWholesaleMode) && !confirm("پیش‌نویس ثبت آگهی قبلی موجود است. آیا بارگذاری شود؟")) {
-    S.removeItem(DRAFT_KEY);
+    S.removeItem(DRAFT_KEY());
   }
-  let loadedDraft = get(DRAFT_KEY, null);
+  let loadedDraft = get(DRAFT_KEY(), null);
   if(loadedDraft && String(loadedDraft.w||"false")!==String(isWholesaleMode)) loadedDraft = null;
   if(loadedDraft) {
     $("#f-t").value = loadedDraft.t || "";
@@ -1754,7 +1758,8 @@ $("#header-post-btn").onclick = () => need(()=>{
   if(isWholesaleMode) {
     $("#single-ci-box").style.display = "none";
     $("#multi-provinces-box").style.display = "block";
-    document.querySelectorAll(".multi-prov-chk").forEach(c => c.checked = false);
+    const savedProv = loadedDraft && Array.isArray(loadedDraft.provinces) ? loadedDraft.provinces : [];
+    document.querySelectorAll(".multi-prov-chk").forEach(c => c.checked = savedProv.includes(+c.value));
   } else {
     $("#single-ci-box").style.display = "block";
     $("#multi-provinces-box").style.display = "none";
@@ -1904,7 +1909,7 @@ $("#save").onclick=async()=>{
   
   const phv=normDigits($("#f-ph").value.trim());
   if(!/^07\d{8}$/.test(phv)){ toast("شماره تماس را به‌صورت ۰۷… وارد کنید."); $("#f-ph").focus(); return; }
-  put("ab_last_ph",phv);
+  put("ab_last_ph_"+me,phv);
   let imgUrls;
   try{ $("#save").disabled=true; imgUrls=await Promise.all(combinedImagesList.map(i=>uploadImg(i.src))); }
   catch(e){ $("#save").disabled=false; toast("آپلود تصویر ناموفق بود؛ دوباره تلاش کنید."); return; }
@@ -1982,7 +1987,7 @@ $("#save").onclick=async()=>{
       syncAd(mine[0]).then(st=>{ if(st) toast(adMsg(st,"ثبت")); put("ab_ads", mine); draw(); });
       addNotification(`آگهی جدید ثبت شد.`);
     }
-    S.removeItem(DRAFT_KEY);
+    S.removeItem(DRAFT_KEY());
     $("#add").close();
     ["#f-t","#f-p","#f-d","#form-map","#edit-ad-id","#form-shop-name"].forEach(s=>$(s).value="");
     $("#form-is-shop").checked = false;
@@ -2056,7 +2061,7 @@ async function adminSetStatus(id, status){
   toast(status==="approved"?"✅ آگهی تایید شد":"❌ آگهی رد شد");
   draw();
 }
-function bumpStat(id,field){ if(sb()) sb().rpc("bump_stat",{p_ad:String(id),p_field:field}).then(()=>{},()=>{}); }
+function bumpStat(id,field){ if(sb() && !seed.some(x=>String(x.id)===String(id))) sb().rpc("bump_stat",{p_ad:String(id),p_field:field}).then(()=>{},()=>{}); }
 async function remoteReview(a,rating,comment){
   if(!sb()||!myId||!a.ownerId) return;
   const {error}=await sb().from("reviews").upsert({shop_phone:a.ph,shop_owner_id:a.ownerId,buyer_id:myId,buyer_name:users[me].name,rating,comment},{onConflict:"shop_phone,buyer_id"});
