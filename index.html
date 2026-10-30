@@ -41,7 +41,7 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card)
 .capsule-btn.primary{background:var(--ac);color:#fff}
 .capsule-btn.primary:hover{background:#0a5e3a}
 
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:65px;background:var(--card);border-top:1px solid var(--bd);display:flex;z-index:120;box-shadow:0 -4px 20px rgba(0,0,0,.08);padding-bottom:env(safe-area-inset-bottom, 0px)}
+.bottom-nav{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom, 0px));left:16px;right:16px;height:65px;background:color-mix(in srgb,var(--card) 85%,transparent);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:24px;display:flex;z-index:120;box-shadow:0 10px 40px rgba(0,0,0,.15);padding-bottom:0;}
 .bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:none;border:0;cursor:pointer;color:var(--mu);font-size:11px;font-weight:600;gap:2px;transition:color .15s, background .15s}
 .bnav-item span.icon{font-size:17px;line-height:1}
 .bnav-item.active{color:var(--ac);background:var(--chip)}
@@ -1668,7 +1668,12 @@ $("#acc").onclick=()=>{
   $("#me-verified-badge-box").innerHTML = isPhone
     ? '<span class="badge-verified">✓ شماره تاییدشده</span>'
     : '<span class="badge-verified" style="background:#1b3b6f;">✓ حساب تاییدشده</span>';
-  $("#admin-btn").hidden = !adminFlag;
+    
+  const adminBtn = $("#admin-btn");
+  adminBtn.hidden = !adminFlag;
+  if(adminFlag) {
+      adminBtn.textContent = (view === 'admin') ? '🔙 خروج از پنل مدیریت' : '🛡️ ورود به پنل مدیریت';
+  }
   $("#me").showModal();
 };
 
@@ -1712,10 +1717,7 @@ $("#me").onclick = async e => {
     $("#radius-status-badge").textContent="شعاع فعال نیست";
   }
   cat=0; wholesaleCat=0; currentPage=1; wholesaleCurrentPage=1; $("#me").close();
-  if(view=="admin"){
-    const retailBtn = document.querySelector('.bnav-item[data-target="retail"]');
-    if(retailBtn) retailBtn.click();
-  }
+
   draw();
 };
 
