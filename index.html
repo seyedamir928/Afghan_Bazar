@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
- <meta charset="utf-8">
-  <meta name="google-site-verification" content="jqvqvxsvx31neFG0CqMzJNRDKTMA7GEWHF0CR4ibI80" />
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>افغان‌بازار | عمده، پرچون، امتیازدهی، نقشه شعاعی و مقایسه کالاها</title>
 <meta name="description" content="پلتفرم پیشرفته آگهی‌های عمده و پرچون در ۳۴ ولایت افغانستان با امتیازدهی، نقشه شعاعی و مقایسه کالاها">
@@ -517,7 +516,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
  <div><label for="form-spec">مشخصات کلیدی</label><input id="form-spec" maxlength="60" placeholder="مثلاً: ۱۲۸ گیگ / ۸۰ هزار کیلومتر"></div>
 </div>
 <div id="wholesale-row" style="display:none;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
- <div><label for="f-moq">حداقل سفارش</label><input id="f-moq" type="number" min="0" inputmode="numeric" placeholder="مثلاً: 10"></div>
+ <div><label for="f-moq">حداقل سفارش</label><input id="f-moq" type="number" min="0" inputmode="numeric" placeholder="مثلاً: ۱۰"></div>
  <div><label for="f-unit">واحد فروش</label><select id="f-unit"><option>کارتن</option><option>کیسه</option><option>تن</option><option>کیلوگرم</option><option>عدد</option></select></div>
 </div>
 <label style="margin-top:10px;" id="map-label-text">موقعیت دقیق روی نقشه ولایت (انتخاب با پین)</label>
@@ -527,7 +526,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
     <input type="hidden" id="form-lng" value="69.2075">
 
     <label for="f-p" style="margin-top:10px;" id="price-label-text">قیمت (افغانی، ۰ = توافقی)</label>
-    <input id="f-p" type="number" min="0" inputmode="numeric" placeholder="مثلاً: 850000">
+    <input id="f-p" type="number" min="0" inputmode="numeric" placeholder="مثلاً: ۸۵۰۰۰۰">
     <div style="display:flex;gap:8px;align-items:center;margin-top:6px;"><select id="f-cur" style="flex:1"><option value="AFN">افغانی</option><option value="USD">دلار</option></select><label class="chk" style="margin:0;flex:1"><input type="checkbox" id="f-neg" style="width:auto"> قابل مذاکره</label></div>
 
     <div style="margin-top:12px; background:var(--bg); border:1px solid var(--bd); padding:10px; border-radius:10px;" id="shop-box-container">
@@ -1301,11 +1300,11 @@ function openAd(id){
 
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:11px;">
       <span style="color:#d6324a;cursor:pointer;" id="report-ad-btn">⚠️ گزارش تخلف یا کلاه‌برداری</span>
-      <span class="mu">کد: ${a.id}</span>
+      <span class="mu">کد: <bdi dir="ltr">${a.id}</bdi></span>
     </div>
 
     <div class="row" style="margin-top:14px;">
-      <a class="capsule-btn primary" href="tel:${esc(a.ph)}" onclick="recordCall('${a.id}')" style="text-align:center;">تماس: ${esc(a.ph)}</a>
+      <a class="capsule-btn primary" href="tel:${esc(a.ph)}" onclick="recordCall('${a.id}')" style="text-align:center;">تماس: <bdi dir="ltr">${esc(a.ph)}</bdi></a>
       <button class="capsule-btn" id="x" style="border:1px solid var(--bd);">بستن</button>
     </div>
     ${a.owner&&a.owner==me?'<div style="display:flex;gap:6px;margin-top:6px;"><button class="capsule-btn" id="edit-ad-btn" style="flex:1;border:1px solid var(--bd);">✏️ ویرایش</button><button class="capsule-btn" id="renew-ad-btn" style="flex:1;border:1px solid var(--bd);">🔄 تمدید</button></div>':''}
@@ -1389,15 +1388,21 @@ function openAd(id){
   }
 
   window.recordCall = (adId) => {
-    const savedAd = mine.find(x => String(x.id) === String(adId));
-    if(savedAd) {
-      savedAd.calls = (Number(savedAd.calls) || 0) + 1;
-      a.calls = savedAd.calls;
-      put("ab_ads", mine);
-    } else {
-      a.calls = (Number(a.calls) || 0) + 1;
+    const callKey = "ab_called_" + adId;
+    const lastCalled = get(callKey, 0);
+    const now = Date.now();
+    if(now - lastCalled > 24 * 3600 * 1000) {
+      put(callKey, now);
+      const savedAd = mine.find(x => String(x.id) === String(adId));
+      if(savedAd) {
+        savedAd.calls = (Number(savedAd.calls) || 0) + 1;
+        a.calls = savedAd.calls;
+        put("ab_ads", mine);
+      } else {
+        a.calls = (Number(a.calls) || 0) + 1;
+      }
+      bumpStat(adId, "calls");
     }
-    bumpStat(adId, "calls");
     const callStat = $("#det .stat-box");
     if(callStat) {
       const callItem = Array.from(callStat.children).find(el => el.textContent.includes("تماس"));
@@ -1912,7 +1917,15 @@ $("#save").onclick=async()=>{
   if(!/^07\d{8}$/.test(phv)){ toast("شماره تماس را به‌صورت ۰۷… وارد کنید."); $("#f-ph").focus(); return; }
   put("ab_last_ph_"+me,phv);
   let imgUrls;
-  try{ $("#save").disabled=true; imgUrls=await Promise.all(combinedImagesList.map(i=>uploadImg(i.src))); }
+  try{ $("#save").disabled=true; imgUrls = [];
+  for(const i of combinedImagesList) {
+    try {
+      const u = await uploadImg(i.src);
+      if(u) imgUrls.push(u);
+    } catch(err) {
+      console.warn("آپلود تصویر ناموفق بود:", err);
+    }
+  } }
   catch(e){ $("#save").disabled=false; toast("آپلود تصویر ناموفق بود؛ دوباره تلاش کنید."); return; }
   $("#save").disabled=false;
   const editId = $("#edit-ad-id").value;
@@ -1964,7 +1977,7 @@ $("#save").onclick=async()=>{
     } else {
       const ts=Date.now();
       mine.unshift({
-        id:"u"+ts, ts, t,
+        id: crypto.randomUUID(), ts, t,
         c: isWholesaleVal ? 1 : +$("#f-c").value,
         wholesaleCat: isWholesaleVal ? +$("#f-c").value : 1,
         ci: isWholesaleVal ? selectedProvinces[0] : +$("#f-ci").value,
@@ -2070,11 +2083,12 @@ async function remoteReview(a,rating,comment){
 }
 async function loadChat(a){
   if(!sb()||!myId||!a.ownerId) return;
-  const {data,error}=await sb().from("messages").select("*").eq("ad_id",String(a.id)).order("created_at");
+  const {data,error}=await sb().from("messages").select("*")
+    .eq("ad_id",String(a.id))
+    .or(`sender_id.eq.${myId},recipient_id.eq.${myId}`)
+    .order("created_at");
   if(error||!data) return;
-  messages[a.id] = data
-    .filter(r => r.sender_id === myId || r.recipient_id === myId)
-    .map(r=>({sender:r.sender_id===myId?me:r.sender_id,senderId:r.sender_id,recipientId:r.recipient_id,name:r.sender_name,text:r.text,time:Date.parse(r.created_at)}));
+  messages[a.id] = data.map(r=>({sender:r.sender_id===myId?me:r.sender_id,senderId:r.sender_id,recipientId:r.recipient_id,name:r.sender_name,text:r.text,time:Date.parse(r.created_at)}));
 }
 async function sendRemote(a,txt){
   if(!sb()||!myId||!a.ownerId) return;
@@ -2085,7 +2099,14 @@ async function sendRemote(a,txt){
   }
   if(!rid || rid === myId) return;
   const {error}=await sb().from("messages").insert({ad_id:String(a.id),sender_id:myId,recipient_id:rid,sender_name:users[me].name,text:txt});
-  if(error){console.warn(error);toast("پیام روی سرور ارسال نشد.");}
+  if(error){
+    console.warn(error);
+    toast("پیام روی سرور ارسال نشد.");
+    if(messages[a.id] && messages[a.id].length > 0) {
+      messages[a.id].pop();
+      put(UK("ab_msgs"), messages);
+    }
+  }
 }
 async function reportRemote(id){
   if(!sb()||!myId) return;
@@ -2104,7 +2125,8 @@ async function renderReports(){
   };
 }
 const SAFE_ID=/^[A-Za-z0-9_-]{1,60}$/;
-const SAFE_IMG=/^(https:\/\/[^\s"'<>\\]+|data:image\/(jpeg|png|webp|gif);base64,[A-Za-z0-9+\/=]+)$/;
+const MY_STORAGE_URL = "https://snhyzmwgazifdqyvqsnu.supabase.co/storage/v1/object/public/ad-images/";
+const SAFE_IMG = new RegExp("^(" + MY_STORAGE_URL.replace(/[\[\]\{\}\(\)\*\+\?\.\^\$\|\\]/g, '\\$&') + "|data:image\\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+)$");
 function cleanAd(r){
   if(!r||!SAFE_ID.test(String(r.id))) return null;
   const a={...(r.data&&typeof r.data==="object"?r.data:{}),id:String(r.id),status: r.status || "approved"};
