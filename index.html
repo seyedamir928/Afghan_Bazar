@@ -1308,7 +1308,7 @@ function openAd(id){
       <button class="capsule-btn" id="x" style="border:1px solid var(--bd);">بستن</button>
     </div>
     ${a.owner&&a.owner==me?'<div style="display:flex;gap:6px;margin-top:6px;"><button class="capsule-btn" id="edit-ad-btn" style="flex:1;border:1px solid var(--bd);">✏️ ویرایش</button><button class="capsule-btn" id="renew-ad-btn" style="flex:1;border:1px solid var(--bd);">🔄 تمدید</button></div>':''}
-    ${(a.owner&&a.owner==me)||adminFlag?'<button class="link danger" id="del" style="color:#d6324a;display:block;margin:8px auto 0;font-size:12px;">حذف این آگهی</button>':''}
+    ${((a.owner&&a.owner==me)||adminFlag) && !seed.some(x=>String(x.id)===String(a.id))?'<button class="link danger" id="del" style="color:#d6324a;display:block;margin:8px auto 0;font-size:12px;">حذف این آگهی</button>':''}
   `;
 
   $("#dlg").showModal();
@@ -1443,7 +1443,8 @@ function openAd(id){
   $("#x").onclick=()=>closeDetailDialog();
   const d=$("#del");
   if(d)d.onclick=async()=>{
-if(!confirm("این آگهی حذف شود؟")) return;
+    if(seed.some(x=>String(x.id)===String(id))){ toast("این آگهی نمونه است و قابل حذف نیست."); return; }
+    if(!confirm("این آگهی حذف شود؟")) return;
 const delOk=await remoteDelete(id,!!a.ownerId);
 if(!delOk){ toast("حذف روی سرور انجام نشد. دسترسی یا اتصال را بررسی کنید."); return; }
 mine=mine.filter(x=>x.id!=id);
@@ -1951,7 +1952,7 @@ $("#save").onclick=async()=>{
         targetAd.lng = lngVal;
         targetAd.imgs = imgUrls;
         put("ab_ads", mine);
-        syncAd(targetAd).then(st=>{ toast(adMsg(st,"ویرایش")); draw(); });
+        syncAd(targetAd).then(st=>{ if(st) toast(adMsg(st,"ویرایش")); put("ab_ads", mine); draw(); });
         addNotification(`آگهی ویرایش شد.`);
       }
     } else {
@@ -1978,7 +1979,7 @@ $("#save").onclick=async()=>{
         views: 1, calls: 0
       });
       if(!put("ab_ads",mine)){ mine.shift(); toast("حافظه پر است؛ تعداد یا حجم عکس‌ها را کم کنید."); return; }
-      syncAd(mine[0]).then(st=>{ toast(adMsg(st,"ثبت")); draw(); });
+      syncAd(mine[0]).then(st=>{ if(st) toast(adMsg(st,"ثبت")); put("ab_ads", mine); draw(); });
       addNotification(`آگهی جدید ثبت شد.`);
     }
     S.removeItem(DRAFT_KEY);
@@ -2030,7 +2031,7 @@ async function uploadImg(src){
 async function syncAd(ad){
   if(!sb()||!myId) return null;
   const {id,owner,ownerId,age,status,...rest}=ad;
-  const {data,error}=await sb().from("ads").upsert({id:String(id),owner_id:myId,owner_phone:myId,status:status||"approved",data:rest}).select("status").single();
+  const {data,error}=await sb().from("ads").upsert({id:String(id),owner_id:myId,status:status||"approved",data:rest}).select("status").single();
   if(error){console.warn(error);toast("ذخیره روی سرور انجام نشد؛ فقط در این دستگاه ذخیره شد.");return null;}
   ad.status=data.status; return data.status;
 }
@@ -2044,13 +2045,14 @@ async function remoteDelete(id,wasRemote){
 }
 async function adminSetStatus(id, status){
   if(!adminFlag){ toast("فقط ادمین می‌تواند تایید/رد کند"); return; }
-  const ad = mine.find(x=>String(x.id)===String(id));
-  if(ad) ad.status = status;
-  put("ab_ads", mine);
+  if(seed.some(x=>String(x.id)===String(id))){ toast("این آگهی نمونه است و قابل تغییر نیست."); return; }
   if(sb() && myId){
     const {error} = await sb().from("ads").update({status}).eq("id", String(id));
     if(error){ console.warn(error); toast("ذخیره نشد روی سرور"); return; }
   }
+  const ad = mine.find(x=>String(x.id)===String(id));
+  if(ad) ad.status = status;
+  put("ab_ads", mine);
   toast(status==="approved"?"✅ آگهی تایید شد":"❌ آگهی رد شد");
   draw();
 }
