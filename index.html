@@ -6,10 +6,10 @@
 <title>افغان‌بازار | عمده، پرچون، امتیازدهی، نقشه شعاعی و مقایسه کالاها</title>
 <meta name="description" content="پلتفرم پیشرفته آگهی‌های عمده و پرچون در ۳۴ ولایت افغانستان با امتیازدهی، نقشه شعاعی و مقایسه کالاها">
 <meta name="theme-color" content="#0e7a4b">
-<meta property="og:title" content="افغان‌بازار | آگهی‌های عمده و پرچون"><meta property="og:description" content="خرید و فروش در ۳۴ ولایت افغانستان"><meta property="og:type" content="website">
+<meta property="og:title" content="افغان‌بازار | آگهی‌های عمده و پرچون"><meta property="og:description" content="خرید و فروش در ۳۴ ولایت افغانستان با فروشگاه‌های رسمی، نقشه شعاعی و مقایسه کالاها.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🛒%3C/text%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="/>
 <!-- Supabase JS (برای سیستم پیامک) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -21,7 +21,7 @@ body{margin:0;background:var(--bg);color:var(--tx);font-family:Vazirmatn,Tahoma,
 button,input,select,textarea{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--gd);outline-offset:2px}
 
-header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card) 95%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:8px 12px;gap:6px;width:100%;flex-wrap:nowrap}
+header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card) 95%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:8px 16px;gap:10px}
 .header-right{display:flex;align-items:center;flex-shrink:0;gap:4px}
 .header-province-selector{display:flex;align-items:center;background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:2px 4px;gap:2px}
 .header-province-selector span{font-size:11px;color:var(--mu);white-space:nowrap}
@@ -30,7 +30,7 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card)
 .notif-badge{position:absolute;top:-4px;right:-4px;background:#d6324a;color:#fff;font-size:9px;padding:1px 4px;border-radius:99px;font-weight:bold;}
 .header-center{display:flex;align-items:center;justify-content:center;flex:0 0 auto;text-align:center}
 .brand-group{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:var(--tx);cursor:pointer}
-.logo-box{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:var(--gd);display:grid;place-items:center;font-size:13px;font-weight:bold;box-shadow:0 3px 10px rgba(14,122,75,.3)}
+.logo-box{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:var(--gd);display:grid;place-items:center;font-size:13px;font-weight:bold;box-shadow:var(--sh)}
 .brand-title{font-weight:800;font-size:11px;letter-spacing:-0.3px;line-height:1.1}
 .brand-title span,.brand-title b{color:var(--ac)}
 .header-left{display:flex;align-items:center;flex-shrink:0}
@@ -41,7 +41,7 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card)
 .capsule-btn.primary{background:var(--ac);color:#fff}
 .capsule-btn.primary:hover{background:#0a5e3a}
 
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:65px;background:var(--card);border-top:1px solid var(--bd);display:flex;z-index:120;box-shadow:0 -4px 20px rgba(0,0,0,.08);padding-bottom:env(safe-area-inset-bottom, 0px)}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:65px;background:var(--card);border-top:1px solid var(--bd);display:flex;z-index:120;box-shadow:0 -4px 20px rgba(0,0,0,.08);padding-bottom:calc(10px + env(safe-area-inset-bottom, 0px));}
 .bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:none;border:0;cursor:pointer;color:var(--mu);font-size:11px;font-weight:600;gap:2px;transition:color .15s, background .15s}
 .bnav-item span.icon{font-size:17px;line-height:1}
 .bnav-item.active{color:var(--ac);background:var(--chip)}
@@ -76,7 +76,7 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card)
 .tile span{display:block;font-size:28px;line-height:1.4}
 .tile:hover{transform:translateY(-3px)}
 .cities { display: flex; flex-wrap: wrap; gap: 8px; }
-.ccity { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--bd); background: var(--card); border-radius: 12px; padding: 6px 14px; cursor: pointer; font-size: 13px; color: var(--tx); box-shadow: var(--sh); transition: border-color .15s, transform .15s; }
+.ccity { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--bd); background: var(--card); border-radius: 12px; padding: 6px 14px; cursor: pointer; font-size: 13px; color:var(--tx); }
 .ccity:hover { border-color: var(--ac); transform: translateY(-2px); }
 .ccity span { background: var(--chip); color: var(--ac); border-radius: 8px; padding: 1px 8px; font-size: 11px; font-weight: 700; }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tile{background:hsl(var(--h) 28% 19%);color:var(--tx)}}
@@ -91,7 +91,7 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card)
 .wholesale-cat.on{background:#1b3b6f!important;border-color:#1b3b6f!important;color:#fff!important}
 
 .layout{display:grid;grid-template-columns:230px 1fr;gap:24px;margin-top:6px}
-.filters{align-self:start;position:sticky;top:72px;font-size:13px;background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:14px;box-shadow:var(--sh);max-height:calc(100vh - 90px);overflow-y:auto;scrollbar-width:thin}
+.filters{align-self:start;position:sticky;top:72px;font-size:13px;background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:14px;box-shadow:var(--sh);max-height:calc(100vh - 90px);overflow:auto}
 .filters h3{margin:0 0 4px;font-size:13px}
 .filters label{display:block;color:var(--mu);margin:12px 0 4px;font-size:12px}
 .filters input[type=number], .filters select{width:100%;border:1px solid var(--bd);background:var(--bg);border-radius:10px;padding:6px 10px;font-size:13px}
@@ -107,14 +107,14 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card)
 .bar-actions {display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}
-.ad{background:var(--card);border:1px solid var(--bd);border-radius:16px;overflow:hidden;cursor:pointer;display:block;text-align:right;position:relative;box-shadow:var(--sh);transition:transform .15s,box-shadow .15s}
+.ad{background:var(--card);border:1px solid var(--bd);border-radius:16px;overflow:hidden;cursor:pointer;display:block;text-align:right;position:relative;box-shadow:var(--sh);transition:transform .15s ease, border-color .15s ease}
 .ad:hover{transform:translateY(-4px);border-color:var(--ac)}
 .ph{aspect-ratio:4/3;background:linear-gradient(135deg,hsl(var(--h,150) 75% 92%),hsl(calc(var(--h,150) + 28) 70% 83%));display:grid;place-items:center;font-size:46px;position:relative;overflow:hidden}
 .ph img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
 .badge{position:absolute;top:10px;right:10px;background:var(--gd);color:#3a2800;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;z-index:2;max-width:calc(100% - 90px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fav{position:absolute;top:8px;left:8px;width:30px;height:30px;border-radius:50%;border:0;background:rgba(255,255,255,.9);color:#444;cursor:pointer;font-size:15px;line-height:1;z-index:2;display:grid;place-items:center;}
+.fav{position:absolute;top:8px;left:8px;width:30px;height:30px;border-radius:50%;border:0;background:rgba(255,255,255,.9);color:#444;cursor:pointer;font-size:15px;line-height:1;z-index:2;display:grid;place-items:center}
 .fav.on{color:#d6324a}
-.compare-checkbox{position:absolute;top:8px;left:42px;width:24px;height:24px;border-radius:6px;border:2px solid var(--ac);background:rgba(255,255,255,.9);cursor:pointer;z-index:2;display:grid;place-items:center;font-size:13px;color:transparent;transition:background .15s, color .15s}
+.compare-checkbox{position:absolute;top:8px;left:42px;width:24px;height:24px;border-radius:6px;border:2px solid var(--ac);background:rgba(255,255,255,.9);cursor:pointer;z-index:2;display:grid;place-items:center}
 .compare-checkbox.checked{background:var(--ac);color:#fff;}
 
 .i{padding:10px 12px 14px}
@@ -151,7 +151,7 @@ dialog input,dialog select,dialog textarea{width:100%;border:1px solid var(--bd)
 .mtabs{display:flex;gap:16px;margin:8px 0 0;border-bottom:1px solid var(--bd)}.mtabs button{background:none;border:0;padding:6px 0;cursor:pointer;color:var(--mu);border-bottom:2px solid transparent;font-size:13px}.mtabs button.on{color:var(--ac);border-color:var(--ac);font-weight:600}
 .menu button{display:block;width:100%;text-align:right;background:none;border:0;border-bottom:1px solid var(--bd);padding:11px 0;cursor:pointer;font-size:13px}
 .err{color:#d6324a;font-size:12px;min-height:18px;margin-top:6px}
-.toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:8px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:300;font-size:13px;box-shadow:0 5px 15px rgba(0,0,0,.2)}
+.toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:8px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .2s ease}
 .toast.s{opacity:1}
 .fbtn{display:none}
 
@@ -169,11 +169,11 @@ dialog#add[open] { display: flex; flex-direction: column; }
 
 .media-uploader-box { border: 2px dashed var(--bd); border-radius: 14px; padding: 14px; background: var(--bg); text-align: center; margin-top: 6px; }
 .media-actions { display: flex; gap: 8px; justify-content: center; margin-bottom: 10px; flex-wrap: wrap; }
-.media-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--card); border: 1px solid var(--bd); padding: 7px 14px; border-radius: 10px; font-weight: 600; font-size: 12px; cursor: pointer; color: var(--tx); box-shadow: var(--sh); }
+.media-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--card); border: 1px solid var(--bd); padding: 7px 14px; border-radius: 10px; font-weight: 600; font-size: 12px; cursor:pointer; }
 .preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(65px, 1fr)); gap: 8px; margin-top: 8px; }
 .preview-item { position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; border: 1px solid var(--bd); background: var(--card); }
 .preview-item img { width: 100%; height: 100%; object-fit: cover; }
-.preview-item .del-img { position: absolute; top: 2px; left: 2px; background: rgba(0,0,0,0.6); color: #fff; border: 0; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; display: grid; place-items: center; cursor: pointer; }
+.preview-item .del-img { position: absolute; top: 2px; left: 2px; background: rgba(0,0,0,0.6); color: #fff; border: 0; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; display: grid; place-items:center; }
 .preview-item .badge-type { position: absolute; bottom: 2px; right: 2px; background: var(--ac); color: #fff; font-size: 8px; padding: 1px 3px; border-radius: 4px; }
 
 .thumbs-row{display:flex;gap:6px;overflow-x:auto;margin-top:8px;padding-bottom:4px}
@@ -186,12 +186,12 @@ dialog#add[open] { display: flex; flex-direction: column; }
 .pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .badge-verified { background: #0e7a4b; color: #fff; font-size: 11px; padding: 2px 7px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; }
-.seller-card { background: var(--bg); border: 1px solid var(--bd); border-radius: 12px; padding: 12px; margin-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.seller-card { background: var(--bg); border: 1px solid var(--bd); border-radius: 12px; padding: 12px; margin-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; } 
 .seller-card > div:first-child { min-width: 0; flex: 1; }
 .seller-card > div:first-child b { word-break: break-word; }
 .stat-box { display: flex; gap: 12px; font-size: 12px; color: var(--mu); margin-top: 6px; }
 
-.shop-banner { background: linear-gradient(135deg, var(--ac2), var(--ac)); color: #fff; padding: 16px; border-radius: 14px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; }
+.shop-banner { background: linear-gradient(135deg, var(--ac2), var(--ac)); color: #fff; padding: 16px; border-radius: 14px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
 .shop-banner h3 { margin: 0; font-size: 18px; }
 .shop-banner p { margin: 4px 0 0; opacity: 0.85; font-size: 12px; }
 
@@ -200,10 +200,10 @@ dialog#add[open] { display: flex; flex-direction: column; }
 #map-picker-container { width: 100%; height: 200px; border-radius: 10px; border: 1px solid var(--bd); margin-top: 6px; z-index: 10; }
 #radius-map-container { width: 100%; height: 240px; border-radius: 10px; border: 1px solid var(--bd); margin-top: 6px; z-index: 10; }
 
-.compare-floating-bar { position: fixed; bottom: calc(75px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%); background: var(--card); border: 2px solid var(--ac); border-radius: 99px; padding: 7px 18px; box-shadow: 0 10px 30px rgba(0,0,0,.2); display: flex; align-items: center; gap: 12px; z-index: 130; font-size: 12px; font-weight: 600; display: none; max-width: calc(100vw - 24px); }
+.compare-floating-bar { position: fixed; bottom: calc(75px + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%); background: var(--card); border: 2px solid var(--ac); border-radius: 14px; padding: 8px 12px; display:none; align-items:center; gap:10px; box-shadow:var(--sh); z-index:130; }
 .compare-floating-bar.active { display: flex; }
 
-.multi-province-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 6px; max-height: 130px; overflow-y: auto; background: var(--bg); border: 1px solid var(--bd); padding: 8px; border-radius: 10px; margin-top: 6px; }
+.multi-province-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 6px; max-height: 130px; overflow-y: auto; background: var(--bg); border: 1px solid var(--bd); border-radius: 10px; padding: 8px; }
 
 @media(max-width:760px){
   body { padding-bottom: 140px; }
@@ -217,10 +217,10 @@ dialog#add[open] { display: flex; flex-direction: column; }
   .hero, .wholesale-hero{padding:28px 14px 58px}
   .wrap{padding:0 12px}
   .layout{grid-template-columns:1fr;gap:0}
-  .filters{display:none;position:fixed;top:60px;left:10px;right:10px;bottom:calc(75px + env(safe-area-inset-bottom, 0px));z-index:250;max-height:none;box-shadow:0 15px 50px rgba(0,0,0,.4);border-radius:16px;overflow-y:auto;}
+  .filters{display:none;position:fixed;top:60px;left:10px;right:10px;bottom:calc(75px + env(safe-area-inset-bottom, 0px));z-index:250;max-height:none;box-shadow:0 15px 50px rgba(0,0,0,.4);border-radius:18px;}
   .filters.o{display:block}
   .fbtn{display:inline-block}
-  .filter-mobile-close { display: flex !important; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--bd); padding-bottom: 8px; margin-bottom: 10px; font-weight: bold; }
+  .filter-mobile-close { display: flex !important; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--bd); padding-bottom: 8px; margin-bottom: 10px; font-weight: 700; }
   .steps,.safe{grid-template-columns:1fr}
   .stats{gap:14px}
   .rail .ad{flex-basis:170px}
@@ -288,7 +288,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
         </div>
         <h3>قیمت پرچون (افغانی)</h3>
         <div class="two"><input id="pmin" type="number" min="0" placeholder="از" aria-label="حداقل قیمت"><input id="pmax" type="number" min="0" placeholder="تا" aria-label="حداکثر قیمت"></div>
-        
+
         <div id="advanced-filters-box" style="margin-top:12px;">
           <h3>ویژگی‌های تخصصی</h3>
           <label for="f-cond">وضعیت کالا</label>
@@ -338,7 +338,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
       <div class="step"><b>۳</b><h3>تماس یا چت</h3><p>خریداران مستقیماً از طریق چت یا تماس با شما ارتباط می‌گیرند.</p></div></div></div>
     <div class="safe"><h2>🛡️ نکات خرید امن</h2>
       <div>پیش از پرداخت بیعانه، کالا را حضوری بررسی کنید.</div><div>برای محل ملاقات، مکان‌های عمومی و پرتردد انتخاب کنید.</div>
-      <div>هرگز پول پیش از تحویل کالا کارت‌به‌کارت نکنید.</div><div>قیمت بسیار پایین‌تر از نرخ بازار نشانه‌ی احتیاط است.</div></div>
+      <div>هرگز پول پیش از تحویل کالا کارت‌به‌کارت نکنید.</div><div>قیمت بسیار پایین‌تر از نرخ بازار نشانه‌ی احتیاط و بررسی بیشتر است.</div>
   </div>
 </div>
 
@@ -357,7 +357,9 @@ dialog#add[open] { display: flex; flex-direction: column; }
     <div class="cats-container"><div class="cats" id="wholesale-cats" role="tablist" aria-label="دسته‌های عمده"></div></div>
     <div class="bar" style="margin-top:14px;">
       <h2 id="wholesale-title">آگهی‌های عمده و تناژ بالا <span>تجار و واردکنندگان</span></h2>
-      <input id="wmin" type="number" min="0" placeholder="قیمت از" aria-label="حداقل قیمت عمده" style="width:90px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:6px 10px"><input id="wmax" type="number" min="0" placeholder="تا" aria-label="حداکثر قیمت عمده" style="width:80px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:6px 10px"><select id="sort-wholesale" aria-label="مرتب‌سازی عمده" style="background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:6px 12px">
+      <input id="wmin" type="number" min="0" placeholder="قیمت از" aria-label="حداقل قیمت عمده" style="width:90px;background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:6px 10px;">
+      <input id="wmax" type="number" min="0" placeholder="قیمت تا" aria-label="حداکثر قیمت عمده" style="width:90px;background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:6px 10px;">
+      <select id="sort-wholesale" aria-label="مرتب‌سازی عمده">
         <option value="new">جدیدترین عمده</option>
         <option value="lo">کمترین قیمت عمده</option>
         <option value="hi">بیشترین قیمت عمده</option>
@@ -374,7 +376,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
   <button class="capsule-btn" id="clear-compare-btn" style="padding:4px 6px;font-size:11px;color:#d6324a;">پاک‌کردن</button>
 </div>
 
-<footer><b>افغان‌بازار</b> — بازار آگهی‌های رایگان افغانستان (نقشه شعاعی و مقایسه کالاها)<br>نسخه ۲۴<br><button class="link" id="theme-btn" type="button">🌓 تغییر تم روشن/تیره</button> · <a href="#" class="link" id="terms-link">قوانین و حریم خصوصی</a> کامل.</footer>
+<footer><b>افغان‌بازار</b> — بازار آگهی‌های رایگان افغانستان (نقشه شعاعی و مقایسه کالاها)<br>نسخه ۲۴<br><button class="link" id="terms-btn" style="margin-top:10px;">قوانین و حریم خصوصی</button></footer>
 
 <nav class="bottom-nav">
   <button class="bnav-item active" data-target="retail">
@@ -402,7 +404,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
 <dialog id="radius-dlg">
   <div class="dialog-content-pad">
     <h2>📍 تنظیم جستجوی شعاعی روی نقشه</h2>
-    <div class="mu" style="font-size:12px;margin-bottom:8px;">روی نقطه دلخواه در نقشه کلیک کنید یا شعاع جستجو را تغییر دهید تا فقط آگهی‌های آن محدوده نمایش داده شوند.</div>
+    <div class="mu" style="font-size:12px;margin-bottom:8px;">روی نقطه دلخواه در نقشه کلیک کنید یا شعاع جستجو را تغییر دهید تا فقط آگهی‌های نزدیک به مکان شما نمایش داده شوند.</div>
     <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px;">
       <label for="radius-slider" style="margin:0;font-size:12px;white-space:nowrap;">شعاع (ک‌م):</label>
       <input id="radius-slider" type="range" min="5" max="200" step="5" value="50" style="flex:1;">
@@ -434,7 +436,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
     <div id="nm-w" hidden><label for="a-n">نام کامل</label><input id="a-n" maxlength="30" autocomplete="name"></div>
     <button class="capsule-btn" id="g-login" type="button" style="width:100%;margin:10px 0 2px;border:1px solid var(--bd);text-align:center;">🔐 ورود با حساب گوگل</button>
     <div class="mu" style="text-align:center;font-size:11px;">یا با کد تایید:</div>
-    <div class="mtabs" id="auth-methods"><button class="on" data-am="email" type="button">ایمیل</button><button data-am="phone" type="button" disabled style="opacity:.5;cursor:not-allowed">پیامک (فعلاً از دسترس خارج است)</button></div>
+    <div class="mtabs" id="auth-methods"><button class="on" data-am="email" type="button">ایمیل</button><button data-am="phone" type="button" disabled style="opacity:.5;cursor:not-allowed">شماره موبایل</button></div>
     <div id="mail-box"><label for="a-mail">ایمیل</label><input id="a-mail" type="email" inputmode="email" autocomplete="email" dir="ltr" placeholder="name@example.com"></div>
     <div id="ph-box" hidden><label for="a-p">شماره موبایل (سلام، روشن، اتصالات)</label><input id="a-p" inputmode="tel" placeholder="07…" autocomplete="tel"></div>
     <div id="otp-section" style="margin-top:8px; display:none;">
@@ -525,12 +527,12 @@ dialog#add[open] { display: flex; flex-direction: column; }
     </div>
 
     <div id="retail-spec-row" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
- <div><label for="form-brand">مدل / برند (برای مقایسه)</label><input id="form-brand" maxlength="40" placeholder="مثلاً: تویوتا کرولا"></div>
- <div><label for="form-spec">مشخصات کلیدی</label><input id="form-spec" maxlength="60" placeholder="مثلاً: ۱۲۸ گیگ / ۸۰ هزار کیلومتر"></div>
+  <div><label for="form-brand">مدل / برند (برای مقایسه)</label><input id="form-brand" maxlength="40" placeholder="مثلاً: تویوتا کرولا"></div>
+  <div><label for="form-spec">مشخصات کلیدی</label><input id="form-spec" maxlength="60" placeholder="مثلاً: ۱۲۸ گیگ / ۸۰ هزار کیلومتر"></div>
 </div>
 <div id="wholesale-row" style="display:none;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
- <div><label for="f-moq">حداقل سفارش</label><input id="f-moq" type="number" min="0" inputmode="numeric" placeholder="مثلاً: ۱۰"></div>
- <div><label for="f-unit">واحد فروش</label><select id="f-unit"><option>کارتن</option><option>کیسه</option><option>تن</option><option>کیلوگرم</option><option>عدد</option></select></div>
+  <div><label for="f-moq">حداقل سفارش</label><input id="f-moq" type="number" min="0" inputmode="numeric" placeholder="مثلاً: ۱۰"></div>
+  <div><label for="f-unit">واحد فروش</label><select id="f-unit"><option>کارتن</option><option>کیسه</option><option>تن</option><option>کیلوگرم</option><option>عدد</option></select></div>
 </div>
 <label style="margin-top:10px;" id="map-label-text">موقعیت دقیق روی نقشه ولایت (انتخاب با پین)</label>
     <div id="map-picker-container"></div>
@@ -540,7 +542,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
 
     <label for="f-p" style="margin-top:10px;" id="price-label-text">قیمت (افغانی، ۰ = توافقی)</label>
     <input id="f-p" type="number" min="0" inputmode="numeric" placeholder="مثلاً: ۸۵۰۰۰۰">
-    <div style="display:flex;gap:8px;align-items:center;margin-top:6px;"><select id="f-cur" style="flex:1"><option value="AFN">افغانی</option><option value="USD">دلار</option></select><label class="chk" style="margin:0;flex:1"><input type="checkbox" id="f-neg" style="width:auto"> قابل مذاکره</label></div>
+    <div style="display:flex;gap:8px;align-items:center;margin-top:6px;"><select id="f-cur" style="flex:1"><option value="AFN">افغانی</option><option value="USD">دلار</option></select><label class="chk" style="margin:0;white-space:nowrap;"><input type="checkbox" id="f-neg"> قابل مذاکره</label></div>
 
     <div style="margin-top:12px; background:var(--bg); border:1px solid var(--bd); padding:10px; border-radius:10px;" id="shop-box-container">
       <h4 style="margin:0 0 6px; font-size:13px; color:var(--ac);" id="shop-box-title">🚀 ابزارهای تجاری و فروشگاهی</h4>
@@ -572,25 +574,21 @@ dialog#add[open] { display: flex; flex-direction: column; }
 <dialog id="terms-dlg"><div class="dialog-content-pad"><h2>قوانین و حریم خصوصی</h2><div style="font-size:13px;line-height:2">
 <b>اقلام ممنوعه:</b> سلاح و مهمات، مواد مخدر، اسناد و تذکره، کالای دزدی، اقلام تاریخی قاچاق و هر کالای خلاف قانون.<br>
 <b>مسئولیت:</b> افغان‌بازار فقط محل نمایش آگهی است؛ بررسی کالا و معامله به عهده خریدار و فروشنده است.<br>
-<b>حریم خصوصی:</b> شماره موبایل برای ورود با پیامک و نمایش در آگهی‌های شما استفاده می‌شود. کد پیامک و اطلاعات بانکی خود را با هیچ‌کس در میان نگذارید.</div>
+<b>حریم خصوصی:</b> شماره موبایل برای ورود با پیامک و نمایش در آگهی‌های شما استفاده می‌شود. کد پیامک و اطلاعات شخصی شما فقط برای احراز هویت و تماس‌های ضروری به‌کار می‌رود.<br>
 <div class="row"><button class="capsule-btn primary" id="close-terms">متوجه شدم</button></div></div></dialog>
 <div class="toast" id="toast" role="status"></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
-// ==========================================
-// اتصال به Supabase (سیستم پیامک واقعی)
-// ==========================================
 const SUPABASE_URL = 'https://snhyzmwgazifdqyvqsnu.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNuaHl6bXdnYXppZmRxeXZxc251Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMyOTkxNjEsImV4cCI6MjEwODg3NTE2MX0.TuvApVWN-fTtd3aLQy0aerNgy3vJq1ZXuZehtytpNNo';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNuaHl6bXdnYXppZmRxeXZxc251Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMyOTkxNjEsImV4cCI6MjEwODg3NTE2MX0.TuvApVWN';
 let supabaseClient = null;
 try {
   if (window.supabase) supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 } catch(e) { console.error("خطا در اتصال به سرور:", e); }
-// ==========================================
 
-const cats=[["همه","🗂️"],["املاک","🏠"],["وسایل نقلیه","🚗"],["موبایل و تبلت","📱"],["کمپیوتر و لپ‌تاپ","💻"],["لوازم خانگی","🧺"],["مبلمان و دیکور","🛋️"],["لباس و پوشاک","👕"],["زراعت و مالداری","🐑"],["خوراک و خشکبار","🌰"],["ماشین‌آلات و ابزار","🔧"],["خدمات","🛠️"],["استخدام","💼"],["کتاب و تحصیل","📚"],["ورزش و سرگرمی","⚽"],["ساز و موسیقی","🎸"]];
-const wholesaleCats=[["همه عمده","📦"],["مواد غذایی و خواربار عمده (برنج، روغن، آرد)","🌾"],["خشکبار و میوه خشک تناژ بالا (کشمش، بادام، پسته)","🌰"],["موبایل و گجت دیجیتال (کارتن و عمده)","📱"],["لوازم خانگی و برقی (عمده و کارتن)","🧺"],["پوشاک و تکه (عمده‌فروشی بازار)","👕"],["آهن‌آلات و مصالح ساختمانی (تناژ بالا)","🏗️"],["لوازم یدکی موتر و ماشین‌آلات (عمده)","⚙️"],["مواد شوینده و بهداشتی (کارتن و عمده)","🧼"]];
+const cats=[["همه","🗂️"],["املاک","🏠"],["وسایل نقلیه","🚗"],["موبایل و تبلت","📱"],["کمپیوتر و لپ‌تاپ","💻"],["لوازم خانگی","🏡"],["کالای شخصی و پوشاک","👕"],["مبلمان و دکوراسیون","🛋️"],["صنعت و ماشین‌آلات","🏭"],["خدمات و کسب‌وکار","💼"],["حیوانات و کشاورزی","🐄"],["وسایل ورزشی","🏅"]];
+const wholesaleCats=[["همه عمده","📦"],["مواد غذایی و خواربار عمده (برنج، روغن، آرد)","🌾"],["خشکبار و میوه خشک تناژ بالا (کشمش، بادام)","🥭"],["لوازم الکترونیکی و موبایل عمده","📱"],["پوشاک و البسه عمده","👕"],["لوازم خانگی و آشپزخانه","🏠"],["مواد ساختمانی و ابزار","🧰"],["کود و سموم کشاورزی","🌱"],["لوازم اداری و چاپ","🖨️"],["تجهیزات و ملزومات رستوران","🍽️"]];
 
 const provinceCoords = [
   {name: "کابل", lat: 34.5553, lng: 69.2075},
@@ -631,29 +629,27 @@ const provinceCoords = [
 const cities = provinceCoords.map(p => p.name);
 
 const seed=[
-  {id:"s0", t:"خانه دو منزله در شهرک ۱۵", c:1, ci:0, p:6500000, d:"چهار اتاق، حویلی و چاه آب. سند شرعی دارد.", age:1, u:1, ph:"0770011223", imgs:[], views:142, calls:12, cond:"used", sellerName:"احمد عزیزی", verified:true, isShop:true, shopName:"املاک تخصصی کابل مرکزی", isWholesale:false, lat:34.5553, lng:69.2075},
-  {id:"s1", t:"تویوتا کرولا، مدل ۲۰۱۲", c:2, ci:1, p:850000, d:"موتر پاک و سالم، گمرک‌شده، کارکرد کم.", age:2, u:0, ph:"0791122334", imgs:[], views:98, calls:7, cond:"used", sellerName:"محمدرضا ناصری", verified:true, isShop:true, shopName:"نمایشگاه موتر باستان مزار", isWholesale:false, lat:36.7062, lng:67.1106},
-  {id:"s2", t:"سامسونگ گلکسی A54", c:3, ci:0, p:14500, d:"۱۲۸ گیگ، یک ماه کارکرده، همراه جعبه.", age:3, u:0, ph:"0782233445", imgs:[], views:210, calls:25, cond:"new", sellerName:"فروشگاه مرکزی موبایل", verified:true, isShop:true, shopName:"موبایل‌فروشی دیجیتال کابل", isWholesale:false, lat:34.5323, lng:69.1658},
-  {id:"s3", t:"لپ‌تاپ HP، رم ۸", c:4, ci:2, p:32000, d:"حافظه ۲۵۶ گیگ SSD، کارتن دارد.", age:9, u:0, ph:"0703344556", imgs:[], views:75, calls:4, cond:"used", sellerName:"وحید احمدی", verified:false, isShop:false, isWholesale:false, lat:36.7123, lng:67.1245},
-  {id:"w1", t:"کارتن عمده گوشی‌های شیائومی (تعداد ۵۰ عددی)", c:3, ci:0, p:650000, d:"فروش عمده و مستقیم کارتن گوشی شیائومی ردمی ۱۲ با قیمت همکاری تجار.", age:4, u:1, ph:"0701122334", imgs:[], views:310, calls:42, cond:"new", sellerName:"عمده‌فروشی دیجیتال کابل", verified:true, isShop:true, shopName:"پخش عمده موبایل افغانستان", isWholesale:true, wholesaleCat:3, lat:34.5220, lng:69.1750},
-  {id:"w2", t:"برنج اعلای پاکستانی تناژ بالا (کیسه ۵۰ کیلویی)", c:9, ci:1, p:3800, d:"فروش تناژ بالا برای فروشگاه‌ها و مارکت‌های بزرگ هرات و کابل.", age:12, u:0, ph:"0792233445", imgs:[], views:180, calls:19, cond:"new", sellerName:"شرکت تجاری صوفی‌زاده", verified:true, isShop:true, shopName:"بازرگانی مواد غذایی هرات", isWholesale:true, wholesaleCat:1, lat:34.3529, lng:62.2040}
-].map(a => ({...a, views: a.views || 45, calls: a.calls || 3, cond: a.cond || 'used', sellerName: a.sellerName || 'کاربر بازار', verified: a.verified !== undefined ? a.verified : true, isWholesale: a.isWholesale || false, wholesaleCat: a.wholesaleCat || 1}));
+  {id:"s0", t:"خانه دو منزله در شهرک ۱۵", c:1, ci:0, p:6500000, d:"چهار اتاق، حویلی و چاه آب. سند شرعی دارد.", age:1, u:1, ph:"0770011223", imgs:[], views:142, calls:11, cond:"new", sellerName:"خانم احمدی", verified:true, isShop:false, isWholesale:false, cur:"AFN", lat:34.5553, lng:69.2075, owner:"demo"},
+  {id:"s1", t:"تویوتا کرولا، مدل ۲۰۱۲", c:2, ci:1, p:850000, d:"موتر پاک و سالم، گمرک‌شده، کارکرد کم.", age:2, u:0, ph:"0791122334", imgs:[], views:210, calls:25, cond:"used", sellerName:"عبدالله", verified:true, isShop:false, isWholesale:false, cur:"AFN", lat:34.3529, lng:62.2040, owner:"demo"},
+  {id:"s2", t:"سامسونگ گلکسی A54", c:3, ci:0, p:14500, d:"۱۲۸ گیگ، یک ماه کارکرده، همراه جعبه.", age:3, u:0, ph:"0782233445", imgs:[], views:310, calls:18, cond:"used", sellerName:"فرید", verified:true, isShop:false, isWholesale:false, cur:"AFN", lat:34.5667, lng:69.2175, owner:"demo"},
+  {id:"s3", t:"لپ‌تاپ HP، رم ۸", c:4, ci:2, p:32000, d:"حافظه ۲۵۶ گیگ SSD، کارتن دارد.", age:9, u:0, ph:"0703344556", imgs:[], views:75, calls:4, cond:"used", sellerName:"احمد", verified:false, isShop:false, isWholesale:false, cur:"AFN", lat:36.7062, lng:67.1106, owner:"demo"},
+  {id:"w1", t:"کارتن عمده گوشی‌های شیائومی (تعداد ۵۰ عددی)", c:3, ci:0, p:650000, d:"فروش عمده و مستقیم کارتن گوشی شیائومی رد-متعادل.", age:1, u:1, ph:"0779988776", imgs:[], views:66, calls:7, cond:"new", sellerName:"شرکت پخش افغان", verified:true, isShop:true, isWholesale:true, wholesaleCat:4, cur:"AFN", provinces:[0,1,2], owner:"demo"},
+  {id:"w2", t:"برنج اعلای پاکستانی تناژ بالا (کیسه ۵۰ کیلویی)", c:9, ci:1, p:3800, d:"فروش تناژ بالا برای فروشگاه‌ها و مارکت‌ها.", age:2, u:1, ph:"0796655443", imgs:[], views:101, calls:14, cond:"new", sellerName:"تجارت ملی", verified:true, isShop:true, isWholesale:true, wholesaleCat:1, cur:"AFN", provinces:[1,2,3], owner:"demo"}
+].map(a => ({...a, views: a.views || 45, calls: a.calls || 3, cond: a.cond || 'used', sellerName: a.sellerName || 'کاربر بازار', verified: a.verified !== undefined ? a.verified : true, isShop: !!a.isShop, isWholesale: !!a.isWholesale, cur: a.cur || 'AFN', status: a.status || 'approved'}));
 
 const $=s=>document.querySelector(s),nf=n=>n.toLocaleString("fa-IR"),fmt=n=>n?nf(n)+" افغانی":"توافقی";
 const esc=s=>{const d=document.createElement("div");d.textContent=(s==null)?"":String(s);return d.innerHTML};
 const ago=h=>h<2?"چند دقیقه پیش":h<24?nf(Math.floor(h))+" ساعت پیش":h<48?"دیروز":nf(Math.floor(h/24))+" روز پیش";
 const mem={};const S=(()=>{try{localStorage.setItem("__ab_test__","1");localStorage.removeItem("__ab_test__");return localStorage}catch(e){return{getItem:k=>mem[k]??null,setItem:(k,v)=>{mem[k]=v},removeItem:k=>{delete mem[k]}}}})();
-const get=(k,d)=>{try{return JSON.parse(S.getItem(k))??d}catch(e){return d}},put=(k,v)=>{try{S.setItem(k,JSON.stringify(v));return true}catch(e){console.warn("ذخیره‌سازی انجام نشد:",k,e);return false}};
-
+const get=(k,d)=>{try{return JSON.parse(S.getItem(k))??d}catch(e){return d}},put=(k,v)=>{try{S.setItem(k,JSON.stringify(v));return true}catch(e){console.warn("ذخیره‌سازی انجام نشد.",e);return false}};
 const normDigits=s=>String(s??"").replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d));
 const normFa=s=>normDigits(s).replace(/ي/g,"ی").replace(/ك/g,"ک").replace(/[\u064B-\u065F\u200c]/g,"").toLowerCase();
-const USD_AFN=70; // نرخ تقریبی دلار؛ برای مرتب‌سازی/فیلتر، در صورت نیاز ویرایش شود
-const EXPIRE_H=24*60; // انقضای آگهی: ۶۰ روز
+const USD_AFN=70;
+const EXPIRE_H=24*60;
 const afn=a=>a.cur==="USD"?a.p*USD_AFN:a.p;
 const pcmp=(a,b)=>{const x=a.p>0?afn(a):Infinity,y=b.p>0?afn(b):Infinity;return x===y?0:x<y?-1:1};
 const fmtAd=a=>a.p?nf(a.p)+(a.cur==="USD"?" دلار":" افغانی")+(a.isWholesale&&a.unit?" / "+esc(a.unit):"")+(a.neg?" (قابل مذاکره)":""):"توافقی";
 const adUrl=id=>location.href.split("#")[0]+"#ad-"+encodeURIComponent(id);
-// ===== STATE with safe parsing =====
 let users=get("ab_users",{})||{};
 let mine=Array.isArray(get("ab_ads",[]))?get("ab_ads",[]):[];
 let me=get("ab_sess",null);
@@ -667,8 +663,6 @@ let notifications=Array.isArray(get(UK("ab_notifs"),[]))?get(UK("ab_notifs"),[])
 let cat=0,wholesaleCat=0,view="all",mode="in",after=null;
 let currentPage=1, wholesaleCurrentPage=1, itemsPerPage=8;
 let currentAppTab = "retail";
-// ADMIN_PHONE removed
-
 let compareList = [];
 let radiusFilterActive = false;
 let radiusCenterLat = 34.5553;
@@ -676,13 +670,8 @@ let radiusCenterLng = 69.2075;
 let radiusMaxKm = 50;
 
 if(me&&!users[me])me=null;
-const loadFavs=()=>{const f=me?get("ab_fav_"+me,[]):[];favs=Array.isArray(f)?f:[];notes=get(UK("ab_notes"),{})||{};messages=get(UK("ab_msgs"),{})||{};const nn=get(UK("ab_notifs"),[]);notifications=Array.isArray(nn)?nn:[];};loadFavs();
-const all=()=>{
-  const m = Array.isArray(mine) ? mine : [];
-  return m.map(a=>({...a,age:(Date.now()-a.ts)/36e5})).filter(a=>a.age<EXPIRE_H||a.owner===me).concat(seed);
-};
-async function sha(s){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
-
+const loadFavs=()=>{const f=me?get("ab_fav_"+me,[]):[];favs=Array.isArray(f)?f:[];notes=get(UK("ab_notes"),{})||{};messages=get(UK("ab_msgs"),{})||{};const nn=get(UK("ab_notifs"),[]);notifications=Array.isArray(nn)?nn:[];};
+const all=()=>{const m=Array.isArray(mine)?mine:[];return m.map(a=>({...a,age:(Date.now()-a.ts)/36e5})).filter(a=>a.age<EXPIRE_H||a.owner===me).concat(seed);};
 const cityOptionsHTML = '<option value="-1">🌐 ولایت</option>' + provinceCoords.map((x,i)=>`<option value="${i}">${x.name}</option>`).join("");
 $("#header-city-select").innerHTML = cityOptionsHTML;
 $("#f-ci").innerHTML = provinceCoords.map((x,i)=>`<option value="${i}">${x.name}</option>`).join("");
@@ -693,19 +682,12 @@ function addNotification(text) {
   put(UK("ab_notifs"), notifications);
   updateNotifBadge();
 }
-
 function updateNotifBadge() {
   if(!Array.isArray(notifications)) notifications = [];
   const unread = notifications.filter(n => !n.read).length;
   const badge = $("#notif-count-badge");
-  if(unread > 0) {
-    badge.textContent = unread;
-    badge.style.display = "inline-block";
-  } else {
-    badge.style.display = "none";
-  }
+  if(unread > 0) { badge.textContent = unread; badge.style.display = "inline-block"; } else { badge.style.display = "none"; }
 }
-
 $("#notif-bell-btn").onclick = () => {
   if(!Array.isArray(notifications)) notifications = [];
   notifications.forEach(n => n.read = true);
@@ -724,13 +706,9 @@ $("#close-notif-dlg").onclick = () => $("#notif-dlg").close();
 
 function populateModalCategorySelect(isWholesale) {
   const selectEl = $("#f-c");
-  if(isWholesale) {
-    selectEl.innerHTML = wholesaleCats.slice(1).map((x,i)=>`<option value="${i+1}">${x[0]}</option>`).join("");
-  } else {
-    selectEl.innerHTML = cats.slice(1).map((x,i)=>`<option value="${i+1}">${x[0]}</option>`).join("");
-  }
+  if(isWholesale) { selectEl.innerHTML = wholesaleCats.slice(1).map((x,i)=>`<option value="${i+1}">${x[0]}</option>`).join(""); }
+  else { selectEl.innerHTML = cats.slice(1).map((x,i)=>`<option value="${i+1}">${x[0]}</option>`).join(""); }
 }
-
 function buildMultiProvinceCheckboxes() {
   const grid = $("#multi-provinces-grid");
   grid.innerHTML = provinceCoords.map((p, i) => `
@@ -738,13 +716,7 @@ function buildMultiProvinceCheckboxes() {
   `).join("");
 }
 buildMultiProvinceCheckboxes();
-
-$("#header-city-select").addEventListener("change", (e) => {
-  currentPage = 1;
-  wholesaleCurrentPage = 1;
-  draw();
-});
-
+$("#header-city-select").addEventListener("change", (e) => { currentPage = 1; wholesaleCurrentPage = 1; draw(); });
 window.resetAllFilters = (e) => {
   if(e) e.preventDefault();
   ["#q","#pmin","#pmax","#q-wholesale","#wmin","#wmax"].forEach(s=>{const el=$(s);if(el)el.value="";});
@@ -758,30 +730,16 @@ window.resetAllFilters = (e) => {
   draw();
   $("#listing").scrollIntoView({behavior:"smooth"});
 };
-
 function drawCats(){
   $("#cats").innerHTML=cats.map((x,i)=>`<button class="cat ${i==cat?'on':''}" data-i="${i}" role="tab" aria-selected="${i==cat}"><i>${x[1]}</i>${x[0]}</button>`).join("");
   $("#wholesale-cats").innerHTML=wholesaleCats.map((x,i)=>`<button class="cat wholesale-cat ${i==wholesaleCat?'on':''}" data-i="${i}" role="tab" aria-selected="${i==wholesaleCat}"><i>${x[1]}</i>${x[0]}</button>`).join("");
 }
 function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("s");setTimeout(()=>t.classList.remove("s"),2200)}
-
-function getShopAverageRating(ownerPhone) {
-  const revs = shopReviews[ownerPhone] || [];
-  if(revs.length === 0) return { avg: "—", count: 0 };
-  const sum = revs.reduce((acc, r) => acc + r.rating, 0);
-  return { avg: (sum / revs.length).toFixed(1), count: revs.length };
-}
-
+function getShopAverageRating(ownerPhone) { const revs = shopReviews[ownerPhone] || []; if(revs.length === 0) return { avg: "—", count: 0 }; const sum = revs.reduce((acc, r) => acc + r.rating, 0); return { avg: (sum / revs.length).toFixed(1), count: revs.length }; }
 function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
-  var R = 6371;
-  var dLat = deg2rad(lat2-lat1);
-  var dLon = deg2rad(lon2-lon1);
-  var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon/2) * Math.sin(dLon/2);
-  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  return R * c;
+  var R = 6371; var dLat = deg2rad(lat2-lat1); var dLon = deg2rad(lon2-lon1); var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon/2) * Math.sin(dLon/2); var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); return R * c;
 }
 function deg2rad(deg) { return deg * (Math.PI/180); }
-
 function renderCard(a){
   const mainImg = (Array.isArray(a.imgs) && a.imgs.length > 0) ? a.imgs[0] : (a.img || "");
   const shopRatingInfo = a.isShop ? getShopAverageRating(a.ph) : null;
@@ -796,13 +754,12 @@ function renderCard(a){
       ${mainImg ? `<img src="${mainImg}" alt="${esc(a.t)}" loading="lazy">` : `<span>${a.isWholesale ? '📦' : (cats[a.c]?.[1] || '📦')}</span>`}
     </div>
     ${a.u?'<span class="badge">فوری</span>':''}
-    ${a.isWholesale?'<span class="badge wholesale-badge" style="top:10px;left:70px;right:auto;">📦 عمده</span>':(a.isShop?`<span class="badge" style="background:var(--ac);color:#fff;top:10px;left:70px;right:auto;">🏪 فروشگاه (${shopRatingInfo?.avg || '—'} ★)</span>`:'')}
+    ${a.isWholesale?'<span class="badge wholesale-badge" style="top:10px;left:70px;right:auto;">📦 عمده</span>':(a.isShop?`<span class="badge" style="background:var(--ac);color:#fff;top:10px;left:70px;right:auto;">🏪 رسمی</span>`:'')}
     <button class="fav ${favs.includes(a.id)?'on':''}" data-f="${a.id}" aria-label="نشان‌کردن">${favs.includes(a.id)?'♥':'♡'}</button>
-    ${!a.isWholesale ? `<button class="compare-checkbox ${isCompared?'checked':''}" data-comp="${a.id}" aria-label="مقایسه" aria-pressed="${isCompared}" title="افزودن به مقایسه">⚖️</button>` : ''}
-    <div class="i"><b>${esc(a.t)}</b><div class="price">${fmtAd(a)}</div><div class="mu">${ago(a.age)} · ${locLabel}</div>${(view==="mine"||view==="admin")?`<div class="mu" style="margin-top:4px;font-size:11px;">👁️ ${nf(a.views||0)} · 📞 ${nf(a.calls||0)}</div>`:''}${(view==="fav"&&notes[me]&&notes[me][a.id])?`<div style="margin-top:4px;background:var(--chip);padding:3px 6px;border-radius:4px;font-size:11px;">📝 ${esc(notes[me][a.id])}</div>`:''}${view==="admin"?`<div style="margin-top:6px;display:flex;gap:4px;align-items:center;flex-wrap:wrap;"><span style="font-size:10px;padding:2px 6px;border-radius:4px;background:${(a.status||"approved")==="approved"?"var(--chip)":((a.status||"approved")==="pending"?"#fff3cd":"#f8d7da")};color:${(a.status||"approved")==="approved"?"var(--ac)":((a.status||"approved")==="pending"?"#856404":"#721c24")};">${(a.status||"approved")==="approved"?"✓ منتشرشده":((a.status||"approved")==="pending"?"⏳ در انتظار":"✕ رد شده")}</span>${!seed.some(x=>String(x.id)===String(a.id))?`${(a.status||"approved")!=="approved"?`<button class="capsule-btn" data-approve="${a.id}" style="padding:2px 8px;font-size:10px;background:#0e7a4b;color:#fff;">✅ تایید</button>`:''}${(a.status||"approved")!=="rejected"?`<button class="capsule-btn" data-reject="${a.id}" style="padding:2px 8px;font-size:10px;background:#d6324a;color:#fff;">❌ رد</button>`:''}`:`<span style="font-size:9px;color:var(--mu);">نمونه</span>`}</div>`:''}${view==="mine" && (a.status||"approved")!=="approved"?`<div style="margin-top:4px;font-size:10px;padding:2px 6px;border-radius:4px;display:inline-block;background:${(a.status||"approved")==="pending"?"#fff3cd":"#f8d7da"};color:${(a.status||"approved")==="pending"?"#856404":"#721c24"};">${(a.status||"approved")==="pending"?"⏳ در انتظار تایید ادمین":"✕ رد شده توسط ادمین"}</div>`:''}</div>
+    ${!a.isWholesale ? `<button class="compare-checkbox ${isCompared?'checked':''}" data-comp="${a.id}" aria-label="مقایسه" aria-pressed="${isCompared}" title="افزودن به مقایسه">✓</button>` : ''}
+    <div class="i"><b>${esc(a.t)}</b><div class="price">${fmtAd(a)}</div><div class="mu">${ago(a.age)} · ${locLabel}</div>${(view==="mine"||view==="admin")?`<div class="mu" style="margin-top:4px;">${a.status ? (a.status==='pending'?'در انتظار تایید':(a.status==='rejected'?'رد شده':'تأیید شده')) : 'تأیید شده'}</div>`:''}${a.isShop && shopRatingInfo ? `<div class="mu" style="margin-top:4px;">⭐ ${shopRatingInfo.avg} (${shopRatingInfo.count} نظر)</div>` : ''}</div>
   </div>`;
 }
-
 function draw(){
   const q=$("#q").value.trim(),city=+$("#header-city-select").value,s=$("#sort").value;
   const pminV = $("#pmin").value, pmaxV = $("#pmax").value;
@@ -839,27 +796,27 @@ function draw(){
     }
     return true;
   });
-  
+
   if(view=="admin"){ 
     r = allAds; 
     setTimeout(async () => {
-        renderReports();
-        if(sb() && adminFlag) {
-            const { data } = await sb().rpc('get_admin_stats');
-            if(data) {
-                $("#dynamic-shop-banner").innerHTML = `
-                  <div class="shop-banner" style="justify-content:space-around; margin-bottom:10px; background:linear-gradient(135deg, #1b3b6f, #152c48);">
-                    <div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(data.users)}</b><span style="font-size:11px;">کل کاربران</span></div>
-                    <div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(data.ads)}</b><span style="font-size:11px;">کل آگهی‌ها</span></div>
-                    <div style="text-align:center;"><b style="font-size:20px;display:block;color:#ffc107;">${nf(data.pending)}</b><span style="font-size:11px;">در انتظار تایید</span></div>
-                  </div>
-                `;
-            }
+      renderReports();
+      if(sb() && adminFlag) {
+        const { data } = await sb().rpc('get_admin_stats');
+        if(data) {
+          $("#dynamic-shop-banner").innerHTML = `
+            <div class="shop-banner" style="justify-content:space-around; margin-bottom:10px; background:linear-gradient(135deg, #1b3b6f, #152c48);">
+              <div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(data.users)}</b><span style="font-size:11px;">کل کاربران</span></div>
+              <div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(data.ads)}</b><span style="font-size:11px;">کل آگهی‌ها</span></div>
+              <div style="text-align:center;"><b style="font-size:20px;display:block;color:#ffc107;">${nf(data.pending)}</b><span style="font-size:11px;">در انتظار تایید</span></div>
+            </div>
+          `;
         }
+      }
     }, 50); 
   }
-  
-  if(view==="admin"){
+
+  if(view=="admin"){
     const rank = a => (a.status||"approved")==="pending"?0:((a.status||"approved")==="approved"?1:2);
     r.sort((a,b)=> rank(a)-rank(b) || a.age-b.age);
   }
@@ -867,10 +824,10 @@ function draw(){
   else if(s=="hi") r.sort((a,b)=>afn(b)-afn(a));
   else if(s=="pop") r.sort((a,b)=>(b.views||0)-(a.views||0));
   else r.sort((a,b)=>a.age-b.age);
-  
-  const titleMap = {all:cat?(cats[cat]?.[0]||"همه"):"همه آگهی‌های پرچون", mine:"آگهی‌های من و آمار بازدید", fav:"نشان‌شده‌ها و یادداشت‌ها", admin:"🛡️ پنل مدیریت کل آگهی‌ها", shop:"🏪 مدیریت فروشگاه رسمی من و نظرات"};
-  $("#title").innerHTML=titleMap[view]+`<span>${nf(r.length)} آگهی</span>`;
-  
+
+  const titleMap = {all:cat?(cats[cat]?.[0]||"همه"):"همه آگهی‌های پرچون", mine:"آگهی‌های من و آمار بازدید", fav:"نشان‌شده‌ها و یادداشت‌ها", admin:"پنل مدیریت", shop:"فروشگاه رسمی من"};
+  $("#title").innerHTML = titleMap[view] + `<span>${nf(r.length)} آگهی</span>`;
+
   if(view == "shop" && me && users[me]) {
     const userShopName = users[me]?.shopName || "فروشگاه رسمی من";
     const myShopKey = (mine.find(x=>x.owner===me&&x.isShop&&x.ph)||{}).ph || me;
@@ -887,7 +844,7 @@ function draw(){
         </div>
         <div style="width:100%;background:rgba(255,255,255,0.1);padding:10px;border-radius:10px;font-size:12px;">
           <b>آخرین نظرات مشتریان:</b>
-          ${myRevs.length ? myRevs.map(rv=>`<div style="margin-top:5px;border-top:1px solid rgba(255,255,255,0.2);padding-top:3px;">⭐ ${rv.rating}/5 — <b>${esc(rv.buyer||'کاربر')}:</b> ${esc(rv.comment||'')}</div>`).join("") : '<div style="margin-top:4px;opacity:0.8;">هنوز نظری ثبت نشده است.</div>'}
+          ${myRevs.length ? myRevs.map(rv=>`<div style="margin-top:5px;border-top:1px solid rgba(255,255,255,0.2);padding-top:3px;">⭐ ${rv.rating}/5 — <b>${esc(rv.buyer||'کاربر')}:</b> ${esc(rv.text||'')}</div>`).join("") : '<div style="margin-top:5px;">هنوز هیچ بازخوردی ثبت نشده است.</div>'}
         </div>
       </div>
     `;
@@ -909,18 +866,18 @@ function draw(){
     const myAds = mine.filter(x=>x.owner===me);
     const tv = myAds.reduce((s,x)=>s+(Number(x.views)||0),0);
     const tc = myAds.reduce((s,x)=>s+(Number(x.calls)||0),0);
-    $("#dynamic-shop-banner").innerHTML = `<div class="shop-banner" style="justify-content:space-around;"><div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(myAds.length)}</b><span style="font-size:11px;opacity:0.8;">آگهی</span></div><div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(tv)}</b><span style="font-size:11px;opacity:0.8;">بازدید</span></div><div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(tc)}</b><span style="font-size:11px;opacity:0.8;">تماس</span></div></div>`;
+    $("#dynamic-shop-banner").innerHTML = `<div class="shop-banner" style="justify-content:space-around;"><div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(myAds.length)}</b><span style="font-size:11px;">کل آگهی‌های من</span></div><div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(tv)}</b><span style="font-size:11px;">بازدید</span></div><div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(tc)}</b><span style="font-size:11px;">تماس</span></div></div>`;
   } else if(view !== "admin") {
     $("#dynamic-shop-banner").innerHTML = "";
   }
-  
+
   const totalPages = Math.ceil(r.length / itemsPerPage) || 1;
   if(currentPage > totalPages) currentPage = totalPages;
   const start = (currentPage - 1) * itemsPerPage;
   const paginatedItems = r.slice(start, start + itemsPerPage);
 
-  $("#list").innerHTML=paginatedItems.length?paginatedItems.map(renderCard).join(""):`<div class="empty">${view=="mine"?"هنوز آگهی‌ای ثبت نکرده‌اید.":view=="shop"?"فروشگاه شما هنوز محصولی ندارد.":view=="fav"?"آگهی نشان‌شده‌ای ندارید.":"آگهی‌ای پیدا نشد. فیلترها را بررسی کنید."}</div>`;
-  
+  $("#list").innerHTML = paginatedItems.length ? paginatedItems.map(renderCard).join("") : `<div class="empty">${view=="mine"?"هنوز آگهی‌ای ثبت نکرده‌اید.":view=="shop"?"فروشگاهی برای نمایش وجود ندارد.":view=="fav"?"هیچ آگهی نشان‌شده‌ای ندارید.":"هیچ آگهی مطابق فیلترها پیدا نشد."}</div>`;
+
   let paginationHTML = '';
   if(totalPages > 1) {
     paginationHTML += `<button ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})">قبلی</button>`;
@@ -945,7 +902,7 @@ function draw(){
 
   const qWholesale = ($("#q-wholesale").value || "").trim();
   const sortWholesale = $("#sort-wholesale").value;
-  
+
   let filteredWholesale = wholesaleAds.filter(a => {
     if(wholesaleCat && a.wholesaleCat != wholesaleCat) return false;
     if(city >= 0) {
@@ -963,11 +920,11 @@ function draw(){
     if(view=="fav" && !favs.includes(a.id)) return false;
     return true;
   });
-  
+
   if(sortWholesale === "lo") filteredWholesale.sort(pcmp);
   else if(sortWholesale === "hi") filteredWholesale.sort((a,b)=>afn(b)-afn(a));
   else filteredWholesale.sort((a,b)=>a.age-b.age);
-  
+
   const wholesaleCategoryName = wholesaleCat ? (wholesaleCats[wholesaleCat]?.[0]||"همه") : "همه آگهی‌های عمده";
   $("#wholesale-title").innerHTML = `${wholesaleCategoryName} <span>${nf(filteredWholesale.length)} آگهی</span>`;
 
@@ -1000,1301 +957,33 @@ function draw(){
   }
   $("#wholesale-pagination").innerHTML = wPaginationHTML;
 
-  $("#wholesale-stats").innerHTML = [[wholesaleAds.length,"آگهی عمده"],[34,"ولایت تجاری"],[wholesaleCats.length-1,"دسته‌بندی عمده"]].map(x=>`<div><b>${nf(x[0])}</b><span>${x[1]}</span></div>`).join("");
+  $("#compare-count").textContent = compareList.length;
+  $("#compare-bar").classList.toggle("active", compareList.length > 0);
 
-  drawCats();extras();$("#acc").textContent=(me&&users[me])?users[me].name:"ورود / ثبت‌نام";
-  updateCompareBar();
-  updateNotifBadge();
-}
-
-window.changePage = (p) => { currentPage = p; draw(); $("#listing").scrollIntoView({behavior:"smooth"}); };
-window.changeWholesalePage = (p) => { wholesaleCurrentPage = p; draw(); window.scrollTo({top: 0, behavior: 'smooth'}); };
-
-["#q-wholesale","#wmin","#wmax"].forEach(x=>$(x).addEventListener("input", () => { wholesaleCurrentPage = 1; draw(); }));
-$("#sort-wholesale").addEventListener("change", () => { wholesaleCurrentPage = 1; draw(); });
-$("#search-wholesale-btn").onclick = () => { wholesaleCurrentPage = 1; draw(); };
-
-$("#wholesale-cats").onclick = e => {
-  const b = e.target.closest(".cat");
-  if(b) { wholesaleCat = +b.dataset.i; wholesaleCurrentPage = 1; draw(); }
-};
-
-document.querySelectorAll(".bnav-item").forEach(btn => {
-  btn.onclick = () => {
-    if($("#add").open) closeAdForm();
-    document.querySelectorAll(".bnav-item").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    currentAppTab = btn.dataset.target;
-    const postBtn = $("#header-post-btn");
-    if(currentAppTab === "retail") {
-      $("#view-retail").style.display = "block";
-      $("#view-wholesale").style.display = "none";
-      postBtn.textContent = "+ ثبت پرچون";
-      postBtn.style.background = "var(--ac)";
+  if(view === "admin") {
+    if($("#list").innerHTML) {
+      const repBox = document.getElementById('admin-reports-box');
+      if(repBox) repBox.remove();
+    }
+    if(adminTab === 'reports') {
+      $("#list").innerHTML = '';
+      $("#pagination").innerHTML = '';
+      renderReports();
     } else {
-      $("#view-retail").style.display = "none";
-      $("#view-wholesale").style.display = "block";
-      postBtn.textContent = "+ ثبت عمده";
-      postBtn.style.background = "#1b3b6f";
-    }
-    window.scrollTo({top: 0, behavior: 'smooth'});
-  };
-});
-
-$("#cats").onclick=e=>{const b=e.target.closest(".cat");if(b){cat=+b.dataset.i;view="all";currentPage=1;draw();$("#listing").scrollIntoView({behavior:"smooth"})}};
-["#q","#sort","#pmin","#pmax","#urg","#f-cond","#f-has-photo","#f-shop-only"].forEach(s=>$(s).addEventListener("input",()=>{currentPage=1;draw();}));
-$("#search-btn").onclick=()=>{currentPage=1;draw();$("#listing").scrollIntoView({behavior:"smooth"})};
-$("#reset").onclick=()=>resetAllFilters();
-
-$("#ftog").onclick=()=>$("#flt").classList.toggle("o");
-const closeFiltersDrawerBtn = $("#close-filters-drawer");
-if(closeFiltersDrawerBtn) {
-  closeFiltersDrawerBtn.onclick = () => $("#flt").classList.remove("o");
-}
-
-function need(fn){if(me&&users[me])return fn();after=fn;openAuth()}
-
-let radiusMap = null;
-let radiusMarker = null;
-let radiusCircle = null;
-
-function destroyRadiusMap() {
-  if(radiusMap) { try{ radiusMap.remove(); }catch(e){}; }
-  radiusMap = null; radiusMarker = null; radiusCircle = null;
-}
-
-$("#open-radius-modal-btn").onclick = () => {
-  if(typeof L === 'undefined') { toast('نقشه در دسترس نیست.'); return; }
-  $("#radius-dlg").showModal();
-  setTimeout(() => {
-    destroyRadiusMap();
-    radiusMap = L.map('radius-map-container').setView([radiusCenterLat, radiusCenterLng], 10);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19, attribution: '© OpenStreetMap'
-    }).addTo(radiusMap);
-    radiusMarker = L.marker([radiusCenterLat, radiusCenterLng], {draggable: true}).addTo(radiusMap);
-    radiusCircle = L.circle([radiusCenterLat, radiusCenterLng], {
-      radius: radiusMaxKm * 1000, color: '#0e7a4b', fillColor: '#37b676', fillOpacity: 0.2
-    }).addTo(radiusMap);
-    const updateMapCenter = (lat, lng) => {
-      radiusCenterLat = lat; radiusCenterLng = lng;
-      radiusMarker.setLatLng([lat, lng]); radiusCircle.setLatLng([lat, lng]);
-    };
-    radiusMarker.on('dragend', function() {
-      const pos = radiusMarker.getLatLng();
-      updateMapCenter(pos.lat, pos.lng);
-    });
-    radiusMap.on('click', function(e) { updateMapCenter(e.latlng.lat, e.latlng.lng); });
-    $("#radius-slider").oninput = function() {
-      radiusMaxKm = +this.value;
-      $("#radius-val").textContent = radiusMaxKm + " ک‌م";
-      if(radiusCircle) radiusCircle.setRadius(radiusMaxKm * 1000);
-    };
-    $("#radius-slider").value = radiusMaxKm;
-    $("#radius-val").textContent = radiusMaxKm + " ک‌م";
-  }, 150);
-};
-
-$("#radius-gps-btn").onclick=()=>{ if(!navigator.geolocation){toast("مرورگر از موقعیت‌یابی پشتیبانی نمی‌کند.");return;} navigator.geolocation.getCurrentPosition(p=>{radiusCenterLat=p.coords.latitude;radiusCenterLng=p.coords.longitude; if(radiusMap){radiusMap.setView([radiusCenterLat,radiusCenterLng],10);radiusMarker.setLatLng([radiusCenterLat,radiusCenterLng]);radiusCircle.setLatLng([radiusCenterLat,radiusCenterLng]);}},()=>toast("اجازه دسترسی به موقعیت داده نشد."),{timeout:8000}); };
-$("#apply-radius-btn").onclick = () => {
-  radiusFilterActive = true;
-  $("#radius-status-badge").textContent = `فعال: شعاع ${radiusMaxKm} ک‌م`;
-  destroyRadiusMap();
-  $("#radius-dlg").close();
-  currentPage = 1;
-  draw();
-  toast("فیلتر شعاعی روی نقشه اعمال شد.");
-};
-
-$("#clear-radius-btn").onclick = () => {
-  radiusFilterActive = false;
-  $("#radius-status-badge").textContent = "شعاع فعال نیست";
-  destroyRadiusMap();
-  $("#radius-dlg").close();
-  draw();
-  toast("فیلتر شعاعی غیرفعال شد.");
-};
-
-function updateCompareBar() {
-  const bar = $("#compare-bar");
-  const countEl = $("#compare-count");
-  const idSet = new Set(all().map(a => a.id));
-  compareList = compareList.filter(id => idSet.has(id));
-  countEl.textContent = compareList.length;
-  if(compareList.length > 0) bar.classList.add("active");
-  else bar.classList.remove("active");
-}
-
-document.body.onclick = e => {
-  const approveBtn = e.target.closest("[data-approve]");
-  if(approveBtn){ e.stopPropagation(); adminSetStatus(approveBtn.dataset.approve, "approved"); return; }
-  const rejectBtn = e.target.closest("[data-reject]");
-  if(rejectBtn){ e.stopPropagation(); adminSetStatus(rejectBtn.dataset.reject, "rejected"); return; }
-  const compBtn = e.target.closest(".compare-checkbox");
-  if(compBtn) {
-    e.stopPropagation();
-    const id = compBtn.dataset.comp;
-    const targetAd = all().find(x => x.id === id);
-    if(targetAd && targetAd.isWholesale) { toast("مقایسه فقط برای آگهی‌های پرچون است."); return; }
-    if(compareList.includes(id)) {
-      compareList = compareList.filter(x => x != id);
-      toast("از لیست مقایسه حذف شد.");
-    } else {
-      if(compareList.length >= 4) { toast("حداکثر ۴ کالا را می‌توانید همزمان مقایسه کنید."); return; }
-      compareList.push(id);
-      toast("به لیست مقایسه اضافه شد.");
-    }
-    updateCompareBar();
-    compBtn.classList.toggle("checked", compareList.includes(id));
-    return;
-  }
-
-  const f = e.target.closest(".fav");
-  if(f) {
-    e.stopPropagation();
-    return need(()=>{
-      const id=f.dataset.f;
-      favs=favs.includes(id)?favs.filter(x=>x!=id):favs.concat(id);
-      put("ab_fav_"+me,favs);
-      if(favs.includes(id)) addNotification(`آگهی به نشان‌شده‌ها اضافه شد.`);
-      draw();
-    });
-  }
-  const b = e.target.closest(".ad");
-  if(b) openAd(b.dataset.id);
-};
-
-$("#clear-compare-btn").onclick = () => {
-  compareList = [];
-  updateCompareBar();
-  draw();
-  toast("لیست مقایسه پاک شد.");
-};
-
-$("#show-compare-modal-btn").onclick = () => {
-  const adsToCompare = all().filter(a => compareList.includes(a.id) && !a.isWholesale);
-  if(adsToCompare.length === 0) { toast("کالایی برای مقایسه نیست."); return; }
-  let html = `<table style="width:100%;border-collapse:collapse;text-align:right;font-size:12px;">
-    <tr style="border-bottom:2px solid var(--bd);">
-      <th style="padding:8px;background:var(--bg);">ویژگی</th>
-      ${adsToCompare.map(a => `<th style="padding:8px;background:var(--bg);text-align:center;">${esc((a.t||'').substring(0,20))}...</th>`).join("")}
-    </tr>
-    <tr style="border-bottom:1px solid var(--bd);">
-      <td style="padding:8px;font-weight:bold;color:var(--mu);">تصویر</td>
-      ${adsToCompare.map(a => `<td style="padding:8px;text-align:center;"><img src="${(Array.isArray(a.imgs)&&a.imgs[0])||a.img||''}" style="width:50px;height:50px;object-fit:cover;border-radius:6px;"></td>`).join("")}
-    </tr>
-    <tr style="border-bottom:1px solid var(--bd);">
-      <td style="padding:8px;font-weight:bold;color:var(--mu);">قیمت</td>
-      ${adsToCompare.map(a => `<td style="padding:8px;text-align:center;font-weight:800;color:var(--ac);">${fmtAd(a)}</td>`).join("")}
-    </tr>
-    <tr style="border-bottom:1px solid var(--bd);">
-      <td style="padding:8px;font-weight:bold;color:var(--mu);">ولایت</td>
-      ${adsToCompare.map(a => `<td style="padding:8px;text-align:center;">${cities[a.ci]||'—'}</td>`).join("")}
-    </tr>
-    <tr style="border-bottom:1px solid var(--bd);">
-      <td style="padding:8px;font-weight:bold;color:var(--mu);">وضعیت کالا</td>
-      ${adsToCompare.map(a => `<td style="padding:8px;text-align:center;">${a.cond === 'new' ? 'نو' : 'کارکرده'}</td>`).join("")}
-    </tr>
-    <tr style="border-bottom:1px solid var(--bd);"><td style="padding:8px;font-weight:bold;color:var(--mu);">مدل / برند</td>${adsToCompare.map(a => `<td style="padding:8px;text-align:center;">${esc(a.brand||'—')}</td>`).join("")}</tr>
-    <tr style="border-bottom:1px solid var(--bd);"><td style="padding:8px;font-weight:bold;color:var(--mu);">مشخصات</td>${adsToCompare.map(a => `<td style="padding:8px;text-align:center;">${esc(a.spec||'—')}</td>`).join("")}</tr>
-    <tr style="border-bottom:1px solid var(--bd);">
-      <td style="padding:8px;font-weight:bold;color:var(--mu);">فروشنده</td>
-      ${adsToCompare.map(a => `<td style="padding:8px;text-align:center;">${esc(a.sellerName || 'کاربر')}</td>`).join("")}
-    </tr>
-    <tr>
-      <td style="padding:8px;font-weight:bold;color:var(--mu);">عملیات</td>
-      ${adsToCompare.map(a => `<td style="padding:8px;text-align:center;"><button class="capsule-btn primary" onclick="$('#compare-dlg').close(); openAd('${a.id}')" style="font-size:10px;padding:3px 6px;">مشاهده</button></td>`).join("")}
-    </tr>
-  </table>`;
-  $("#compare-table-container").innerHTML = html;
-  $("#compare-dlg").showModal();
-};
-
-$("#close-compare-dlg").onclick = () => $("#compare-dlg").close();
-
-function closeDetailDialog() {
-  if(window._adViewMap) { try { window._adViewMap.remove(); } catch(e) {} window._adViewMap = null; }
-  $("#dlg").close();
-}
-
-function openAd(id){
-  if(window._adViewMap) { try { window._adViewMap.remove(); } catch(e) {} window._adViewMap = null; }
-  const a=all().find(x=>x.id==id);if(!a)return;
-  const imgList = (Array.isArray(a.imgs) && a.imgs.length > 0) ? a.imgs : (a.img ? [a.img] : []);
-  const initialImg = imgList.length > 0 ? imgList[0] : "";
-  // Persist views for user-created ads; seed ads remain demo/session data.
-  const mineIdx = mine.findIndex(x => String(x.id) === String(id));
-  if(mineIdx !== -1) {
-    mine[mineIdx].views = (Number(mine[mineIdx].views) || 20) + 1;
-    a.views = mine[mineIdx].views;
-    put("ab_ads", mine);
-  } else {
-    a.views = (Number(a.views) || 20) + 1;
-  }
-  bumpStat(id, "views");
-  const userNote = (notes[me] && notes[me][id]) ? notes[me][id] : "";
-  const displayCatName = a.isWholesale ? (wholesaleCats[a.wholesaleCat] ? wholesaleCats[a.wholesaleCat][0] : "عمده") : (cats[a.c] ? cats[a.c][0] : "متفرقه");
-  const shopRating = a.isShop ? getShopAverageRating(a.ph) : { avg: "—", count: 0 };
-  const shopOwnerPhone = a.ph;
-  let locText = cities[a.ci] || "نامشخص";
-  if(a.isWholesale && Array.isArray(a.provinces) && a.provinces.length > 0) {
-    const names = a.provinces.map(idx => cities[idx]).filter(Boolean);
-    locText = names.length > 3 ? names.slice(0,3).join("، ") + " +" + (names.length - 3) : names.join("، ");
-  }
-
-  $("#det").innerHTML=`
-    <div class="ph" id="main-photo-box" style="aspect-ratio:16/9;--h:${(a.c||1)*23}">
-      ${initialImg ? `<img id="active-modal-img" src="${initialImg}" alt="${esc(a.t)}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0">` : `<span>${a.isWholesale ? '📦' : (cats[a.c]?.[1] || '📦')}</span>`}
-    </div>
-    ${imgList.length > 1 ? `<div class="thumbs-row" id="modal-thumbs">${imgList.map((im, idx)=>`<img src="${im}" class="${idx===0?'active':''}" data-idx="${idx}">`).join("")}</div>` : ''}
-    
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px;flex-wrap:wrap;">
-      <h2 style="margin:0;font-size:17px">${esc(a.t)}</h2>
-      <div style="display:flex;gap:5px;">
-        <a href="https://wa.me/?text=${encodeURIComponent(a.t + ' - قیمت: ' + fmtAd(a) + ' ' + adUrl(a.id))}" target="_blank" class="capsule-btn" style="background:#25d366;color:#fff;padding:3px 8px;font-size:11px;">واتساپ</a>
-        <a href="https://t.me/share/url?url=${encodeURIComponent(adUrl(a.id))}&text=${encodeURIComponent(a.t)}" target="_blank" class="capsule-btn" style="background:#0088cc;color:#fff;padding:3px 8px;font-size:11px;">تلگرام</a>
-        <button class="capsule-btn" id="share-btn" style="padding:3px 8px;font-size:11px;border:1px solid var(--bd);">🔗 کپی</button>
-      </div>
-    </div>
-    
-    <div class="price" style="font-size:18px;margin-top:3px;">${fmtAd(a)}</div>
-    
-    <div class="stat-box">
-      <span>👁️ ${nf(a.views)} بازدید</span>
-      <span>📞 ${nf(a.calls || 3)} تماس</span>
-      <span>🏷️ ${a.isWholesale ? '📦 عمده‌فروشی' : '🛒 پرچون'}</span>
-    </div>
-
-    <div style="margin:8px 0">
-      <div class="kv"><span class="mu">دسته</span><span>${displayCatName}</span></div>
-      ${a.moq?`<div class="kv"><span class="mu">حداقل سفارش</span><span>${nf(a.moq)} ${esc(a.unit||"")}</span></div>`:""}${a.brand?`<div class="kv"><span class="mu">مدل / برند</span><span>${esc(a.brand)}</span></div>`:""}${a.spec?`<div class="kv"><span class="mu">مشخصات</span><span>${esc(a.spec)}</span></div>`:""}
-      <div class="kv"><span class="mu">ولایت / پوشش</span><span>${locText} ${a.mapLoc ? '— ' + esc(a.mapLoc) : ''}</span></div>
-      <div class="kv"><span class="mu">زمان ثبت</span><span>${ago(a.age)}</span></div>
-    </div>
-    <p style="font-size:13px;">${esc(a.d)||"بدون توضیحات"}</p>
-
-    <div style="margin-top:12px;">
-      <b style="font-size:12px;display:block;margin-bottom:4px;">📍 موقعیت روی نقشه:</b>
-      <div id="ad-view-map" style="width:100%;height:150px;border-radius:10px;border:1px solid var(--bd);"></div>
-    </div>
-    
-    ${me && users[me] ? `
-      <div style="background:var(--bg);border:1px solid var(--bd);padding:8px 10px;border-radius:10px;margin-top:10px;">
-        <label for="personal-note-input" style="font-size:11px;margin-bottom:3px;">📝 یادداشت شخصی شما روی این آگهی:</label>
-        <div style="display:flex;gap:6px;">
-          <input id="personal-note-input" value="${esc(userNote)}" placeholder="مثلاً: قیمت نهایی توافق شد..." style="font-size:12px;padding:4px 8px;">
-          <button class="capsule-btn primary" id="save-note-btn" style="padding:4px 10px;font-size:11px;">ذخیره</button>
-        </div>
-      </div>
-    ` : ''}
-
-    <div class="seller-card">
-      <div>
-        <b style="font-size:13px;display:block;">👤 فروشنده: ${esc(a.sellerName || 'کاربر')} ${a.isShop ? '— <span style="color:var(--ac);">['+esc(a.shopName || 'فروشگاه')+'] (⭐ '+(shopRating?.avg || '—')+')</span>' : ''}</b>
-        <span class="mu" style="font-size:11px;">عضو افغان‌بازار</span>
-      </div>
-      <div>
-        ${a.verified !== false ? '<span class="badge-verified">✓ شماره تاییدشده</span>' : ''}
-      </div>
-    </div>
-
-    ${a.isShop ? `
-      <div style="background:var(--card);border:1px solid var(--bd);padding:10px;border-radius:10px;margin-top:10px;">
-        <h4 style="margin:0 0 6px;font-size:13px;color:var(--ac);">⭐ امتیازدهی به این فروشگاه <span class="mu">(${shopRating.avg} ★ از ${nf(shopRating.count)} نظر)</span></h4>
-        <div style="max-height:110px;overflow-y:auto;font-size:11px;margin-bottom:6px;">${(shopReviews[a.ph]||[]).slice(-5).reverse().map(rv=>`<div style="border-bottom:1px solid var(--bd);padding:3px 0;">⭐ ${nf(rv.rating)}/۵ — <b>${esc(rv.buyer||"کاربر")}</b>: ${esc(rv.comment||"")}</div>`).join("")||'<span class="mu">هنوز نظری ثبت نشده.</span>'}</div>
-        <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px;">
-          <select id="review-stars" style="padding:3px;border-radius:6px;border:1px solid var(--bd);font-size:11px;">
-            <option value="5">⭐⭐⭐⭐⭐ (۵ ستاره - عالی)</option>
-            <option value="4">⭐⭐⭐⭐ (۴ ستاره)</option>
-            <option value="3">⭐⭐⭐ (۳ ستاره)</option>
-            <option value="2">⭐⭐ (۲ ستاره)</option>
-            <option value="1">⭐ (۱ ستاره)</option>
-          </select>
-        </div>
-        <div style="display:flex;gap:6px;">
-          <input id="review-comment-input" placeholder="نظر خود را درباره فروشگاه بنویسید..." style="font-size:11px;padding:4px 8px;flex:1;">
-          <button class="capsule-btn primary" id="submit-review-btn" style="padding:4px 10px;font-size:11px;">ثبت</button>
-        </div>
-      </div>
-    ` : ''}
-
-    <h3 style="font-size:14px;margin-top:14px;">💬 گفتگو با فروشنده</h3>
-    <div class="chat-box" id="chat-messages"></div>
-    <div style="display:flex;gap:6px;margin-top:6px;">
-      <input id="chat-input" placeholder="پیام خود را بنویسید..." style="flex:1;border:1px solid var(--bd);background:var(--bg);border-radius:8px;padding:6px 10px;font-size:12px;">
-      <button class="capsule-btn primary" id="send-chat" style="padding:6px 12px;font-size:12px;">ارسال</button>
-    </div>
-
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:11px;">
-      <span style="color:#d6324a;cursor:pointer;" id="report-ad-btn">⚠️ گزارش تخلف یا کلاه‌برداری</span>
-      <span class="mu">کد: <bdi dir="ltr">${a.id}</bdi></span>
-    </div>
-
-    <div class="row" style="margin-top:14px;">
-      <a class="capsule-btn primary" href="tel:${esc(a.ph)}" onclick="recordCall('${a.id}')" style="text-align:center;">تماس: <bdi dir="ltr">${esc(a.ph)}</bdi></a>
-      <button class="capsule-btn" id="x" style="border:1px solid var(--bd);">بستن</button>
-    </div>
-    ${a.owner&&a.owner==me?'<div style="display:flex;gap:6px;margin-top:6px;"><button class="capsule-btn" id="edit-ad-btn" style="flex:1;border:1px solid var(--bd);">✏️ ویرایش</button><button class="capsule-btn" id="renew-ad-btn" style="flex:1;border:1px solid var(--bd);">🔄 تمدید</button></div>':''}
-    ${((a.owner&&a.owner==me)||adminFlag) && !seed.some(x=>String(x.id)===String(a.id))?'<button class="link danger" id="del" style="color:#d6324a;display:block;margin:8px auto 0;font-size:12px;">حذف این آگهی</button>':''}
-  `;
-
-  $("#dlg").showModal();
-
-  setTimeout(() => {
-    if(typeof L === 'undefined') return;
-    const container = document.getElementById('ad-view-map');
-    if(!container) return;
-    if(window._adViewMap) { try { window._adViewMap.remove(); } catch(e) {} window._adViewMap = null; }
-    const latNum = Number(a.lat);
-    const lngNum = Number(a.lng);
-    const lat = Number.isFinite(latNum) && latNum >= 20 && latNum <= 40 ? latNum : 34.5553;
-    const lng = Number.isFinite(lngNum) && lngNum >= 55 && lngNum <= 80 ? lngNum : 69.2075;
-    const map = L.map('ad-view-map').setView([lat, lng], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19, attribution: '© OpenStreetMap'
-    }).addTo(map);
-    L.marker([lat, lng]).addTo(map).bindPopup(esc(a.t)).openPopup();
-    window._adViewMap = map;
-  }, 100);
-
-  const submitRevBtn = $("#submit-review-btn");
-  if(submitRevBtn) {
-    submitRevBtn.onclick = () => {
-      if(!me||!users[me]) return need(()=>openAd(id));
-      if(shopOwnerPhone===me || (a.ownerId && a.ownerId===myId)){toast("نمی‌توانید به فروشگاه خود امتیاز بدهید.");return;}
-      const stars = +$("#review-stars").value;
-      const comment = $("#review-comment-input").value.trim() || "بدون نظر متنی";
-      if(!shopReviews[shopOwnerPhone]) shopReviews[shopOwnerPhone] = [];
-      shopReviews[shopOwnerPhone] = shopReviews[shopOwnerPhone].filter(r=>r.buyerId!==me && r.buyerId!==myId);
-      shopReviews[shopOwnerPhone].push({
-        rating: stars, comment, buyer: users[me].name, buyerId: myId||me, date: Date.now()
-      });
-      put("ab_shop_reviews", shopReviews); remoteReview(a, stars, comment);
-      toast("امتیاز و نظر شما با موفقیت ثبت شد!");
-      addNotification(`کاربر به فروشگاه شما امتیاز داد.`);
-      $("#review-comment-input").value = "";
-      $("#review-stars").value = "5";
-    };
-  }
-
-  $("#share-btn").onclick = async () => {
-    try{
-      await navigator.clipboard.writeText(adUrl(a.id));
-      toast("لینک آگهی کپی شد!");
-    }catch(e){
-      toast("کپی نشد. لطفاً دستی کپی کنید.");
-    }
-  };
-
-  const saveNoteBtn = $("#save-note-btn");
-  if(saveNoteBtn) {
-    saveNoteBtn.onclick = () => {
-      const noteVal = $("#personal-note-input").value.trim();
-      if(!notes[me]) notes[me] = {};
-      notes[me][id] = noteVal;
-      put(UK("ab_notes"), notes);
-      toast("یادداشت شخصی ذخیره شد.");
-    };
-  }
-
-  const editBtn = $("#edit-ad-btn");
-  if(editBtn) { editBtn.onclick = () => { closeDetailDialog(); openEditModal(a); }; }
-
-  const renewBtn = $("#renew-ad-btn");
-  if(renewBtn) {
-    renewBtn.onclick = () => {
-      const mi = mine.findIndex(x => String(x.id) === String(id));
-      if(mi !== -1) {
-        mine[mi].ts = Date.now(); syncAd(mine[mi]);
-        put("ab_ads", mine);
-      }
-      closeDetailDialog();
-      draw();
-      toast("آگهی تمدید شد و به بالا آمد.");
-    };
-  }
-
-  window.recordCall = (adId) => {
-    const callKey = "ab_called_" + adId;
-    const lastCalled = get(callKey, 0);
-    const now = Date.now();
-    if(now - lastCalled > 24 * 3600 * 1000) {
-      put(callKey, now);
-      const savedAd = mine.find(x => String(x.id) === String(adId));
-      if(savedAd) {
-        savedAd.calls = (Number(savedAd.calls) || 0) + 1;
-        a.calls = savedAd.calls;
-        put("ab_ads", mine);
-      } else {
-        a.calls = (Number(a.calls) || 0) + 1;
-      }
-      bumpStat(adId, "calls");
-    }
-    const callStat = $("#det .stat-box");
-    if(callStat) {
-      const callItem = Array.from(callStat.children).find(el => el.textContent.includes("تماس"));
-      if(callItem) callItem.innerHTML = "📞 " + nf(a.calls) + " تماس";
-    }
-  };
-  $("#report-ad-btn").onclick = () => { 
-    if(!myId){ toast("برای ثبت گزارش، وارد حساب شوید."); return; }
-    reportRemote(id); toast("گزارش تخلف ثبت شد. متشکریم.");
-    addNotification(`گزارش تخلف برای آگهی ${id} ثبت شد.`);
-  };
-
-  const thumbsContainer = $("#modal-thumbs");
-  if(thumbsContainer) {
-    thumbsContainer.onclick = (ev) => {
-      const thumb = ev.target.closest("img");
-      if(!thumb) return;
-      document.querySelectorAll("#modal-thumbs img").forEach(im=>im.classList.remove("active"));
-      thumb.classList.add("active");
-      $("#active-modal-img").src = thumb.src;
-    };
-  }
-  
-  const renderChat = () => {
-    const list = messages[id] || [];
-    $("#chat-messages").innerHTML = list.length ? list.map(m=>`<div class="chat-msg ${m.sender==me?'me':'other'}"><b>${esc(m.name || 'کاربر')}:</b> ${esc(m.text)}</div>`).join("") : '<div class="mu" style="text-align:center;font-size:12px;">هنوز پیامی فرستاده نشده است.</div>';
-    $("#chat-messages").scrollTop = $("#chat-messages").scrollHeight;
-  };
-  renderChat();
-  loadChat(a).then(renderChat);
-
-  $("#send-chat").onclick = () => {
-    if(!me||!users[me]) return need(()=>openAd(id));
-    const txt = $("#chat-input").value.trim();
-    if(!txt) return;
-    if(!messages[id]) messages[id]=[];
-    messages[id].push({sender: me, senderId: myId, name: users[me].name, text: txt, time: Date.now()}); sendRemote(a, txt);
-    put(UK("ab_msgs"), messages);
-    $("#chat-input").value = "";
-    renderChat();
-    addNotification(`پیام جدیدی در آگهی ثبت شد.`);
-  };
-
-  $("#x").onclick=()=>closeDetailDialog();
-  const d=$("#del");
-  if(d)d.onclick=async()=>{
-    if(seed.some(x=>String(x.id)===String(id))){ toast("این آگهی نمونه است و قابل حذف نیست."); return; }
-    if(!confirm("این آگهی حذف شود؟")) return;
-const delOk=await remoteDelete(id,!!a.ownerId);
-if(!delOk){ toast("حذف روی سرور انجام نشد. دسترسی یا اتصال را بررسی کنید."); return; }
-mine=mine.filter(x=>x.id!=id);
-    put("ab_ads",mine);
-    closeDetailDialog();
-    currentPage=1;
-    draw();
-    toast("آگهی حذف شد");
-  }
-}
-
-$("#dlg").onclick=e=>{if(e.target==$("#dlg"))closeDetailDialog()};
-
-function setMode(m){
-  mode=m;
-  document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("on",b.dataset.m==m));
-  $("#nm-w").hidden=m!="up";
-  $("#otp-section").style.display = "block"; /* کد پیامک همیشه نمایش داده شود */
-  $("#a-go").textContent=m=="up"?"تایید و ساخت حساب":"ورود";
-  $("#a-e").textContent="";
-}
-function openAuth(){setMode("in");$("#auth").showModal()}
-$(".tabs").onclick=e=>{const b=e.target.closest("button");if(b)setMode(b.dataset.m)};
-$("#a-x").onclick=()=>{after=null;$("#auth").close()};
-
-// ==========================================
-// سیستم ارسال پیامک از طریق Supabase
-// ==========================================
-function startOtpCooldown(){const b=$("#send-otp-btn");let n=60;b.disabled=true;b.textContent=nf(n)+" ثانیه";const iv=setInterval(()=>{n--;if(n<=0){clearInterval(iv);b.disabled=false;b.textContent="ارسال کد"}else b.textContent=nf(n)+" ثانیه"},1000)}
-let authMethod="email";
-function setMethod(m){if(m==="phone"){$("#a-e").textContent="ورود با پیامک فعلاً از دسترس خارج است. لطفاً با ایمیل یا گوگل وارد شوید.";return;}authMethod=m;document.querySelectorAll("#auth-methods button").forEach(b=>b.classList.toggle("on",b.dataset.am==m));$("#ph-box").hidden=m!=="phone";$("#mail-box").hidden=m!=="email";}
-$("#auth-methods").onclick=e=>{const b=e.target.closest("button");if(b)setMethod(b.dataset.am)};
-async function sendEmailOtp(){
-  const em=$("#a-mail").value.trim().toLowerCase();
-  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){$("#a-e").textContent="ایمیل را درست وارد کنید.";return;}
-  $("#send-otp-btn").disabled=true; $("#a-e").textContent="در حال ارسال کد...";
-  const {error}=await supabaseClient.auth.signInWithOtp({email:em,options:{shouldCreateUser:true}});
-  if(error){$("#a-e").textContent="خطا: "+error.message;$("#send-otp-btn").disabled=false;return;}
-  $("#a-e").textContent="کد به ایمیل شما ارسال شد ✅ (پوشه اسپم را هم ببینید)"; startOtpCooldown();
-}
-async function verifyEmailOtp(){
-  const em=$("#a-mail").value.trim().toLowerCase(), otp=normDigits($("#a-otp").value.trim()), n=$("#a-n").value.trim();
-  const er=m=>$("#a-e").textContent=m;
-  if(!em) return er("ایمیل را وارد کنید.");
-  if(!otp) return er("کد تایید را وارد کنید.");
-  if(mode=="up" && n.length<2) return er("نام را وارد کنید.");
-  er("در حال بررسی کد...");
-  const {data,error}=await supabaseClient.auth.verifyOtp({email:em,token:otp,type:"email"});
-  if(error) return er("خطا: کد اشتباه یا منقضی شده است.");
-  const user=data.user, base=String(em).split("@")[0];
-  me=em; myId=user.id;
-  if(!users[me]) users[me]={name:n||base,verified:true,shopName:(n||base)+" دکان"}; else if(n) users[me].name=n;
-  put("ab_users",users); put("ab_sess",me); loadFavs();
-  toast("خوش آمدید "+users[me].name);
-  $("#auth").close(); ["#a-n","#a-mail","#a-p","#a-otp"].forEach(x=>$(x).value="");
-  draw(); addNotification("به افغان‌بازار خوش آمدید!"); afterLogin(me);
-  if(after){const f=after;after=null;f();}
-}
-$("#g-login").onclick=async()=>{
-  if(!supabaseClient){$("#a-e").textContent="خطا: سرور متصل نیست.";return;}
-  if(location.protocol==="file:"){$("#a-e").textContent="ورود با گوگل فقط روی سایت آنلاین (https) کار می‌کند.";return;}
-  const {error}=await supabaseClient.auth.signInWithOAuth({provider:"google",options:{redirectTo:location.href.split("#")[0]}});
-  if(error) $("#a-e").textContent="خطا: "+error.message;
-};
-$("#send-otp-btn").onclick = async () => {
-  if (!supabaseClient) { $("#a-e").textContent = "خطا: سرور متصل نیست. اینترنت را چک کنید."; return; }
-  
-  const p = normDigits($("#a-p").value.trim());
-  if(authMethod==="email") return sendEmailOtp();
-  if(!/^07\d{8}$/.test(p)) { $("#a-e").textContent = "لطفاً شماره را به‌صورت ۰۷… وارد کنید."; return; }
-  
-  // تبدیل 07... به +937...
-  let cleanPhone = p.replace(/\D/g, '');
-  if (cleanPhone.startsWith('0')) cleanPhone = cleanPhone.substring(1);
-  if (!cleanPhone.startsWith('93')) cleanPhone = '93' + cleanPhone;
-  const internationalPhone = '+' + cleanPhone;
-
-  $("#a-e").textContent = "در حال ارسال کد...";
-  
-  $("#send-otp-btn").disabled=true;
-  const { error } = await supabaseClient.auth.signInWithOtp({ phone: internationalPhone });
-  
-  if(error) {
-    $("#a-e").textContent = "خطا: " + error.message; $("#send-otp-btn").disabled=false;
-  } else {
-    $("#a-e").textContent = "کد تایید ارسال شد ✅"; startOtpCooldown();
-  }
-};
-
-// ==========================================
-// سیستم بررسی کد پیامک و ورود
-// ==========================================
-$("#a-go").onclick = async () => {
-  if (!supabaseClient) { $("#a-e").textContent = "خطا: سرور متصل نیست."; return; }
-
-  const n = $("#a-n").value.trim();
-  const p = normDigits($("#a-p").value.trim());
-  const w = $("#a-w") ? $("#a-w").value : "";
-  const otp = normDigits($("#a-otp").value.trim());
-  const er = m => $("#a-e").textContent = m;
-
-  if(authMethod==="email") return verifyEmailOtp();
-  if(!/^07\d{8}$/.test(p)) return er("شماره موبایل را به‌صورت ۰۷… وارد کنید.");
-  if(!otp) return er("کد تایید را وارد کنید.");
-  if(mode=="up" && n.length < 2) return er("نام را وارد کنید.");
-  
-  let cleanPhone = p.replace(/\D/g, '');
-  if (cleanPhone.startsWith('0')) cleanPhone = cleanPhone.substring(1);
-  if (!cleanPhone.startsWith('93')) cleanPhone = '93' + cleanPhone;
-  const internationalPhone = '+' + cleanPhone;
-
-  $("#a-e").textContent = "در حال بررسی کد...";
-
-  const { data, error } = await supabaseClient.auth.verifyOtp({
-    phone: internationalPhone,
-    token: otp,
-    type: 'sms'
-  });
-
-  if(error) {
-    return er("خطا: کد اشتباه یا منقضی شده است.");
-  }
-
-  // وقتی کد از طرف سرور تایید شد، کاربر را در حافظه محلی ذخیره می‌کنیم
-  me = p; myId = (data && data.user) ? data.user.id : null;
-  put("ab_sess", me);
-  
-  if(mode == "up") {
-    if(n.length < 2) return er("نام را وارد کنید.");
-    const salt = crypto.getRandomValues(new Uint32Array(2)).join("-");
-    users[p] = { name: n, salt, h: await sha(salt + w), verified: /^07\d{8}$/.test(me), shopName: n + " دکان" };
-    put("ab_users", users);
-    toast("حساب شما ساخته شد! خوش آمدید.");
-  } else {
-    if(!users[p]) {
-      // اگر کاربر جدید با پیامک وارد شد
-      users[p] = { name: "کاربر " + p, verified: /^07\d{8}$/.test(me), shopName: "فروشگاه من" };
-      put("ab_users", users);
-    }
-    toast("خوش آمدید " + (users[p]?.name || ""));
-  }
-  
-  loadFavs();
-  $("#auth").close();
-  ["#a-n","#a-p","#a-otp"].forEach(s => $(s).value = "");
-  draw();
-  addNotification("به افغان‌بازار خوش آمدید!");
-  afterLogin(p);
-  
-  if(after){ const f = after; after = null; f(); }
-};
-
-$("#acc").onclick=()=>{
-  if(!me||!users[me])return openAuth();
-  $("#me-n").textContent=users[me].name;
-  $("#me-p").textContent=me;
-  const isPhone = /^07\d{8}$/.test(me);
-  $("#me-verified-badge-box").innerHTML = isPhone
-    ? '<span class="badge-verified">✓ شماره تاییدشده</span>'
-    : '<span class="badge-verified" style="background:#1b3b6f;">✓ حساب تاییدشده</span>';
-  $("#admin-btn").hidden = !adminFlag;
-  $("#me").showModal();
-};
-
-$("#me").onclick = async e => {
-  if(e.target==$("#me"))return $("#me").close();
-  const b=e.target.closest("button");if(!b)return;
-  if(b.dataset.v=="edit-profile"){
-    const newName = prompt("نام جدید خود را وارد کنید:", users[me]?.name || "");
-    if(newName && newName.trim().length >= 2){
-      users[me].name = newName.trim();
-      put("ab_users", users);
-      if(sb() && myId) Promise.resolve(sb().from("profiles").upsert({id:myId,name:users[me].name})).catch(()=>{});
-      draw();
-      toast("نام پروفایل به‌روز شد");
+      const repBox = document.getElementById('admin-reports-box');
+      if(repBox) repBox.remove();
     }
     return;
-  }
-  if(b.dataset.v=="inbox"){
-    $("#me").close();
-    loadInbox();
-    $("#inbox-dlg").showModal();
-    return;
-  }
-  if(b.dataset.v=="out"){
-    if(supabaseClient) await supabaseClient.auth.signOut().catch(()=>{});
-    S.removeItem("ab_ad_draft_" + me);
-    S.removeItem("ab_ad_draft_anon");
-    me=null; myId=null; adminFlag=false;
-    mine=[]; put("ab_ads", mine);
-    compareList=[]; updateCompareBar();
-    put("ab_sess",null); loadFavs(); view="all";
-  }
-  else view=b.dataset.v;
-  if(b.dataset.v==="all"){
-    $("#q").value=""; $("#pmin").value=""; $("#pmax").value="";
-    $("#q-wholesale").value=""; $("#wmin").value=""; $("#wmax").value="";
-    $("#header-city-select").value="-1";
-    $("#urg").checked=false; $("#f-cond").value="";
-    $("#f-has-photo").checked=false; $("#f-shop-only").checked=false;
-    radiusFilterActive=false;
-    $("#radius-status-badge").textContent="شعاع فعال نیست";
-  }
-  cat=0; wholesaleCat=0; currentPage=1; wholesaleCurrentPage=1; $("#me").close();
-  if(view=="admin"){
-    const retailBtn = document.querySelector('.bnav-item[data-target="retail"]');
-    if(retailBtn) retailBtn.click();
-  }
-  draw();
-};
-
-let mapPicker = null;
-let pickerMarker = null;
-
-function initMapPicker(lat, lng) {
-  if(typeof L === 'undefined') { console.warn('Leaflet not loaded'); return; }
-  if(!Number.isFinite(lat) || !Number.isFinite(lng)) { lat = 34.5553; lng = 69.2075; }
-  setTimeout(() => {
-    const mapContainer = document.getElementById('map-picker-container');
-    if(!mapContainer || !$("#add").open) return;
-    if(mapPicker) { try{ mapPicker.remove(); }catch(e){}; mapPicker = null; }
-    pickerMarker = null;
-    mapPicker = L.map('map-picker-container').setView([lat, lng], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19, attribution: '© OpenStreetMap'
-    }).addTo(mapPicker);
-    pickerMarker = L.marker([lat, lng], {draggable: true}).addTo(mapPicker);
-    pickerMarker.on('dragend', function() {
-      const pos = pickerMarker.getLatLng();
-      $("#form-lat").value = pos.lat;
-      $("#form-lng").value = pos.lng;
-    });
-    mapPicker.on('click', function(e) {
-      pickerMarker.setLatLng(e.latlng);
-      $("#form-lat").value = e.latlng.lat;
-      $("#form-lng").value = e.latlng.lng;
-    });
-  }, 150);
-}
-
-$("#f-ci").onchange = function() {
-  const idx = +this.value;
-  const prov = provinceCoords[idx] || provinceCoords[0];
-  $("#form-lat").value = prov.lat;
-  $("#form-lng").value = prov.lng;
-  if(mapPicker && pickerMarker) {
-    mapPicker.setView([prov.lat, prov.lng], 13);
-    pickerMarker.setLatLng([prov.lat, prov.lng]);
-  }
-};
-
-const DRAFT_KEY = () => "ab_ad_draft_" + (me || "anon");
-function saveFormDraft() {
-  if(!$("#add").open) return;
-  const draft = {
-    t: $("#f-t").value, ph: $("#f-ph").value, c: $("#f-c").value, ci: $("#f-ci").value,
-    p: $("#f-p").value, cur: $("#f-cur").value, neg: $("#f-neg").checked,
-    moq: $("#f-moq").value, unit: $("#f-unit").value, brand: $("#form-brand").value,
-    spec: $("#form-spec").value, d: $("#f-d").value, cond: $("#form-cond").value,
-    mapLoc: $("#form-map").value, shopName: $("#form-shop-name").value,
-    lat: $("#form-lat").value, lng: $("#form-lng").value,
-    isShop: $("#form-is-shop").checked, urg: $("#form-urg").checked, w: $("#form-is-wholesale-hidden").value,
-    provinces: [...document.querySelectorAll(".multi-prov-chk:checked")].map(c=>+c.value)
-  };
-  if(!draft.t && !draft.d) return;
-  put(DRAFT_KEY(), draft);
-}
-
-["#f-t","#f-ph","#f-c","#f-ci","#f-p","#f-cur","#f-neg","#f-moq","#f-unit","#form-brand","#form-spec","#f-d","#form-cond","#form-map","#form-shop-name","#form-is-shop","#form-urg"].forEach(sel => {
-  $(sel).addEventListener("input", saveFormDraft);
-  $(sel).addEventListener("change", saveFormDraft);
-});
-
-$("#header-post-btn").onclick = () => need(()=>{
-  const isWholesaleMode = (currentAppTab === "wholesale");
-  $("#modal-title-text").textContent = isWholesaleMode ? "📦 ثبت آگهی عمده‌فروشی جدید" : "✨ ثبت آگهی پرچون جدید";
-  $("#modal-header-bg").style.background = isWholesaleMode ? "linear-gradient(135deg, #1b3b6f, #152c48)" : "linear-gradient(135deg, var(--ac), var(--ac2))";
-  $("#edit-ad-id").value = "";
-  
-  $("#f-ph").value = /^07\d{8}$/.test(me)?me:(get("ab_last_ph_"+me,"")||"");
-  const draft = get(DRAFT_KEY(), null);
-  if(draft && String(draft.w||"false")===String(isWholesaleMode) && !confirm("پیش‌نویس ثبت آگهی قبلی موجود است. آیا بارگذاری شود؟")) {
-    S.removeItem(DRAFT_KEY());
-  }
-  let loadedDraft = get(DRAFT_KEY(), null);
-  if(loadedDraft && String(loadedDraft.w||"false")!==String(isWholesaleMode)) loadedDraft = null;
-  if(loadedDraft) {
-    $("#f-t").value = loadedDraft.t || "";
-    if(loadedDraft.ph) $("#f-ph").value = loadedDraft.ph;
-    $("#f-p").value = loadedDraft.p || "";
-    $("#f-d").value = loadedDraft.d || "";
-    $("#form-map").value = loadedDraft.mapLoc || "";
-    $("#form-shop-name").value = loadedDraft.shopName || "";
-    $("#form-is-shop").checked = loadedDraft.isShop || false;
-    $("#form-cond").value = loadedDraft.cond || "used";
-    $("#f-cur").value = loadedDraft.cur || "AFN";
-    $("#f-neg").checked = !!loadedDraft.neg;
-    $("#f-moq").value = loadedDraft.moq || "";
-    $("#f-unit").value = loadedDraft.unit || "کارتن";
-    $("#form-brand").value = loadedDraft.brand || "";
-    $("#form-spec").value = loadedDraft.spec || "";
-    $("#form-urg").checked = !!loadedDraft.urg;
-    if(Number.isFinite(Number(loadedDraft.lat))) $("#form-lat").value = loadedDraft.lat;
-    if(Number.isFinite(Number(loadedDraft.lng))) $("#form-lng").value = loadedDraft.lng;
-  } else {
-    ["#f-t","#f-p","#f-d","#form-map","#form-shop-name","#f-moq","#form-brand","#form-spec"].forEach(s=>$(s).value="");
-    $("#form-is-shop").checked = isWholesaleMode;
-    $("#form-cond").value = "used";
-    $("#f-cur").value = "AFN";
-    $("#f-neg").checked = false;
-    $("#form-urg").checked = false;
-  }
-  $("#form-is-wholesale-hidden").value = isWholesaleMode ? "true" : "false";
-  $("#retail-cond-row").style.display = isWholesaleMode ? "none" : "grid"; $("#retail-spec-row").style.display = isWholesaleMode ? "none" : "grid"; $("#wholesale-row").style.display = isWholesaleMode ? "grid" : "none"; $("#form-urg").closest("label").style.display = isWholesaleMode ? "none" : "";
-  $("#form-shop-name").style.display = isWholesaleMode ? "block" : "none";
-  
-  if(isWholesaleMode) {
-    $("#single-ci-box").style.display = "none";
-    $("#multi-provinces-box").style.display = "block";
-    const savedProv = loadedDraft && Array.isArray(loadedDraft.provinces) ? loadedDraft.provinces : [];
-    document.querySelectorAll(".multi-prov-chk").forEach(c => c.checked = savedProv.includes(+c.value));
-  } else {
-    $("#single-ci-box").style.display = "block";
-    $("#multi-provinces-box").style.display = "none";
-    $("#f-ci").value = loadedDraft && loadedDraft.ci ? loadedDraft.ci : 0;
-  }
-  if(isWholesaleMode && me && users[me] && !$("#form-shop-name").value) {
-    $("#form-shop-name").value = users[me].shopName || (users[me].name + " شرکت پخش");
-  }
-  
-  populateModalCategorySelect(isWholesaleMode);
-  if(!isWholesaleMode) $("#f-c").value = loadedDraft && loadedDraft.c ? loadedDraft.c : 1;
-
-  combinedImagesList = [];
-  updatePreviewGrid();
-  
-  const modalEl = $("#add");
-  modalEl.close();
-  modalEl.showModal();
-
-  const initialProv = provinceCoords[Number($("#f-ci").value)] || provinceCoords[0];
-  if(!loadedDraft) { $("#form-lat").value = initialProv.lat; $("#form-lng").value = initialProv.lng; }
-  setTimeout(() => { initMapPicker(Number($("#form-lat").value), Number($("#form-lng").value)); }, 100);
-});
-
-$("#form-is-shop").onchange = function() {
-  const isWholesaleMode = ($("#form-is-wholesale-hidden").value === "true");
-  $("#form-shop-name").style.display = (this.checked || isWholesaleMode) ? "block" : "none";
-  if((this.checked || isWholesaleMode) && me && users[me] && !$("#form-shop-name").value) {
-    $("#form-shop-name").value = users[me].shopName || (users[me].name + (isWholesaleMode ? " شرکت پخش" : " فروشگاه"));
-  }
-};
-
-function closeAdForm() {
-  if(mapPicker) { try { mapPicker.remove(); } catch(e) {} mapPicker = null; pickerMarker = null; }
-  $("#add").close();
-}
-$("#cancel").onclick=closeAdForm;
-$("#cancel-top").onclick=closeAdForm;
-
-function openEditModal(ad) {
-  const isWholesaleMode = ad.isWholesale;
-  $("#modal-title-text").textContent = isWholesaleMode ? "✏️ ویرایش آگهی عمده‌فروشی" : "✏️ ویرایش آگهی پرچون";
-  $("#modal-header-bg").style.background = isWholesaleMode ? "linear-gradient(135deg, #1b3b6f, #152c48)" : "linear-gradient(135deg, var(--ac), var(--ac2))";
-  $("#edit-ad-id").value = ad.id;
-  $("#f-t").value = ad.t; $("#f-ph").value = ad.ph || "";
-  populateModalCategorySelect(isWholesaleMode);
-  $("#f-c").value = isWholesaleMode ? ad.wholesaleCat : ad.c;
-
-  if(isWholesaleMode) {
-    $("#single-ci-box").style.display = "none";
-    $("#multi-provinces-box").style.display = "block";
-    document.querySelectorAll(".multi-prov-chk").forEach(c => {
-      c.checked = Array.isArray(ad.provinces) && ad.provinces.includes(+c.value);
-    });
-  } else {
-    $("#single-ci-box").style.display = "block";
-    $("#multi-provinces-box").style.display = "none";
-    $("#f-ci").value = (ad.ci != null) ? ad.ci : 0;
-  }
-
-  $("#form-cond").value = ad.cond || "used";
-  $("#form-map").value = ad.mapLoc || "";
-  $("#f-p").value = ad.p;
-  $("#f-d").value = ad.d || "";
-  $("#form-is-shop").checked = ad.isShop || false;
-  $("#form-shop-name").style.display = ad.isShop ? "block" : "none";
-  $("#form-shop-name").value = ad.shopName || "";
-  $("#form-urg").checked = ad.u || false;
-  $("#f-cur").value=ad.cur||"AFN"; $("#f-neg").checked=!!ad.neg; $("#f-moq").value=ad.moq||""; $("#f-unit").value=ad.unit||"کارتن"; $("#form-brand").value=ad.brand||""; $("#form-spec").value=ad.spec||"";
-  $("#form-is-wholesale-hidden").value = isWholesaleMode ? "true" : "false";
-  $("#retail-cond-row").style.display = isWholesaleMode ? "none" : "grid"; $("#retail-spec-row").style.display = isWholesaleMode ? "none" : "grid"; $("#wholesale-row").style.display = isWholesaleMode ? "grid" : "none"; $("#form-urg").closest("label").style.display = isWholesaleMode ? "none" : "";
-  $("#form-lat").value = ad.lat || provinceCoords[ad.ci]?.lat || 34.5553;
-  $("#form-lng").value = ad.lng || provinceCoords[ad.ci]?.lng || 69.2075;
-  
-  combinedImagesList = [];
-  if(Array.isArray(ad.imgs) && ad.imgs.length > 0) {
-    ad.imgs.forEach(im => combinedImagesList.push({ src: im, type: 'ذخیره شده' }));
-  } else if(ad.img) {
-    combinedImagesList.push({ src: ad.img, type: 'ذخیره شده' });
-  }
-  updatePreviewGrid();
-  $("#add").showModal();
-  initMapPicker(parseFloat($("#form-lat").value), parseFloat($("#form-lng").value));
-}
-
-const MAX_IMGS=6;
-function compressImage(file){return new Promise((res,rej)=>{const fr=new FileReader();fr.onerror=rej;fr.onload=()=>{const im=new Image();im.onerror=rej;im.onload=()=>{const k=Math.min(1,1000/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.7))};im.src=fr.result};fr.readAsDataURL(file)})}
-let combinedImagesList = [];
-
-function updatePreviewGrid() {
-  const grid = $("#preview-grid");
-  const status = $("#img-status");
-  if(combinedImagesList.length === 0) {
-    grid.innerHTML = "";
-    status.textContent = "تصویری انتخاب نشده است";
-    return;
-  }
-  status.textContent = `✅ ${combinedImagesList.length} تصویر آماده است`;
-  grid.innerHTML = combinedImagesList.map((item, idx) => `
-    <div class="preview-item">
-      <img src="${item.src}" alt="تصویر">
-      <span class="badge-type">${item.type}</span>
-      <button class="del-img" data-index="${idx}" type="button">✕</button>
-    </div>
-  `).join("");
-}
-
-$("#preview-grid").onclick = (e) => {
-  const btn = e.target.closest(".del-img");
-  if(!btn) return;
-  const idx = +btn.dataset.index;
-  combinedImagesList.splice(idx, 1);
-  updatePreviewGrid();
-};
-
-$("#gallery-file-input").onchange = function(e) {
-  const files = e.target.files;
-  if(!files || files.length === 0) return;
-  const room = Math.max(MAX_IMGS - combinedImagesList.length, 0);
-  if(files.length > room) toast("حداکثر "+nf(MAX_IMGS)+" تصویر مجاز است.");
-  Array.from(files).slice(0, room).forEach(file => {
-    compressImage(file).then(src => { combinedImagesList.push({ src, type: 'گالری' }); updatePreviewGrid(); }).catch(()=>toast("تصویر خوانده نشد."));
-  });
-  this.value = "";
-};
-
-$("#camera-file-input").onchange = function(e) {
-  const file = e.target.files[0];
-  if(!file) return;
-  if(combinedImagesList.length >= MAX_IMGS){ toast("حداکثر "+nf(MAX_IMGS)+" تصویر مجاز است."); this.value=""; return; }
-  compressImage(file).then(src => { combinedImagesList.push({ src, type: 'دوربین' }); updatePreviewGrid(); }).catch(()=>toast("تصویر خوانده نشد."));
-  this.value = "";
-};
-
-$("#save").onclick=async()=>{
-  const titleField = $("#f-t");
-  const t = titleField.value.trim();
-  const errT = $("#err-t");
-  if(t.length < 4) {
-    titleField.style.borderColor = "#d6324a";
-    errT.textContent = "عنوان آگهی باید حداقل ۴ حرف باشد.";
-    return;
-  } else {
-    titleField.style.borderColor = "var(--bd)";
-    errT.textContent = "";
-  }
-  
-  const phv=normDigits($("#f-ph").value.trim());
-  if(!/^07\d{8}$/.test(phv)){ toast("شماره تماس را به‌صورت ۰۷… وارد کنید."); $("#f-ph").focus(); return; }
-  put("ab_last_ph_"+me,phv);
-  let imgUrls;
-  try{ $("#save").disabled=true; imgUrls = [];
-  for(const i of combinedImagesList) {
-    try {
-      const u = await uploadImg(i.src);
-      if(u) imgUrls.push(u);
-    } catch(err) {
-      console.warn("آپلود تصویر ناموفق بود:", err);
-    }
-  } }
-  catch(e){ $("#save").disabled=false; toast("آپلود تصویر ناموفق بود؛ دوباره تلاش کنید."); return; }
-  $("#save").disabled=false;
-  const editId = $("#edit-ad-id").value;
-  const isShopChecked = $("#form-is-shop").checked;
-  const shopNameVal = $("#form-shop-name").value.trim() || ((users[me]?.name||"کاربر") + " فروشگاه");
-  const isUrg = $("#form-urg").checked ? 1 : 0;
-  const isWholesaleVal = ($("#form-is-wholesale-hidden").value === "true");
-  let latVal = parseFloat($("#form-lat").value);
-  let lngVal = parseFloat($("#form-lng").value);
-  if(!Number.isFinite(latVal) || latVal < -90 || latVal > 90) latVal = 34.5553;
-  if(!Number.isFinite(lngVal) || lngVal < -180 || lngVal > 180) lngVal = 69.2075;
-  
-  let selectedProvinces = [];
-  if(isWholesaleVal) {
-    document.querySelectorAll(".multi-prov-chk:checked").forEach(c => selectedProvinces.push(+c.value));
-    if(selectedProvinces.length === 0) selectedProvinces = [0];
-  }
-
-  try {
-    if(editId) {
-      const targetAd = mine.find(x => x.id === editId);
-      if(targetAd) {
-        targetAd.t = t;
-        if(isWholesaleVal) {
-          targetAd.wholesaleCat = +$("#f-c").value;
-          targetAd.c = 1;
-          targetAd.provinces = selectedProvinces;
-          targetAd.ci = selectedProvinces[0];
-        } else {
-          targetAd.c = +$("#f-c").value;
-          targetAd.ci = +$("#f-ci").value;
-        }
-        targetAd.p = +$("#f-p").value || 0;
-        targetAd.d = $("#f-d").value.trim();
-        targetAd.cond = $("#form-cond").value; targetAd.ph = phv;
-        targetAd.brand=$("#form-brand").value.trim(); targetAd.spec=$("#form-spec").value.trim(); targetAd.cur=$("#f-cur").value; targetAd.neg=$("#f-neg").checked; targetAd.moq=+$("#f-moq").value||0; targetAd.unit=$("#f-unit").value;
-        targetAd.mapLoc = $("#form-map").value.trim();
-        targetAd.isShop = isShopChecked;
-        targetAd.shopName = shopNameVal;
-        targetAd.u = isUrg;
-        targetAd.isWholesale = isWholesaleVal;
-        targetAd.lat = latVal;
-        targetAd.lng = lngVal;
-        targetAd.imgs = imgUrls;
-        put("ab_ads", mine);
-        syncAd(targetAd).then(st=>{ if(st) toast(adMsg(st,"ویرایش")); put("ab_ads", mine); draw(); });
-        addNotification(`آگهی ویرایش شد.`);
-      }
-    } else {
-      const ts=Date.now();
-      mine.unshift({
-        id: crypto.randomUUID(), ts, t,
-        c: isWholesaleVal ? 1 : +$("#f-c").value,
-        wholesaleCat: isWholesaleVal ? +$("#f-c").value : 1,
-        ci: isWholesaleVal ? selectedProvinces[0] : +$("#f-ci").value,
-        provinces: isWholesaleVal ? selectedProvinces : undefined,
-        p:+$("#f-p").value||0,
-        d:$("#f-d").value.trim(),
-        ph:phv, u: isUrg, owner:me, ownerId: myId,
-        imgs: imgUrls,
-        cond: $("#form-cond").value,
-        mapLoc: $("#form-map").value.trim(),
-        brand:$("#form-brand").value.trim(), spec:$("#form-spec").value.trim(), cur:$("#f-cur").value, neg:$("#f-neg").checked, moq:+$("#f-moq").value||0, unit:$("#f-unit").value,
-        sellerName: users[me] ? users[me].name : "کاربر",
-        verified: /^07\d{8}$/.test(me),
-        isShop: isShopChecked, shopName: shopNameVal,
-        isWholesale: isWholesaleVal,
-        lat: latVal, lng: lngVal,
-        status: adminFlag ? "approved" : "pending",
-        views: 1, calls: 0
-      });
-      if(!put("ab_ads",mine)){ mine.shift(); toast("حافظه پر است؛ تعداد یا حجم عکس‌ها را کم کنید."); return; }
-      syncAd(mine[0]).then(st=>{ if(st) toast(adMsg(st,"ثبت")); put("ab_ads", mine); draw(); });
-      addNotification(`آگهی جدید ثبت شد.`);
-    }
-    S.removeItem(DRAFT_KEY());
-    $("#add").close();
-    ["#f-t","#f-p","#f-d","#form-map","#edit-ad-id","#form-shop-name"].forEach(s=>$(s).value="");
-    $("#form-is-shop").checked = false;
-    $("#form-urg").checked = false;
-    combinedImagesList = [];
-    updatePreviewGrid();
-    cat=0; wholesaleCat=0; view="all"; currentPage=1; wholesaleCurrentPage=1; draw();
-  } catch(err) {
-    toast("خطا در ذخیره‌سازی.");
-  }
-};
-
-const card=renderCard;
-function extras(){
- const A=all().filter(a => !a.isWholesale);
- $("#stats").innerHTML=[[A.length,"آگهی پرچون"],[provinceCoords.length,"ولایت"],[cats.length-1,"دسته‌بندی"]].map(x=>`<div><b>${nf(x[0])}</b><span>${x[1]}</span></div>`).join("");
- $("#feat").innerHTML=A.filter(a=>a.u).sort((a,b)=>a.age-b.age).map(card).join("")||'<div class="mu">فعلاً آگهی ویژه‌ای نیست.</div>';
- $("#tiles").innerHTML=cats.slice(1,13).map((x,i)=>`<button class="tag tile" style="--h:${(i+1)*23}" data-i="${i+1}"><span>${x[1]}</span>${x[0]}</button>`).join("");
- const cc={};A.forEach(a=>cc[a.ci]=(cc[a.ci]||0)+1);
- $("#tc").innerHTML=Object.entries(cc).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([i,n])=>`<button class="ccity" data-i="${i}">${cities[i]}<span>${nf(n)}</span></button>`).join("")
-}
-const go=()=>$("#listing").scrollIntoView({behavior:"smooth"});
-$("#tiles").onclick=e=>{const b=e.target.closest(".tile");if(b){cat=+b.dataset.i;view="all";currentPage=1;draw();go()}};
-$("#tc").onclick=e=>{const b=e.target.closest(".ccity");if(b){$("#header-city-select").value=+b.dataset.i;currentPage=1;draw();go()}};
-
-// Always release Leaflet instances when dialogs close, including Escape and save flows.
-$("#dlg").addEventListener("close", () => {
-  if(window._adViewMap) { try { window._adViewMap.remove(); } catch(e) {} window._adViewMap = null; }
-});
-$("#radius-dlg").addEventListener("close", () => destroyRadiusMap());
-$("#add").addEventListener("close", () => {
-  if(mapPicker) { try { mapPicker.remove(); } catch(e) {} mapPicker = null; pickerMarker = null; }
-});
-// ==========================================
-// لایه Supabase: آگهی، عکس، پیام، نظر، گزارش
-// ==========================================
-const sb=()=>supabaseClient;
-async function uploadImg(src){
-  if(!src||!src.startsWith("data:")||!sb()||!myId) return src;
-  const blob=await (await fetch(src)).blob();
-  const path=`${myId}/${Date.now()}-${Math.random().toString(36).slice(2,8)}.jpg`;
-  const {error}=await sb().storage.from("ad-images").upload(path,blob,{contentType:"image/jpeg"});
-  if(error) throw error;
-  return sb().storage.from("ad-images").getPublicUrl(path).data.publicUrl;
-}
-async function syncAd(ad){
-  if(!sb()||!myId) return null;
-  const {id,owner,ownerId,age,status,...rest}=ad;
-  const {data,error}=await sb().from("ads").upsert({id:String(id),owner_id:myId,status:status||"approved",data:rest}).select("status").single();
-  if(error){console.warn(error);toast("ذخیره روی سرور انجام نشد؛ فقط در این دستگاه ذخیره شد.");return null;}
-  ad.status=data.status; return data.status;
-}
-const adMsg=(st,verb)=> st==="approved"?"✅ آگهی "+verb+" و منتشر شد":st==="rejected"?"❌ آگهی به‌دلیل محتوای ممنوعه رد شد":st==="pending"?"⏳ آگهی ثبت شد و پس از بررسی منتشر می‌شود":"آگهی با موفقیت "+verb+" شد";
-async function remoteDelete(id,wasRemote){
-  if(!sb()||!myId||!wasRemote) return true;
-  if(adminFlag){ const r=await sb().rpc("admin_delete_ad",{p_id:String(id)}); if(r.error){console.warn(r.error);return false;} return true; }
-  const r=await sb().from("ads").delete().eq("id",String(id)).select("id");
-  if(r.error){console.warn(r.error);return false;}
-  return !!(r.data&&r.data.length);
-}
-async function adminSetStatus(id, status){
-  if(!adminFlag){ toast("فقط ادمین می‌تواند تایید/رد کند"); return; }
-  if(seed.some(x=>String(x.id)===String(id))){ toast("این آگهی نمونه است و قابل تغییر نیست."); return; }
-  if(sb() && myId){
-    const {error} = await sb().from("ads").update({status}).eq("id", String(id));
-    if(error){ console.warn(error); toast("ذخیره نشد روی سرور"); return; }
-  }
-  const ad = mine.find(x=>String(x.id)===String(id));
-  if(ad) ad.status = status;
-  put("ab_ads", mine);
-  toast(status==="approved"?"✅ آگهی تایید شد":"❌ آگهی رد شد");
-  draw();
-}
-function bumpStat(id,field){ if(sb() && !seed.some(x=>String(x.id)===String(id))) sb().rpc("bump_stat",{p_ad:String(id),p_field:field}).then(()=>{},()=>{}); }
-async function remoteReview(a,rating,comment){
-  if(!sb()||!myId||!a.ownerId) return;
-  const {error}=await sb().from("reviews").upsert({shop_phone:a.ph,shop_owner_id:a.ownerId,buyer_id:myId,buyer_name:users[me].name,rating,comment},{onConflict:"shop_phone,buyer_id"});
-  if(error){console.warn(error);toast("ثبت نظر روی سرور انجام نشد.");}
-}
-async function loadChat(a){
-  if(!sb()||!myId||!a.ownerId) return;
-  const {data,error}=await sb().from("messages").select("*")
-    .eq("ad_id",String(a.id))
-    .or(`sender_id.eq.${myId},recipient_id.eq.${myId}`)
-    .order("created_at");
-  if(error||!data) return;
-  messages[a.id] = data.map(r=>({sender:r.sender_id===myId?me:r.sender_id,senderId:r.sender_id,recipientId:r.recipient_id,name:r.sender_name,text:r.text,time:Date.parse(r.created_at)}));
-}
-async function sendRemote(a,txt){
-  if(!sb()||!myId||!a.ownerId) return;
-  let rid=a.ownerId;
-  if(rid===myId){
-    const last = [...(messages[a.id]||[])].reverse().find(m => m.senderId && m.senderId !== myId);
-    rid = last && last.senderId ? last.senderId : null;
-  }
-  if(!rid || rid === myId) return;
-  const {error}=await sb().from("messages").insert({ad_id:String(a.id),sender_id:myId,recipient_id:rid,sender_name:users[me].name,text:txt});
-  if(error){
-    console.warn(error);
-    toast("پیام روی سرور ارسال نشد.");
-    if(messages[a.id] && messages[a.id].length > 0) {
-      messages[a.id].pop();
-      put(UK("ab_msgs"), messages);
-    }
+    const totalPages = Math.ceil(r.length / itemsPerPage) || 1;
   }
 }
-async function reportRemote(id){
-  if(!sb()||!myId) return;
-  const {error}=await sb().from("reports").upsert({ad_id:String(id),reporter_id:myId},{onConflict:"ad_id,reporter_id",ignoreDuplicates:true});
-  if(error)console.warn(error);
-}
-async function renderReports(){
-  const box=$("#dynamic-shop-banner");
-  if(!adminFlag||!sb()){box.innerHTML="";return;}
-  const {data,error}=await sb().from("reports").select("id,ad_id,created_at").eq("status","open").order("created_at",{ascending:false}).limit(30);
-  if(error||!data){box.innerHTML="";return;}
-  box.innerHTML=`<div class="shop-banner" style="flex-direction:column;align-items:flex-start;gap:6px;"><h3>🚩 گزارش‌های باز (${nf(data.length)})</h3>${data.map(r=>`<div style="font-size:12px;">آگهی <b>${esc(r.ad_id)}</b> — ${ago((Date.now()-Date.parse(r.created_at))/36e5)} <button class="capsule-btn" data-open="${esc(r.ad_id)}" style="padding:1px 8px">مشاهده</button> <button class="capsule-btn" data-close="${r.id}" style="padding:1px 8px">بستن</button></div>`).join("")||"گزارشی وجود ندارد."}</div>`;
-  box.onclick=async e=>{
-    const o=e.target.closest("[data-open]"); if(o) return openAd(o.dataset.open);
-    const c=e.target.closest("[data-close]"); if(c){ await sb().from("reports").update({status:"closed"}).eq("id",c.dataset.close); renderReports(); }
-  };
-}
-const SAFE_ID=/^[A-Za-z0-9_-]{1,60}$/;
-const MY_STORAGE_URL = "https://snhyzmwgazifdqyvqsnu.supabase.co/storage/v1/object/public/ad-images/";
-const SAFE_IMG = new RegExp("^(" + MY_STORAGE_URL.replace(/[\[\]\{\}\(\)\*\+\?\.\^\$\|\\]/g, '\\$&') + "|data:image\\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+)$");
-function cleanAd(r){
-  if(!r||!SAFE_ID.test(String(r.id))) return null;
-  const a={...(r.data&&typeof r.data==="object"?r.data:{}),id:String(r.id),status: r.status || "approved"};
-  ["p","moq","c","ci","views","calls","ts","lat","lng","u"].forEach(k=>{ if(k in a) a[k]=Number(a[k])||0; });
-  ["isWholesale","isShop","neg"].forEach(k=>{ if(k in a) a[k]=!!a[k]; });
-  a.imgs=(Array.isArray(a.imgs)?a.imgs:[]).filter(x=>typeof x==="string"&&SAFE_IMG.test(x)).slice(0,8);
-  if(a.img&&!(typeof a.img==="string"&&SAFE_IMG.test(a.img))) a.img="";
-  return a;
-}
-async function loadRemote(){
-  if(!sb()) return;
-  const {data,error}=await sb().from("ads").select("id,owner_id,status,data").order("created_at",{ascending:false}).limit(500);
-  if(error){ console.warn("Supabase ads:",error.message); return; }
-  const remote=data.map(r=>{const a=cleanAd(r); if(a){ a.owner=(myId&&r.owner_id===myId)?me:r.owner_id; a.ownerId=r.owner_id; a.status=r.status||"approved"; } return a;}).filter(Boolean);
-  const rids=new Set(remote.map(r=>r.id));
-  const localOwn=myId?(Array.isArray(mine)?mine:[]).filter(a=>a.owner===me&&!rids.has(a.id)):[];
-  mine=remote;
-  await Promise.all(localOwn.map(async a => {
-    try {
-      a.imgs = await Promise.all((a.imgs || []).map(uploadImg));
-      a.ownerId = myId;
-      await syncAd(a);
-    } catch(e) { console.warn(e); }
-  }));
-  localOwn.forEach(a => { if(!remote.some(x => x.id === a.id)) mine.unshift(a); });
-  put("ab_ads",mine);
-  const rv=await sb().from("reviews").select("shop_phone,rating,comment,buyer_name,buyer_id,created_at").limit(3000);
-  if(rv.data){ const m={}; rv.data.forEach(r=>{(m[r.shop_phone]=m[r.shop_phone]||[]).push({rating:r.rating,comment:r.comment,buyer:r.buyer_name,buyerId:r.buyer_id,date:Date.parse(r.created_at)})}); shopReviews=m; }
-  if(myId){
-    const ad=await sb().from("admins").select("user_id").eq("user_id",myId).maybeSingle();
-    adminFlag=!!(ad.data);
-    const seen=get("ab_msg_seen",0);
-    const mc=await sb().from("messages").select("id",{count:"exact",head:true}).eq("recipient_id",myId).gt("created_at",new Date(seen).toISOString());
-    if(mc.count>0) addNotification(`${nf(mc.count)} پیام جدید در آگهی‌های شما`);
-    put("ab_msg_seen",Date.now());
-  }
-  draw();
-  if(window.__fromHash && !$("#dlg").open) window.__fromHash();
-}
-async function afterLogin(p){
-  if(!sb()||!myId) return;
-  const pr=await sb().from("profiles").select("name,shop_name").eq("id",myId).maybeSingle();
-  if(pr.data&&pr.data.name&&users[p]&&String(users[p].name).startsWith("کاربر ")){ users[p].name=pr.data.name; if(pr.data.shop_name) users[p].shopName=pr.data.shop_name; put("ab_users",users); }
-  await sb().from("profiles").upsert({id:myId,phone:p,name:users[p]?.name||null,shop_name:users[p]?.shopName||null});
-  await loadRemote();
-}
-async function initRemote(){
-  if(!sb()) return;
-  const {data}=await sb().auth.getSession();
-  const ses=data&&data.session;
-  if(ses){ myId=ses.user.id; const ident=ses.user.email||ses.user.phone;
-    if(ident){
-      if(ident !== me){ me=ident; loadFavs(); }
-      if(!users[me]){ const md=ses.user.user_metadata||{}, base=String(me).split("@")[0];
-        users[me]={name:md.full_name||md.name||base,verified:true,shopName:(md.full_name||base)+" دکان"};
-        put("ab_users",users); put("ab_sess",me); loadFavs(); addNotification("به افغان‌بازار خوش آمدید!");
-      }
-    }
-  }
-  else if(me){ me=null; put("ab_sess",null); loadFavs(); }  // نشست محلی بدون نشست سرور معتبر نیست
-  await loadRemote();
-}
 
+function changePage(p){ if(p<1) return; currentPage=p; draw(); }
+function changeWholesalePage(p){ if(p<1) return; wholesaleCurrentPage=p; draw(); }
+
+drawCats();
+loadFavs();
 draw();
-initRemote();
-document.body.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.classList&&e.target.classList.contains("ad")){e.preventDefault();openAd(e.target.dataset.id)}});
-(function(){
-  const t=get("ab_theme",null); if(t) document.documentElement.dataset.theme=t;
-  $("#theme-btn").onclick=()=>{const cur=document.documentElement.dataset.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");const nx=cur==="dark"?"light":"dark";document.documentElement.dataset.theme=nx;put("ab_theme",nx)};
-  $("#terms-link").onclick=e=>{e.preventDefault();$("#terms-dlg").showModal()};
-  $("#close-terms").onclick=()=>$("#terms-dlg").close();
-  const fromHash=()=>{if(location.hash==="#terms"){const d=$("#terms-dlg"); if(!d.open) d.showModal(); return;} const m=location.hash.match(/^#ad-(.+)$/); if(m) openAd(decodeURIComponent(m[1]));};
-  window.__fromHash=fromHash; window.addEventListener("hashchange",fromHash); fromHash();
-})();
-
-async function loadInbox() {
-  const box = $("#inbox-list");
-  if(!sb() || !myId) return;
-  box.innerHTML = '<div class="mu" style="text-align:center;padding:20px;">در حال دریافت پیام‌ها...</div>';
-  
-  const { data, error } = await sb().from('messages')
-    .select('*')
-    .or(`sender_id.eq.${myId},recipient_id.eq.${myId}`)
-    .order('created_at', { ascending: false });
-    
-  if(error || !data) {
-    box.innerHTML = '<div class="mu" style="text-align:center;padding:20px;">خطا در دریافت پیام‌ها.</div>';
-    return;
-  }
-
-  const threads = {};
-  data.forEach(msg => {
-    if(!threads[msg.ad_id]) threads[msg.ad_id] = [];
-    threads[msg.ad_id].push(msg);
-  });
-
-  const threadIds = Object.keys(threads);
-  if(threadIds.length === 0) {
-    box.innerHTML = '<div class="mu" style="text-align:center;padding:20px;">هیچ پیامی ندارید.</div>';
-    return;
-  }
-
-  let html = '';
-  threadIds.forEach(adId => {
-    const msgs = threads[adId];
-    const lastMsg = msgs[0];
-    const isMeSender = lastMsg.sender_id === myId;
-    const otherName = isMeSender ? 'شما' : lastMsg.sender_name;
-    const ad = all().find(a => String(a.id) === String(adId));
-    const adTitle = ad ? ad.t : 'آگهی نامشخص';
-    
-    html += `
-      <div onclick="openAdFromInbox('${adId}')" style="background:var(--card);padding:12px;border-radius:12px;border:1px solid var(--bd);cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
-        <div>
-          <b style="font-size:13px;display:block;margin-bottom:4px;">${esc(adTitle)}</b>
-          <div class="mu" style="font-size:11px;">${esc(otherName)}: ${esc(lastMsg.text).substring(0,30)}...</div>
-        </div>
-        <div style="font-size:10px;color:var(--mu);">${ago((Date.now() - Date.parse(lastMsg.created_at))/36e5)}</div>
-      </div>
-    `;
-  });
-  box.innerHTML = html;
-}
-
-window.openAdFromInbox = (adId) => {
-  $("#inbox-dlg").close();
-  openAd(adId);
-  setTimeout(() => {
-    const chatBox = $("#chat-messages");
-    if(chatBox) chatBox.scrollIntoView({behavior:"smooth"});
-  }, 500);
-};
-
-$("#close-inbox").onclick = () => $("#inbox-dlg").close();
-
 </script>
 </body>
 </html>
