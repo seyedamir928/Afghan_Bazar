@@ -11,7 +11,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <!-- Supabase JS (برای سیستم پیامک) -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+  // ==========================================
+// ثبت Service Worker برای PWA
+// ==========================================
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then((reg) => console.log('Service Worker registered successfully.'))
+      .catch((err) => console.log('Service Worker registration failed:', err));
+  });
+}
+</script>
+
 
 <style>
 :root{--bg:#f2f6f3;--card:#fff;--tx:#12211a;--mu:#62736a;--bd:#dfe8e2;--chip:#e6efe9;--ac:#0e7a4b;--ac2:#08432c;--gd:#f4b73f;--on:#fff;--hl:#0e7a4b;--sh:0 8px 24px rgba(10,60,40,.09)}
@@ -231,6 +243,12 @@ dialog#add[open] { display: flex; flex-direction: column; }
 :root[data-theme="dark"]{--bg:#0b110e;--card:#151d18;--tx:#eaf2ed;--mu:#93a39a;--bd:#25322b;--chip:#1d2923;--ac:#37b676;--ac2:#0a3322;--on:#06130c;--hl:#37b676;--sh:none}
 :root[data-theme="dark"] .tile{background:hsl(var(--h) 28% 19%);color:var(--tx)}
 </style>
+<!-- PWA Configurations -->
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="افغان‌بازار">
+<link rel="apple-touch-icon" href="icon-192.png">
 </head>
 <body>
 <header>
