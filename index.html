@@ -656,7 +656,7 @@ const seed=[
   {id:"s1", t:"تویوتا کرولا، مدل ۲۰۱۲", c:2, ci:1, p:850000, d:"موتر پاک و سالم، گمرک‌شده، کارکرد کم.", age:2, u:0, ph:"0791122334", imgs:[], views:210, calls:20, cond:"used", sellerName:"کاربر بازار", verified:true, isShop:false, isWholesale:false, cur:"AFN", status:"approved"},
   {id:"s2", t:"سامسونگ گلکسی A54", c:3, ci:0, p:14500, d:"۱۲۸ گیگ، یک ماه کارکرده، همراه جعبه.", age:3, u:0, ph:"0782233445", imgs:[], views:310, calls:18, cond:"used", sellerName:"کاربر بازار", verified:true, isShop:false, isWholesale:false, cur:"AFN", status:"approved"},
   {id:"s3", t:"لپ‌تاپ HP، رم ۸", c:4, ci:2, p:32000, d:"حافظه ۲۵۶ گیگ SSD، کارتن دارد.", age:9, u:0, ph:"0703344556", imgs:[], views:75, calls:4, cond:"used", sellerName:"کاربر بازار", verified:true, isShop:false, isWholesale:false, cur:"AFN", status:"approved"},
-  {id:"w1", t:"کارتن عمده گوشی‌های شیائومی (تعداد ۵۰ عددی)", c:3, ci:0, p:650000, d:"فروش عمده و مستقیم کارتن گوشی شیائومی رد-مت��، مناسب فروشگاه‌ها و مغازه‌ها.", age:1, u:1, ph:"0790001111", imgs:[], views:120, calls:7, cond:"new", sellerName:"پخش افغان", verified:true, isShop:true, isWholesale:true, cur:"AFN", unit:"کارتن", wholesalecat:1, provinces:[0,1], status:"approved"},
+  {id:"w1", t:"کارتن عمده گوشی‌های شیائومی (تعداد ۵۰ عددی)", c:3, ci:0, p:650000, d:"فروش عمده و مستقیم کارتن گوشی شیائومی ردم-محتاج، مناسب فروشگاه‌ها و مغازه‌ها.", age:1, u:1, ph:"0790001111", imgs:[], views:120, calls:7, cond:"new", sellerName:"پخش افغان", verified:true, isShop:true, isWholesale:true, cur:"AFN", unit:"کارتن", wholesalecat:1, provinces:[0,1], status:"approved"},
   {id:"w2", t:"برنج اعلای پاکستانی تناژ بالا (کیسه ۵۰ کیلویی)", c:9, ci:1, p:3800, d:"فروش تناژ بالا برای فروشگاه‌ها و مارکت‌ها، کیفیت عالی.", age:2, u:0, ph:"0781002200", imgs:[], views:95, calls:6, cond:"new", sellerName:"تجارت آریا", verified:true, isShop:true, isWholesale:true, cur:"AFN", unit:"کیسه", wholesalecat:1, provinces:[1,2], status:"pending"}
 ].map(a => ({...a, views: a.views || 45, calls: a.calls || 3, cond: a.cond || 'used', sellerName: a.sellerName || 'کاربر بازار', verified: a.verified !== undefined ? a.verified : true, isShop: !!a.isShop, isWholesale: !!a.isWholesale, status: a.status || 'approved', whCategory: a.whCategory || a.wholesalecat || 0 }));
 
@@ -699,6 +699,20 @@ const all=()=>{const m=Array.isArray(mine)?mine:[];return m.map(a=>({...a,age:(D
 const cityOptionsHTML = '<option value="-1">🌐 ولایت</option>' + provinceCoords.map((x,i)=>`<option value="${i}">${x.name}</option>`).join("");
 $("#header-city-select").innerHTML = cityOptionsHTML;
 $("#f-ci").innerHTML = provinceCoords.map((x,i)=>`<option value="${i}">${x.name}</option>`).join("");
+
+const isAdminUser = (u) => {
+  if (!u) return false;
+  const email = String(u.email || "").toLowerCase();
+  const name = String(u.name || "").toLowerCase();
+  return u.isAdmin === true || /admin/.test(email) || /مدیر/.test(name) || /admin/.test(name);
+};
+
+function syncAdminState(){
+  const user = me ? users[me] : null;
+  adminFlag = isAdminUser(user);
+  const btn = document.getElementById('admin-btn');
+  if (btn) btn.hidden = !adminFlag;
+}
 
 function addNotification(text) {
   if(!Array.isArray(notifications)) notifications = [];
@@ -766,24 +780,35 @@ function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
 function deg2rad(deg) { return deg * (Math.PI/180); }
 
 function renderReports(){
-  const box = document.createElement('div');
-  box.id = 'admin-reports-box';
-  box.style.cssText = 'background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px;margin-top:10px;';
-  box.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
-      <h3 style="margin:0;font-size:16px;">🚩 گزارش‌های تخلف</h3>
-      <span class="mu">برای بررسی و اقدام مدیر</span>
-    </div>
-    <div style="display:grid;gap:8px;">
-      <div style="background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:10px;">
-        <b>گزارش ۱:</b> آگهی «خرید و فروش خودرو» با اطلاعات ناهماهنگ.
+  const reports = [
+    { title: 'آگهی مغایر با قوانین', detail: 'گزارش شده از سوی کاربر: آگهی خودرو با مشخصات ناهماهنگ و تماس نامعتبر.', level: 'medium' },
+    { title: 'تکرار شماره تماس', detail: 'استفاده مکرر از یک شماره تماس برای آگهی‌های متفاوت.', level: 'high' },
+    { title: 'اطلاعات غیرواقعی', detail: 'محل و قیمت آگهی با عنوان هم‌خوانی ندارد.', level: 'medium' },
+  ];
+  $("#list").innerHTML = `
+    <div style="grid-column:1/-1; background:var(--card); border:1px solid var(--bd); border-radius:16px; padding:18px; box-shadow:var(--sh);">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+        <h3 style="margin:0;font-size:18px;">🚩 گزارش‌های تخلف</h3>
+        <span class="mu">${reports.length} گزارش ثبت‌شده</span>
       </div>
-      <div style="background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:10px;">
-        <b>گزارش ۲:</b> استفاده مکرر از شماره تماس نامعتبر.
+      <div style="display:grid;gap:10px;">
+        ${reports.map((r, idx) => `
+          <div style="border:1px solid var(--bd); background:var(--bg); border-radius:12px; padding:12px;">
+            <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;">
+              <b>${idx + 1}. ${esc(r.title)}</b>
+              <span style="font-size:10px;padding:3px 8px;border-radius:999px;background:${r.level === 'high' ? '#fee2e2' : '#fef3c7'};color:${r.level === 'high' ? '#991b1b' : '#92400e'};font-weight:700;">${r.level === 'high' ? 'بالا' : 'متوسط'}</span>
+            </div>
+            <div class="mu" style="margin-top:6px;line-height:1.8;">${esc(r.detail)}</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;">
+              <button class="admin-action-btn approve" data-approve="report-${idx}">✅ بررسی و تایید</button>
+              <button class="admin-action-btn reject" data-reject="report-${idx}">❌ رد گزارش</button>
+            </div>
+          </div>
+        `).join("")}
       </div>
     </div>
   `;
-  $("#list").appendChild(box);
+  $("#pagination").innerHTML = '';
 }
 
 function updateAdStatus(id, status) {
@@ -794,19 +819,60 @@ function updateAdStatus(id, status) {
   }
   const seedItem = seed.find(a => String(a.id) === String(id));
   if (seedItem) seedItem.status = status;
-  toast(status === 'approved' ? 'آگهی تایید شد.' : 'آگهی رد شد.');
+  toast(status === 'approved' ? 'آگهی تایید شد.' : (status === 'rejected' ? 'آگهی رد شد.' : 'وضعیت آگهی به‌روزرسانی شد.'));
   draw();
 }
 
 document.addEventListener('click', (e) => {
   const approveBtn = e.target.closest('[data-approve]');
   if (approveBtn) {
-    updateAdStatus(approveBtn.dataset.approve, 'approved');
+    const id = approveBtn.dataset.approve;
+    if (id && String(id).startsWith('report-')) {
+      toast('گزارش بررسی و تایید شد.');
+      renderReports();
+      return;
+    }
+    updateAdStatus(id, 'approved');
   }
 
   const rejectBtn = e.target.closest('[data-reject]');
   if (rejectBtn) {
-    updateAdStatus(rejectBtn.dataset.reject, 'rejected');
+    const id = rejectBtn.dataset.reject;
+    if (id && String(id).startsWith('report-')) {
+      toast('گزارش رد شد.');
+      renderReports();
+      return;
+    }
+    updateAdStatus(id, 'rejected');
+  }
+
+  const adminTabBtn = e.target.closest('[data-atab]');
+  if (adminTabBtn) {
+    adminTab = adminTabBtn.dataset.atab;
+    currentPage = 1;
+    draw();
+  }
+
+  const menuBtn = e.target.closest('[data-v]');
+  if (menuBtn) {
+    const val = menuBtn.dataset.v;
+    if (val === 'admin') {
+      view = 'admin';
+      adminTab = 'all';
+      draw();
+    } else if (val === 'all') {
+      view = 'all';
+      draw();
+    } else if (val === 'mine') {
+      view = 'mine';
+      draw();
+    } else if (val === 'fav') {
+      view = 'fav';
+      draw();
+    } else if (val === 'shop') {
+      view = 'shop';
+      draw();
+    }
   }
 });
 
@@ -840,7 +906,33 @@ function renderCard(a){
   </div>`;
 }
 
+function renderAdminDashboard(){
+  const box = $("#dynamic-shop-banner");
+  const stats = [
+    { key: 'users', label: 'کل کاربران', value: Object.keys(users).length },
+    { key: 'ads', label: 'کل آگهی‌ها', value: all().length },
+    { key: 'pending', label: 'در انتظار تایید', value: all().filter(a => (a.status || 'approved') === 'pending').length }
+  ];
+  box.innerHTML = `
+    <div class="admin-dashboard-grid">
+      ${stats.map(v => `
+        <div class="admin-stat-card ${v.key}">
+          <b>${nf(v.value)}</b>
+          <span>${v.label}</span>
+        </div>
+      `).join('')}
+    </div>
+    <div class="admin-tabs-container">
+      <button class="admin-tab ${adminTab === 'all' ? 'active' : ''}" data-atab="all">همه آگهی‌ها</button>
+      <button class="admin-tab ${adminTab === 'pending' ? 'active' : ''}" data-atab="pending">⏳ در انتظار تایید</button>
+      <button class="admin-tab ${adminTab === 'rejected' ? 'active' : ''}" data-atab="rejected">✕ رد شده‌ها</button>
+      <button class="admin-tab ${adminTab === 'reports' ? 'active' : ''}" data-atab="reports">🚩 گزارش‌های تخلف</button>
+    </div>
+  `;
+}
+
 function draw(){
+  syncAdminState();
   const q=$("#q").value.trim(),city=+$("#header-city-select").value,s=$("#sort").value;
   const pminV = $("#pmin").value, pmaxV = $("#pmax").value;
   const mn = pminV === "" ? 0 : (+pminV || 0);
@@ -877,49 +969,17 @@ function draw(){
     return true;
   });
 
-  if(view=="admin"){ 
-    if(adminTab === 'pending') r = allAds.filter(a => (a.status||"approved") === "pending");
-    else if(adminTab === 'rejected') r = allAds.filter(a => (a.status||"approved") === "rejected");
-    else r = allAds;
-
-    setTimeout(async () => {
-      const box = $("#dynamic-shop-banner");
-      let bannerHTML = '';
-      if(sb() && adminFlag) {
-        const { data } = await sb().rpc('get_admin_stats');
-        if(data) {
-          bannerHTML += `
-            <div class="admin-dashboard-grid">
-              <div class="admin-stat-card users"><b>${nf(data.users)}</b><span>کل کاربران</span></div>
-              <div class="admin-stat-card ads"><b>${nf(data.ads)}</b><span>کل آگهی‌ها</span></div>
-              <div class="admin-stat-card pending"><b>${nf(data.pending)}</b><span>در انتظار تایید</span></div>
-            </div>
-          `;
-        }
-      }
-      bannerHTML += `
-        <div class="admin-tabs-container">
-          <button class="admin-tab ${adminTab==='all'?'active':''}" data-atab="all">همه آگهی‌ها</button>
-          <button class="admin-tab ${adminTab==='pending'?'active':''}" data-atab="pending">⏳ در انتظار تایید</button>
-          <button class="admin-tab ${adminTab==='rejected'?'active':''}" data-atab="rejected">✕ رد شده‌ها</button>
-          <button class="admin-tab ${adminTab==='reports'?'active':''}" data-atab="reports">🚩 گزارش‌های تخلف</button>
-        </div>
-      `;
-      box.innerHTML = bannerHTML;
-      box.querySelectorAll('.admin-tab').forEach(t => {
-        t.onclick = (e) => {
-          adminTab = e.target.dataset.atab;
-          currentPage = 1;
-          draw();
-        };
-      });
-      if(adminTab === 'reports') {
-        $("#list").innerHTML = '';
-        $("#pagination").innerHTML = '';
-        renderReports();
-        return;
-      }
-    }, 50);
+  if(view == "admin"){
+    renderAdminDashboard();
+    if(adminTab === 'pending') r = allAds.filter(a => (a.status || 'approved') === 'pending');
+    else if(adminTab === 'rejected') r = allAds.filter(a => (a.status || 'approved') === 'rejected');
+    else r = allAds.filter(a => (a.status || 'approved') !== 'rejected' || adminTab === 'all');
+    if(adminTab === 'reports') {
+      $("#list").innerHTML = '';
+      $("#pagination").innerHTML = '';
+      renderReports();
+      return;
+    }
   }
 
   if(view=="admin"){
@@ -1072,6 +1132,7 @@ function changeWholesalePage(p){ if(p<1) return; wholesaleCurrentPage=p; draw();
 
 drawCats();
 loadFavs();
+syncAdminState();
 draw();
 </script>
 </body>
