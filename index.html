@@ -13,7 +13,213 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <!-- Supabase JS (برای سیستم پیامک) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+/* =========================================
+   🎨 ارتقای ظاهری لوکس و مدرن (Premium UI)
+   ========================================= */
 
+/* ۱. تغییر پالت رنگی و فاصله‌ها */
+:root {
+    --bg: #f8fafc; /* پس‌زمینه خاکستری بسیار روشن و گرم */
+    --ac: #047857; /* سبز زمردی عمیق‌تر برای دکمه‌ها */
+    --ac2: #064e3b; /* سبز تیره‌تر برای گرادیانت‌ها */
+    --sh: 0 10px 30px rgba(0, 0, 0, 0.04); /* سایه‌های نرم‌تر و پخش‌شده‌تر */
+}
+
+/* اگر حالت تاریک فعال بود، رنگ‌ها را تنظیم کن */
+:root[data-theme="dark"] {
+    --bg: #0f172a; /* آبی-خاکستری تیره */
+    --card: #1e293b;
+    --sh: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ۲. بازطراحی بخش Hero (بالای صفحه) */
+.hero, .wholesale-hero {
+    /* اضافه کردن یک الگوی نقطه‌چین بسیار محو و لوکس به پس‌زمینه */
+    background-image: 
+        radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+        radial-gradient(circle at 15% 20%, rgba(244, 183, 63, 0.3), transparent 40%), 
+        linear-gradient(135deg, var(--ac2), var(--ac) 70%, #0ea5e9);
+    background-size: 20px 20px, 100% 100%, 100% 100%;
+    padding: 50px 20px 80px;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+
+/* نوار جستجوی شیشه‌ای (Glassmorphism) */
+.sbox {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 99px;
+    padding: 6px 8px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+.sbox input {
+    color: #fff;
+    font-size: 14px;
+}
+.sbox input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+.sbox .capsule-btn.primary {
+    background: #fff;
+    color: var(--ac2);
+    border-radius: 99px;
+    font-weight: 800;
+}
+.sbox .capsule-btn.primary:hover {
+    background: #f1f5f9;
+}
+
+/* ۳. تحول در کارت‌های آگهی */
+.ad {
+    border-radius: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.ad:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    border-color: rgba(4, 120, 87, 0.2);
+}
+
+/* تغییر نسبت تصویر به مربع (بزرگتر و جذاب‌تر) */
+.ph {
+    aspect-ratio: 1 / 1;
+    border-radius: 20px 20px 0 0;
+}
+.ph img {
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* افکت زوم روی عکس هنگام هاور */
+.ad:hover .ph img {
+    transform: scale(1.08);
+}
+
+/* استایل بخش متن کارت */
+.i {
+    padding: 14px 16px 18px;
+}
+.i b {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--tx);
+}
+.price {
+    font-size: 16px;
+    margin-top: 6px;
+    letter-spacing: -0.5px;
+}
+
+/* برچسب‌های شناور روی عکس (Floating Badges) */
+.badge {
+    top: 12px;
+    right: 12px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+.fav {
+    top: 12px;
+    left: 12px;
+    width: 32px;
+    height: 32px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.6);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+.fav:hover {
+    transform: scale(1.1);
+}
+.compare-checkbox {
+    top: 12px;
+    left: 52px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.6);
+}
+
+/* ۴. نوار پایین صفحه (تبلت و موبایل) - حالت اپلیکیشن شناور */
+@media(max-width: 760px) {
+    .bottom-nav {
+        left: 16px;
+        right: 16px;
+        bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+        height: 70px;
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: color-mix(in srgb, var(--card) 85%, transparent);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        padding-bottom: 0;
+    }
+    
+    .bnav-item {
+        border-radius: 16px;
+        margin: 8px 4px;
+        gap: 4px;
+        transition: all 0.2s;
+    }
+    .bnav-item.active {
+        background: var(--ac);
+        color: #fff;
+        box-shadow: 0 4px 15px rgba(4, 120, 87, 0.3);
+    }
+    .bnav-item.active .icon {
+        transform: scale(1.1);
+    }
+    
+    /* اصلاح فاصله پایین بدنه برای اینکه نوار شناور روی محتوا نیفتد */
+    body {
+        padding-bottom: 120px !important;
+    }
+}
+
+/* ۵. انیمیشن ظاهر شدن نرم کارت‌ها */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.grid > .ad {
+    animation: fadeInUp 0.4s ease-out forwards;
+}
+
+/* ۶. زیباسازی منوها و دکمه‌های فیلتر */
+.cat {
+    border-radius: 99px;
+    padding: 8px 18px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+.cat:hover {
+    border-color: var(--ac);
+    color: var(--ac);
+}
+.cat.on {
+    background: var(--ac);
+    box-shadow: 0 4px 12px rgba(4, 120, 87, 0.25);
+}
+
+/* دکمه‌های کپسولی (ورود، ثبت آگهی و ...) */
+.split-capsule {
+    border-radius: 99px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+.capsule-btn {
+    border-radius: 99px;
+}
 <style>
 :root{--bg:#f2f6f3;--card:#fff;--tx:#12211a;--mu:#62736a;--bd:#dfe8e2;--chip:#e6efe9;--ac:#0e7a4b;--ac2:#08432c;--gd:#f4b73f;--on:#fff;--hl:#0e7a4b;--sh:0 8px 24px rgba(10,60,40,.09)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b110e;--card:#151d18;--tx:#eaf2ed;--mu:#93a39a;--bd:#25322b;--chip:#1d2923;--ac:#37b676;--ac2:#0a3322;--on:#06130c;--hl:#37b676;--sh:none}}
