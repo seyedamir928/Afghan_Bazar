@@ -1,7 +1,7 @@
 {
-  "name": "افغان‌بازار",
+  "name": "افغان‌بازار | Afghan Bazar",
   "short_name": "افغان‌بازار",
-  "description": "بازار آنلاین پرچون و عمده افغانستان",
+  "description": "پلتفرم پیشرفته آگهی‌های عمده و پرچون در ۳۴ ولایت افغانستان",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -10,18 +10,53 @@
   "dir": "rtl",
   "lang": "fa",
   "orientation": "portrait",
+  "categories": ["shopping", "business", "marketplace"],
+  
   "icons": [
     {
       "src": "./icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "./icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  
+  "screenshots": [
+    {
+      "src": "./screenshot-mobile.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "صفحه اصلی افغان‌بازار"
+    }
+  ],
+  
+  "shortcuts": [
+    {
+      "name": "ثبت آگهی جدید",
+      "short_name": "آگهی جدید",
+      "description": "ثبت سریع آگهی پرچون یا عمده",
+      "url": "./?action=post",
+      "icons": [{ "src": "./icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "پروفایل من",
+      "short_name": "پروفایل",
+      "description": "مشاهده آگهی‌های من و پیام‌ها",
+      "url": "./?action=profile",
+      "icons": [{ "src": "./icon-192.png", "sizes": "192x192" }]
     }
   ]
 }
