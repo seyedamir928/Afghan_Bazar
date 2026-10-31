@@ -1295,6 +1295,26 @@ function getShopAverageRating(ownerPhone) {
   return { avg: (sum / revs.length).toFixed(1), count: revs.length };
 }
 
+function priceInsight(ad) {
+  if (!ad.p || ad.p <= 0 || ad.isWholesale) return null;
+  const sameCat = all().filter(x =>
+    !x.isWholesale && x.c === ad.c && x.ci === ad.ci &&
+    x.p > 0 && x.id !== ad.id &&
+    (!x.status || x.status === "approved")
+  );
+  if (sameCat.length < 3) return null;
+  const avg = sameCat.reduce((s, x) => s + afn(x), 0) / sameCat.length;
+  const myPrice = afn(ad);
+  const diff = ((myPrice - avg) / avg) * 100;
+  let verdict, color, icon;
+  if (diff < -15) { verdict = "خیلی ارزان‌تر از میانگین"; color = "#0e7a4b"; icon = "🟢"; }
+  else if (diff < -5) { verdict = "کمی ارزان‌تر از میانگین"; color = "#37b676"; icon = "🟢"; }
+  else if (diff <= 5) { verdict = "قیمت منصفانه (نزدیک میانگین)"; color = "#62736a"; icon = "⚪"; }
+  else if (diff <= 15) { verdict = "کمی گران‌تر از میانگین"; color = "#e08c00"; icon = "🟡"; }
+  else { verdict = "گران‌تر از میانگین — دقت کنید"; color = "#d6324a"; icon = "🔴"; }
+  return { avg: Math.round(avg), diff: diff.toFixed(0), count: sameCat.length, verdict, color, icon };
+}
+
 function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
   var R = 6371;
   var dLat = deg2rad(lat2-lat1);
@@ -1319,6 +1339,11 @@ function renderCard(a){
       ${mainImg ? `<img src="${mainImg}" alt="${esc(a.t)}" loading="lazy">` : `<span>${a.isWholesale ? '📦' : (cats[a.c]?.[1] || '📦')}</span>`}
     </div>
     ${a.u?'<span class="badge">فوری</span>':''}
+    ${(() => {
+      const pi = priceInsight(a);
+      if (!pi || +pi.diff > -5) return '';
+      return `<span class="badge" style="background:#0e7a4b;color:#fff;top:10px;right:auto;left:110px;z-index:3;">💰 قیمت خوب</span>`;
+    })()}
     ${a.isWholesale?'<span class="badge wholesale-badge" style="top:10px;left:70px;right:auto;">📦 عمده</span>':(a.isShop?`<span class="badge" style="background:var(--ac);color:#fff;top:10px;left:70px;right:auto;">🏪 فروشگاه (${shopRatingInfo?.avg || '—'} ★)</span>`:'')}
     <button class="fav ${favs.includes(a.id)?'on':''}" data-f="${a.id}" aria-label="نشان‌کردن">${favs.includes(a.id)?'♥':'♡'}</button>
     ${!a.isWholesale ? `<button class="compare-checkbox ${isCompared?'checked':''}" data-comp="${a.id}" aria-label="مقایسه" aria-pressed="${isCompared}" title="افزودن به مقایسه">⚖️</button>` : ''}
@@ -1543,7 +1568,16 @@ function draw(){
   const wStart = (wholesaleCurrentPage - 1) * itemsPerPage;
   const wPaginated = filteredWholesale.slice(wStart, wStart + itemsPerPage);
 
-  $("#wholesale-list").innerHTML = wPaginated.length ? wPaginated.map(renderCard).join("") : `<div class="empty">هیچ آگهی عمده‌فروشی در این دسته یافت نشد.</div>`;
+  if (wPaginated.length) {
+    $("#wholesale-list").innerHTML = wPaginated.map(renderCard).join("");
+  } else {
+    $("#wholesale-list").innerHTML = `<div class="empty" style="text-align:center;">
+      <div style="font-size:56px;margin-bottom:8px;">📦</div>
+      <div style="font-weight:700;font-size:15px;margin-bottom:6px;color:var(--tx);">هیچ آگهی عمده‌ای پیدا نشد</div>
+      <div class="mu" style="margin-bottom:14px;">فیلترها را تغییر دهید یا دامنه جستجو را وسیع‌تر کنید.</div>
+      <button class="capsule-btn primary" onclick="resetAllFilters()" style="margin:0 auto;">پاک‌کردن فیلترها</button>
+    </div>`;
+  }
 
   let wPaginationHTML = '';
   if(wholesaleTotalPages > 1) {
@@ -1626,8 +1660,8 @@ const _debouncedDraw = debounce(()=>{currentPage=1;draw();},300);
 ["#q","#pmin","#pmax"].forEach(s=>$(s).addEventListener("input",_debouncedDraw));
 ["#sort","#urg","#f-cond","#f-has-photo","#f-shop-only"].forEach(s=>$(s).addEventListener("change",()=>{currentPage=1;draw();}));
 $("#search-btn").onclick=()=>{currentPage=1;draw();$("#listing").scrollIntoView({behavior:"smooth"})};
-$("#q").addEventListener("keypress", e=>{ if(e.key==="Enter"){ e.preventDefault(); currentPage=1; draw(); $("#listing").scrollIntoView({behavior:"smooth"}); } });
-$("#q-wholesale").addEventListener("keypress", e=>{ if(e.key==="Enter"){ e.preventDefault(); wholesaleCurrentPage=1; draw(); window.scrollTo({top:0,behavior:"smooth"}); } });
+$("#q").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); currentPage=1; draw(); $("#listing").scrollIntoView({behavior:"smooth"}); } });
+$("#q-wholesale").addEventListener("keydown", e=>{ if(e.key==="Enter"){ e.preventDefault(); wholesaleCurrentPage=1; draw(); window.scrollTo({top:0,behavior:"smooth"}); } });
 $("#reset").onclick=()=>resetAllFilters();
 
 $("#ftog").onclick=()=>$("#flt").classList.toggle("o");
@@ -1849,6 +1883,23 @@ function openAd(id){
       <span><svg class="icon icon-sm"><use href="#i-phone"></use></svg> ${nf(a.calls || 3)} تماس</span>
       <span><svg class="icon icon-sm"><use href="${a.isWholesale ? '#i-package' : '#i-tag'}"></use></svg> ${a.isWholesale ? 'عمده‌فروشی' : 'پرچون'}</span>
     </div>
+
+    ${(() => {
+      const pi = priceInsight(a);
+      if (!pi) return '';
+      return `<div style="background:linear-gradient(135deg, color-mix(in srgb, ${pi.color} 12%, transparent), transparent); border:1px solid ${pi.color}; border-radius:12px; padding:10px 12px; margin:8px 0;">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
+          <div>
+            <div style="font-size:12px; font-weight:700; color:${pi.color};">${pi.icon} ${pi.verdict}</div>
+            <div class="mu" style="font-size:11px; margin-top:2px;">میانگین ${nf(pi.count)} آگهی مشابه در ${cities[a.ci] || 'این منطقه'}: <b>${nf(pi.avg)} افغانی</b></div>
+          </div>
+          <div style="text-align:left;">
+            <div style="font-size:16px; font-weight:800; color:${pi.color};">${pi.diff > 0 ? '+' : ''}${nf(+pi.diff)}٪</div>
+            <div class="mu" style="font-size:10px;">نسبت به میانگین</div>
+          </div>
+        </div>
+      </div>`;
+    })()}
 
     <div style="margin:8px 0">
       <div class="kv"><span class="mu">دسته</span><span>${displayCatName}</span></div>
@@ -2088,7 +2139,14 @@ function setMode(m){
   $("#a-go").textContent=m=="up"?"تایید و ساخت حساب":"ورود";
   $("#a-e").textContent="";
 }
-function openAuth(){setMode("in");$("#auth").showModal()}
+function openAuth(){
+  setMode("in");
+  $("#auth").showModal();
+  setTimeout(() => {
+    const el = $("#a-mail") || $("#a-p");
+    if (el) el.focus();
+  }, 100);
+}
 $(".tabs").onclick=e=>{const b=e.target.closest("button");if(b)setMode(b.dataset.m)};
 $("#a-x").onclick=()=>{after=null;$("#auth").close()};
 
@@ -2100,9 +2158,16 @@ let authMethod="email";
 function setMethod(m){if(m==="phone"){$("#a-e").textContent="ورود با پیامک فعلاً از دسترس خارج است. لطفاً با ایمیل یا گوگل وارد شوید.";return;}authMethod=m;document.querySelectorAll("#auth-methods button").forEach(b=>b.classList.toggle("on",b.dataset.am==m));$("#ph-box").hidden=m!=="phone";$("#mail-box").hidden=m!=="email";}
 $("#auth-methods").onclick=e=>{const b=e.target.closest("button");if(b)setMethod(b.dataset.am)};
 async function sendEmailOtp(){
+  const last = get("ab_otp_last", 0);
+  if (Date.now() - last < 60000) {
+    const wait = Math.ceil((60000 - (Date.now() - last)) / 1000);
+    $("#a-e").textContent = `لطفاً ${nf(wait)} ثانیه صبر کنید.`;
+    return;
+  }
   const em=$("#a-mail").value.trim().toLowerCase();
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){$("#a-e").textContent="ایمیل را درست وارد کنید.";return;}
   $("#send-otp-btn").disabled=true; $("#a-e").textContent="در حال ارسال کد...";
+  put("ab_otp_last", Date.now());
   const {error}=await supabaseClient.auth.signInWithOtp({email:em,options:{shouldCreateUser:true}});
   if(error){$("#a-e").textContent="خطا: "+error.message;$("#send-otp-btn").disabled=false;return;}
   $("#a-e").textContent="کد به ایمیل شما ارسال شد ✅ (پوشه اسپم را هم ببینید)"; startOtpCooldown();
@@ -2144,7 +2209,7 @@ $("#a-go").onclick = async () => {
   if (!supabaseClient) { $("#a-e").textContent = "خطا: سرور متصل نیست."; return; }
   if(authMethod==="email") return verifyEmailOtp();
   $("#a-e").textContent = "ورود با پیامک فعلاً از دسترس خارج است. لطفاً از ایمیل یا گوگل استفاده کنید.";
-};;
+};
 
 $("#acc").onclick=()=>{
   if(!me||!users[me])return openAuth();
@@ -2290,6 +2355,7 @@ function saveFormDraft() {
 $("#header-post-btn").onclick = () => need(()=>{
   const isWholesaleMode = (currentAppTab === "wholesale");
   $("#modal-title-text").innerHTML = isWholesaleMode ? '<svg class="icon icon-sm"><use href="#i-edit"></use></svg> ویرایش آگهی عمده‌فروشی' : '<svg class="icon icon-sm"><use href="#i-edit"></use></svg> ویرایش آگهی پرچون';
+  setTimeout(() => { const t = $("#f-t"); if(t) t.focus(); }, 200);
   $("#modal-header-bg").style.background = isWholesaleMode ? "linear-gradient(135deg, #1b3b6f, #152c48)" : "linear-gradient(135deg, var(--ac), var(--ac2))";
   $("#edit-ad-id").value = "";
   
@@ -2450,12 +2516,15 @@ $("#preview-grid").onclick = (e) => {
   updatePreviewGrid();
 };
 
+const MAX_FILE_MB = 10;
+const MAX_FILE_BYTES = MAX_FILE_MB * 1024 * 1024;
 $("#gallery-file-input").onchange = function(e) {
   const files = e.target.files;
   if(!files || files.length === 0) return;
   const room = Math.max(MAX_IMGS - combinedImagesList.length, 0);
   if(files.length > room) toast("حداکثر "+nf(MAX_IMGS)+" تصویر مجاز است.");
   Array.from(files).slice(0, room).forEach(file => {
+    if (file.size > MAX_FILE_BYTES) { toast(`فایل ${file.name} بزرگ است (بیشتر از ${nf(MAX_FILE_MB)} مگابایت)`); return; }
     compressImage(file).then(src => { combinedImagesList.push({ src, type: 'گالری' }); updatePreviewGrid(); }).catch(()=>toast("تصویر خوانده نشد."));
   });
   this.value = "";
@@ -2465,6 +2534,7 @@ $("#camera-file-input").onchange = function(e) {
   const file = e.target.files[0];
   if(!file) return;
   if(combinedImagesList.length >= MAX_IMGS){ toast("حداکثر "+nf(MAX_IMGS)+" تصویر مجاز است."); this.value=""; return; }
+  if (file.size > MAX_FILE_BYTES) { toast(`فایل بزرگ است (بیشتر از ${nf(MAX_FILE_MB)} مگابایت)`); this.value=""; return; }
   compressImage(file).then(src => { combinedImagesList.push({ src, type: 'دوربین' }); updatePreviewGrid(); }).catch(()=>toast("تصویر خوانده نشد."));
   this.value = "";
 };
@@ -2674,7 +2744,8 @@ async function loadChat(a) {
   const {data, error} = await sb().from("messages").select("*")
     .eq("ad_id", String(a.id))
     .or(`sender_id.eq.${myId},recipient_id.eq.${myId}`)
-    .order("created_at");
+    .order("created_at", { ascending: false })
+    .limit(50);
     
   if(!error && data) {
     const fetchedMsgs = data.map(r => ({
@@ -2860,11 +2931,23 @@ async function initRemote(){
     }
   }
   else if(me){ me=null; put("ab_sess",null); loadFavs(); }  // نشست محلی بدون نشست سرور معتبر نیست
+
+  // گوش دادن به تغییرات auth (refresh، logout، و غیره)
+  sb().auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_OUT') {
+      me = null; myId = null; adminFlag = false;
+      put("ab_sess", null); loadFavs(); draw();
+      toast("از حساب خارج شدید.");
+    } else if (event === 'TOKEN_REFRESHED' && session?.user) {
+      const ident = session.user.email || session.user.phone;
+      if (ident && ident !== me) { me = ident; myId = session.user.id; put("ab_sess", me); loadFavs(); draw(); }
+    }
+  });
+
   await loadRemote();
 }
 
-draw();
-initRemote().catch(e => console.warn("initRemote:", e));
+
 document.body.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.classList&&e.target.classList.contains("ad")){e.preventDefault();openAd(e.target.dataset.id)}});
 (function(){
   const t=get("ab_theme",null); if(t) document.documentElement.dataset.theme=t;
@@ -3588,6 +3671,30 @@ const PushManagerClient = (() => {
     const obs = new MutationObserver(() => { if (tryInject()) obs.disconnect(); });
     obs.observe(document.body, { childList: true, subtree: true });
     setTimeout(() => obs.disconnect(), 5000);
+  }
+})();
+
+
+// ==========================================
+// BOOTSTRAP — بعد از همه‌ی تعریف‌ها
+// ==========================================
+(async () => {
+  const _listEl = document.getElementById('list');
+  const _wholeEl = document.getElementById('wholesale-list');
+  if (_listEl) _listEl.innerHTML = skeletonHTML();
+  if (_wholeEl) _wholeEl.innerHTML = skeletonHTML();
+  try {
+    await initRemote();
+  } catch(e) {
+    console.error("initRemote failed:", e);
+    if (_listEl) _listEl.innerHTML = `<div class="empty" style="text-align:center;">
+      <div style="font-size:56px;margin-bottom:8px;">📡</div>
+      <div style="font-weight:700;font-size:15px;margin-bottom:6px;">اتصال به سرور برقرار نشد</div>
+      <div class="mu" style="margin-bottom:14px;">اینترنت خود را بررسی کنید و دوباره تلاش کنید.</div>
+      <button class="capsule-btn primary" onclick="location.reload()" style="margin:0 auto;">تلاش مجدد</button>
+    </div>`;
+  } finally {
+    draw();
   }
 })();
 
