@@ -157,6 +157,18 @@ dialog input,dialog select,dialog textarea{width:100%;border:1px solid var(--bd)
 #pwa-install-banner button{border:0;border-radius:10px;padding:8px 14px;font-size:12px;cursor:pointer}
 #pwa-install-btn{background:var(--ac);color:#fff;font-weight:600}
 #pwa-dismiss-btn{background:transparent;color:var(--mu)}
+#net-pill{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:50%;transform:translate(-50%,-90px);z-index:320;padding:7px 16px;border-radius:99px;font-size:12px;font-weight:700;color:#fff;background:#b3261e;box-shadow:0 6px 20px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:transform .35s var(--ease-spring,cubic-bezier(.34,1.56,.64,1)),opacity .25s}
+#net-pill.show{transform:translate(-50%,0);opacity:1}
+#net-pill.ok{background:#0e7a4b}
+#to-top{position:fixed;left:16px;bottom:calc(96px + env(safe-area-inset-bottom,0px));width:44px;height:44px;border-radius:50%;border:1px solid var(--bd);background:var(--card);color:var(--tx);box-shadow:var(--sh);font-size:20px;line-height:1;display:grid;place-items:center;cursor:pointer;z-index:140;opacity:0;transform:translateY(16px) scale(.8);pointer-events:none;transition:opacity .25s,transform .3s var(--ease-spring,cubic-bezier(.34,1.56,.64,1))}
+#to-top.show{opacity:1;transform:none;pointer-events:auto}
+#to-top:active{transform:scale(.9)}
+#sw-update-banner{position:fixed;left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:210;background:var(--card);border:1px solid var(--ac);border-radius:16px;box-shadow:0 8px 28px rgba(0,0,0,.18);padding:12px 14px;display:none;align-items:center;gap:10px}
+#sw-update-banner.show{display:flex}
+#sw-update-banner .pib-txt{flex:1;font-size:13px;line-height:1.5}
+#sw-update-banner button{border:0;border-radius:10px;padding:8px 14px;font-size:12px;cursor:pointer}
+#sw-reload{background:var(--ac);color:#fff;font-weight:600}
+#sw-later{background:transparent;color:var(--mu)}
 #pwa-hint-bubble{position:absolute;top:calc(100% + 8px);right:50%;transform:translateX(50%) translateY(-6px);background:var(--tx);color:var(--bg);font-size:11px;font-weight:600;white-space:nowrap;padding:7px 12px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.2);opacity:0;pointer-events:none;transition:opacity .35s ease,transform .35s ease;z-index:150}
 #pwa-hint-bubble::before{content:"";position:absolute;bottom:100%;right:50%;transform:translateX(50%);border:6px solid transparent;border-bottom-color:var(--tx)}
 #pwa-hint-bubble.show{opacity:1;transform:translateX(50%) translateY(0)}
@@ -860,7 +872,7 @@ if ('serviceWorker' in navigator) {
   <button class="capsule-btn" id="clear-compare-btn" style="padding:4px 6px;font-size:11px;color:#d6324a;">پاک‌کردن</button>
 </div>
 
-<footer><b>افغان‌بازار</b> — بازار آگهی‌های رایگان افغانستان (نقشه شعاعی و مقایسه کالاها)<br>نسخه ۲۸<br><button class="link" id="theme-btn" type="button">🌓 تغییر تم روشن/تیره</button> · <a href="#" class="link" id="terms-link">قوانین و حریم خصوصی</a></footer>
+<footer><b>افغان‌بازار</b> — بازار آگهی‌های رایگان افغانستان (نقشه شعاعی و مقایسه کالاها)<br>نسخه ۳۲<br><button class="link" id="theme-btn" type="button">🌓 تغییر تم روشن/تیره</button> · <a href="#" class="link" id="terms-link">قوانین و حریم خصوصی</a></footer>
 
 <nav class="bottom-nav">
   <button class="bnav-item active" data-target="retail">
@@ -2948,6 +2960,83 @@ async function initRemote(){
 }
 
 
+/* ===== افزودنی‌های تجربه کاربری: وضعیت شبکه، بروزرسانی، برگشت به بالا، دکمه برگشت، خطای عمومی ===== */
+(function(){
+  var say=function(m){ try{ if(typeof toast==='function') toast(m); }catch(e){} };
+  var reduce=function(){ return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; };
+
+  /* ۱) وضعیت اینترنت */
+  var pill=document.createElement('div'); pill.id='net-pill'; pill.setAttribute('role','status'); document.body.appendChild(pill);
+  var pillTimer=null;
+  function showPill(txt,ok,autoHide){
+    clearTimeout(pillTimer); pill.textContent=txt; pill.classList.toggle('ok',!!ok); pill.classList.add('show');
+    if(autoHide) pillTimer=setTimeout(function(){ pill.classList.remove('show'); },2500);
+  }
+  window.addEventListener('offline',function(){ showPill('📡 اینترنت قطع است',false,false); });
+  window.addEventListener('online',function(){ showPill('✅ دوباره آنلاین شدید',true,true); });
+  if(navigator.onLine===false) showPill('📡 اینترنت قطع است',false,false);
+
+  /* ۲) اعلان نسخه جدید */
+  var ub=document.createElement('div'); ub.id='sw-update-banner'; ub.setAttribute('role','alert');
+  ub.innerHTML='<span style="font-size:22px">🔄</span><div class="pib-txt"><b>نسخه جدید آماده است</b><br><span class="mu">برای دیدن تغییرات بروزرسانی کنید</span></div><button id="sw-later" type="button">بعداً</button><button id="sw-reload" type="button">بروزرسانی</button>';
+  document.body.appendChild(ub);
+  ub.querySelector('#sw-later').onclick=function(){ ub.classList.remove('show'); };
+  ub.querySelector('#sw-reload').onclick=function(){ location.reload(); };
+  window.__showUpdateBanner=function(){ ub.classList.add('show'); };
+  if('serviceWorker' in navigator){
+    var hadController=!!navigator.serviceWorker.controller;
+    navigator.serviceWorker.addEventListener('controllerchange',function(){ if(hadController) window.__showUpdateBanner(); });
+  }
+
+  /* ۳) دکمه برگشت به بالا */
+  var tt=document.createElement('button'); tt.id='to-top'; tt.type='button'; tt.setAttribute('aria-label','برگشت به بالا'); tt.textContent='↑'; document.body.appendChild(tt);
+  var ticking=false;
+  window.addEventListener('scroll',function(){
+    if(ticking) return; ticking=true;
+    requestAnimationFrame(function(){ tt.classList.toggle('show',(window.scrollY||document.documentElement.scrollTop||0)>700); ticking=false; });
+  },{passive:true});
+  tt.onclick=function(){ window.scrollTo({top:0,behavior:reduce()?'auto':'smooth'}); };
+
+  /* ۴) دکمه برگشت اندروید: اول پنجره باز را می‌بندد، نه اینکه از برنامه خارج شود */
+  var stack=[], skip=0;
+  var origShow=HTMLDialogElement.prototype.showModal;
+  HTMLDialogElement.prototype.showModal=function(){
+    var was=this.open;
+    origShow.apply(this,arguments);
+    if(!was && this.open){
+      try{ history.pushState({abDlg:1},''); }catch(e){ return; }
+      stack.push(this);
+      this.addEventListener('close',function(){
+        var i=stack.lastIndexOf(this);
+        if(i===-1) return;
+        stack.splice(i,1);
+        skip++; history.back();
+      },{once:true});
+    }
+  };
+  window.addEventListener('popstate',function(){
+    if(skip>0){ skip--; return; }
+    var d=stack.pop();
+    if(d && d.open) d.close();
+  });
+
+  /* ۵) شبکه ایمنی خطا: پیام ساده به‌جای خرابی بی‌صدا (حداکثر هر ۳۰ ثانیه یک بار) */
+  var lastErr=0;
+  function softError(){
+    var now=Date.now();
+    if(now-lastErr<30000 || navigator.onLine===false) return;
+    lastErr=now; say('مشکلی پیش آمد. اگر تکرار شد، صفحه را رفرش کنید.');
+  }
+  window.addEventListener('error',function(e){
+    if(!e || !e.message || /ResizeObserver|Script error/i.test(e.message)) return;
+    softError();
+  });
+  window.addEventListener('unhandledrejection',function(e){
+    var r=e && e.reason;
+    if(r && (r.name==='AbortError' || r.name==='NotAllowedError')) return;
+    softError();
+  });
+})();
 document.body.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.classList&&e.target.classList.contains("ad")){e.preventDefault();openAd(e.target.dataset.id)}});
 (function(){
   const t=get("ab_theme",null); if(t) document.documentElement.dataset.theme=t;
@@ -3618,9 +3707,10 @@ const PushManagerClient = (() => {
     if (!reg) return;
     const sub = await reg.pushManager.getSubscription();
     if (sub) {
+      const __ep = sub.endpoint;
       await sub.unsubscribe();
       if (sb() && myId) {
-        await sb().from('push_subscriptions').delete().eq('user_id', myId);
+        await sb().from('push_subscriptions').delete().eq('user_id', myId).eq('endpoint', __ep);
       }
     }
     toast('اعلان‌های پوش غیرفعال شدند');
