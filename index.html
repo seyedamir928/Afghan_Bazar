@@ -12,89 +12,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <!-- Supabase JS (برای سیستم پیامک) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <div id="pwa-install-banner" role="dialog" aria-label="نصب افغان‌بازار">
-    <span style="font-size:26px">📲</span>
-    <div class="pib-txt"><b>افغان‌بازار را نصب کنید</b><br><span class="mu">دسترسی سریع‌تر، مثل یک اپلیکیشن</span></div>
-    <button id="pwa-dismiss-btn" type="button">بعداً</button>
-    <button id="pwa-install-btn" type="button">نصب</button>
-  </div>
-  <script>
-  // ==========================================
-// ثبت Service Worker برای PWA
-// ==========================================
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .then((reg) => console.log('Service Worker registered successfully.'))
-      .catch((err) => console.log('Service Worker registration failed:', err));
-  });
-}
 
-// ==========================================
-// پیشنهاد نصب اپلیکیشن (PWA)
-// ==========================================
-(function(){
-  var SNOOZE_DAYS = 14, deferredPrompt = null;
-  function snoozed(){
-    try { var t = +localStorage.getItem('ab_pwa_snooze'); return t && (Date.now() - t) < SNOOZE_DAYS*864e5; }
-    catch(e){ return false; }
-  }
-  function isStandalone(){
-    return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-  }
-  window.addEventListener('beforeinstallprompt', function(e){
-    e.preventDefault();
-    deferredPrompt = e;
-    if (isStandalone() || snoozed()) return;
-    var b = document.getElementById('pwa-install-banner');
-    if (b) setTimeout(function(){ b.classList.add('show'); }, 2500);
-  });
-  document.addEventListener('DOMContentLoaded', function(){
-    var banner = document.getElementById('pwa-install-banner');
-    var installBtn = document.getElementById('pwa-install-btn');
-    var dismissBtn = document.getElementById('pwa-dismiss-btn');
-    if (installBtn) installBtn.onclick = function(){
-      if (banner) banner.classList.remove('show');
-      if (!deferredPrompt) return;
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.finally(function(){ deferredPrompt = null; });
-    };
-    if (dismissBtn) dismissBtn.onclick = function(){
-      if (banner) banner.classList.remove('show');
-      try { localStorage.setItem('ab_pwa_snooze', String(Date.now())); } catch(e){}
-    };
-  });
-  window.addEventListener('appinstalled', function(){
-    var b = document.getElementById('pwa-install-banner');
-    if (b) b.classList.remove('show');
-    deferredPrompt = null;
-    try { localStorage.setItem('ab_pwa_hint_stop', '1'); } catch(e){}
-  });
-
-  // راهنمای شناور کنار لوگو: گاه‌به‌گاه و تصادفی ظاهر می‌شود تا کاربر متوجه قابلیت نصب شود
-  function hintStopped(){
-    try { return localStorage.getItem('ab_pwa_hint_stop') === '1'; } catch(e){ return false; }
-  }
-  function showInstallHint(){
-    if (isStandalone() || hintStopped()) return;
-    var el = document.getElementById('pwa-hint-bubble');
-    if (!el) return;
-    el.classList.add('show');
-    setTimeout(function(){ el.classList.remove('show'); }, 4000);
-  }
-  function scheduleInstallHint(){
-    if (isStandalone() || hintStopped()) return;
-    var delay = 20000 + Math.random() * 40000; // بین ۲۰ تا ۶۰ ثانیه، به‌صورت تصادفی
-    setTimeout(function(){
-      showInstallHint();
-      scheduleInstallHint();
-    }, delay);
-  }
-  document.addEventListener('DOMContentLoaded', function(){
-    setTimeout(scheduleInstallHint, 6000 + Math.random() * 6000);
-  });
-})();
-</script>
 
 
 <style>
@@ -684,6 +602,89 @@ dialog#add[open] { display: flex; flex-direction: column; }
 <link rel="apple-touch-icon" href="icon-192.png">
 </head>
 <body>
+  <div id="pwa-install-banner" role="dialog" aria-label="نصب افغان‌بازار">
+    <span style="font-size:26px">📲</span>
+    <div class="pib-txt"><b>افغان‌بازار را نصب کنید</b><br><span class="mu">دسترسی سریع‌تر، مثل یک اپلیکیشن</span></div>
+    <button id="pwa-dismiss-btn" type="button">بعداً</button>
+    <button id="pwa-install-btn" type="button">نصب</button>
+  </div>
+  <script>
+  // ==========================================
+// ثبت Service Worker برای PWA
+// ==========================================
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then((reg) => console.log('Service Worker registered successfully.'))
+      .catch((err) => console.log('Service Worker registration failed:', err));
+  });
+}
+
+// ==========================================
+// پیشنهاد نصب اپلیکیشن (PWA)
+// ==========================================
+(function(){
+  var SNOOZE_DAYS = 14, deferredPrompt = null;
+  function snoozed(){
+    try { var t = +localStorage.getItem('ab_pwa_snooze'); return t && (Date.now() - t) < SNOOZE_DAYS*864e5; }
+    catch(e){ return false; }
+  }
+  function isStandalone(){
+    return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  }
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault();
+    deferredPrompt = e;
+    if (isStandalone() || snoozed()) return;
+    var b = document.getElementById('pwa-install-banner');
+    if (b) setTimeout(function(){ b.classList.add('show'); }, 2500);
+  });
+  document.addEventListener('DOMContentLoaded', function(){
+    var banner = document.getElementById('pwa-install-banner');
+    var installBtn = document.getElementById('pwa-install-btn');
+    var dismissBtn = document.getElementById('pwa-dismiss-btn');
+    if (installBtn) installBtn.onclick = function(){
+      if (banner) banner.classList.remove('show');
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.finally(function(){ deferredPrompt = null; });
+    };
+    if (dismissBtn) dismissBtn.onclick = function(){
+      if (banner) banner.classList.remove('show');
+      try { localStorage.setItem('ab_pwa_snooze', String(Date.now())); } catch(e){}
+    };
+  });
+  window.addEventListener('appinstalled', function(){
+    var b = document.getElementById('pwa-install-banner');
+    if (b) b.classList.remove('show');
+    deferredPrompt = null;
+    try { localStorage.setItem('ab_pwa_hint_stop', '1'); } catch(e){}
+  });
+
+  // راهنمای شناور کنار لوگو: گاه‌به‌گاه و تصادفی ظاهر می‌شود تا کاربر متوجه قابلیت نصب شود
+  function hintStopped(){
+    try { return localStorage.getItem('ab_pwa_hint_stop') === '1'; } catch(e){ return false; }
+  }
+  function showInstallHint(){
+    if (isStandalone() || hintStopped()) return;
+    var el = document.getElementById('pwa-hint-bubble');
+    if (!el) return;
+    el.classList.add('show');
+    setTimeout(function(){ el.classList.remove('show'); }, 4000);
+  }
+  function scheduleInstallHint(){
+    if (isStandalone() || hintStopped()) return;
+    var delay = 20000 + Math.random() * 40000; // بین ۲۰ تا ۶۰ ثانیه، به‌صورت تصادفی
+    setTimeout(function(){
+      showInstallHint();
+      scheduleInstallHint();
+    }, delay);
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    setTimeout(scheduleInstallHint, 6000 + Math.random() * 6000);
+  });
+})();
+</script>
 
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></symbol>
@@ -2140,7 +2141,7 @@ $("#a-go").onclick = async () => {
 
   const n = $("#a-n").value.trim();
   const p = normDigits($("#a-p").value.trim());
-  const w = $("#a-w") ? $("#a-w").value : "";
+  const w = "";
   const otp = normDigits($("#a-otp").value.trim());
   const er = m => $("#a-e").textContent = m;
 
@@ -2588,7 +2589,7 @@ $("#save").onclick=async()=>{
         targetAd.lng = lngVal;
         targetAd.imgs = imgUrls;
         put("ab_ads", mine);
-        syncAd(targetAd).then(st=>{ if(st) toast(adMsg(st,"ویرایش")); put("ab_ads", mine); draw(); });
+        syncAd(targetAd).then(st=>{ if(st) toast(adMsg(st,"ویرایش")); put("ab_ads", mine); draw(); }).catch(()=>{ put("ab_ads", mine); draw(); });
         addNotification(`آگهی ویرایش شد.`);
       }
     } else {
@@ -2615,7 +2616,7 @@ $("#save").onclick=async()=>{
         views: 1, calls: 0
       });
       if(!put("ab_ads",mine)){ mine.shift(); toast("حافظه پر است؛ تعداد یا حجم عکس‌ها را کم کنید."); return; }
-      syncAd(mine[0]).then(st=>{ if(st) toast(adMsg(st,"ثبت")); put("ab_ads", mine); draw(); });
+      syncAd(mine[0]).then(st=>{ if(st) toast(adMsg(st,"ثبت")); put("ab_ads", mine); draw(); }).catch(()=>{ put("ab_ads", mine); draw(); });
       addNotification(`آگهی جدید ثبت شد.`);
     }
     S.removeItem(DRAFT_KEY());
