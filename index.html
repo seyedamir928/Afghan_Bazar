@@ -12,6 +12,12 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <!-- Supabase JS (برای سیستم پیامک) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <div id="pwa-install-banner" role="dialog" aria-label="نصب افغان‌بازار">
+    <span style="font-size:26px">📲</span>
+    <div class="pib-txt"><b>افغان‌بازار را نصب کنید</b><br><span class="mu">دسترسی سریع‌تر، مثل یک اپلیکیشن</span></div>
+    <button id="pwa-dismiss-btn" type="button">بعداً</button>
+    <button id="pwa-install-btn" type="button">نصب</button>
+  </div>
   <script>
   // ==========================================
 // ثبت Service Worker برای PWA
@@ -23,6 +29,47 @@ if ('serviceWorker' in navigator) {
       .catch((err) => console.log('Service Worker registration failed:', err));
   });
 }
+
+// ==========================================
+// پیشنهاد نصب اپلیکیشن (PWA)
+// ==========================================
+(function(){
+  var SNOOZE_DAYS = 14, deferredPrompt = null;
+  function snoozed(){
+    try { var t = +localStorage.getItem('ab_pwa_snooze'); return t && (Date.now() - t) < SNOOZE_DAYS*864e5; }
+    catch(e){ return false; }
+  }
+  function isStandalone(){
+    return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  }
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault();
+    deferredPrompt = e;
+    if (isStandalone() || snoozed()) return;
+    var b = document.getElementById('pwa-install-banner');
+    if (b) setTimeout(function(){ b.classList.add('show'); }, 2500);
+  });
+  document.addEventListener('DOMContentLoaded', function(){
+    var banner = document.getElementById('pwa-install-banner');
+    var installBtn = document.getElementById('pwa-install-btn');
+    var dismissBtn = document.getElementById('pwa-dismiss-btn');
+    if (installBtn) installBtn.onclick = function(){
+      if (banner) banner.classList.remove('show');
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.finally(function(){ deferredPrompt = null; });
+    };
+    if (dismissBtn) dismissBtn.onclick = function(){
+      if (banner) banner.classList.remove('show');
+      try { localStorage.setItem('ab_pwa_snooze', String(Date.now())); } catch(e){}
+    };
+  });
+  window.addEventListener('appinstalled', function(){
+    var b = document.getElementById('pwa-install-banner');
+    if (b) b.classList.remove('show');
+    deferredPrompt = null;
+  });
+})();
 </script>
 
 
@@ -162,6 +209,12 @@ dialog input,dialog select,dialog textarea{width:100%;border:1px solid var(--bd)
 .tabs button{background:none;border:0;padding:6px 0;cursor:pointer;color:var(--mu);border-bottom:2px solid transparent;font-size:13px}
 .tabs button.on{color:var(--ac);border-color:var(--ac);font-weight:600}
 .mtabs{display:flex;gap:16px;margin:8px 0 0;border-bottom:1px solid var(--bd)}.mtabs button{background:none;border:0;padding:6px 0;cursor:pointer;color:var(--mu);border-bottom:2px solid transparent;font-size:13px}.mtabs button.on{color:var(--ac);border-color:var(--ac);font-weight:600}
+#pwa-install-banner{position:fixed;left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:200;background:var(--card);border:1px solid var(--bd);border-radius:16px;box-shadow:0 8px 28px rgba(0,0,0,.18);padding:12px 14px;display:none;align-items:center;gap:10px}
+#pwa-install-banner.show{display:flex}
+#pwa-install-banner .pib-txt{flex:1;font-size:13px;line-height:1.5}
+#pwa-install-banner button{border:0;border-radius:10px;padding:8px 14px;font-size:12px;cursor:pointer}
+#pwa-install-btn{background:var(--ac);color:#fff;font-weight:600}
+#pwa-dismiss-btn{background:transparent;color:var(--mu)}
 .menu button{display:block;width:100%;text-align:right;background:none;border:0;border-bottom:1px solid var(--bd);padding:11px 0;cursor:pointer;font-size:13px}
 .err{color:#d6324a;font-size:12px;min-height:18px;margin-top:6px}
 .toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:8px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:300;font-size:13px;box-shadow:0 5px 15px rgba(0,0,0,.2)}
@@ -394,7 +447,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
   <button class="capsule-btn" id="clear-compare-btn" style="padding:4px 6px;font-size:11px;color:#d6324a;">پاک‌کردن</button>
 </div>
 
-<footer><b>افغان‌بازار</b> — بازار آگهی‌های رایگان افغانستان (نقشه شعاعی و مقایسه کالاها)<br>نسخه ۲۶<br><button class="link" id="theme-btn" type="button">🌓 تغییر تم روشن/تیره</button> · <a href="#" class="link" id="terms-link">قوانین و حریم خصوصی</a></footer>
+<footer><b>افغان‌بازار</b> — بازار آگهی‌های رایگان افغانستان (نقشه شعاعی و مقایسه کالاها)<br>نسخه ۲۷<br><button class="link" id="theme-btn" type="button">🌓 تغییر تم روشن/تیره</button> · <a href="#" class="link" id="terms-link">قوانین و حریم خصوصی</a></footer>
 
 <nav class="bottom-nav">
   <button class="bnav-item active" data-target="retail">
