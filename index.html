@@ -68,6 +68,30 @@ if ('serviceWorker' in navigator) {
     var b = document.getElementById('pwa-install-banner');
     if (b) b.classList.remove('show');
     deferredPrompt = null;
+    try { localStorage.setItem('ab_pwa_hint_stop', '1'); } catch(e){}
+  });
+
+  // راهنمای شناور کنار لوگو: گاه‌به‌گاه و تصادفی ظاهر می‌شود تا کاربر متوجه قابلیت نصب شود
+  function hintStopped(){
+    try { return localStorage.getItem('ab_pwa_hint_stop') === '1'; } catch(e){ return false; }
+  }
+  function showInstallHint(){
+    if (isStandalone() || hintStopped()) return;
+    var el = document.getElementById('pwa-hint-bubble');
+    if (!el) return;
+    el.classList.add('show');
+    setTimeout(function(){ el.classList.remove('show'); }, 4000);
+  }
+  function scheduleInstallHint(){
+    if (isStandalone() || hintStopped()) return;
+    var delay = 20000 + Math.random() * 40000; // بین ۲۰ تا ۶۰ ثانیه، به‌صورت تصادفی
+    setTimeout(function(){
+      showInstallHint();
+      scheduleInstallHint();
+    }, delay);
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    setTimeout(scheduleInstallHint, 6000 + Math.random() * 6000);
   });
 })();
 </script>
@@ -89,7 +113,7 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card)
 .notif-bell-btn{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:4px 6px;cursor:pointer;position:relative;font-size:13px;flex-shrink:0;}
 .notif-badge{position:absolute;top:-4px;right:-4px;background:#d6324a;color:#fff;font-size:9px;padding:1px 4px;border-radius:99px;font-weight:bold;}
 .header-center{display:flex;align-items:center;justify-content:center;flex:0 0 auto;text-align:center}
-.brand-group{display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:var(--tx);cursor:pointer}
+.brand-group{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;text-decoration:none;color:var(--tx);cursor:pointer}
 .logo-box{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:var(--gd);display:grid;place-items:center;font-size:13px;font-weight:bold;box-shadow:0 3px 10px rgba(14,122,75,.3)}
 .brand-title{font-weight:800;font-size:11px;letter-spacing:-0.3px;line-height:1.1}
 .brand-title span,.brand-title b{color:var(--ac)}
@@ -215,6 +239,9 @@ dialog input,dialog select,dialog textarea{width:100%;border:1px solid var(--bd)
 #pwa-install-banner button{border:0;border-radius:10px;padding:8px 14px;font-size:12px;cursor:pointer}
 #pwa-install-btn{background:var(--ac);color:#fff;font-weight:600}
 #pwa-dismiss-btn{background:transparent;color:var(--mu)}
+#pwa-hint-bubble{position:absolute;top:calc(100% + 8px);right:50%;transform:translateX(50%) translateY(-6px);background:var(--tx);color:var(--bg);font-size:11px;font-weight:600;white-space:nowrap;padding:7px 12px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.2);opacity:0;pointer-events:none;transition:opacity .35s ease,transform .35s ease;z-index:150}
+#pwa-hint-bubble::before{content:"";position:absolute;bottom:100%;right:50%;transform:translateX(50%);border:6px solid transparent;border-bottom-color:var(--tx)}
+#pwa-hint-bubble.show{opacity:1;transform:translateX(50%) translateY(0)}
 .menu button{display:block;width:100%;text-align:right;background:none;border:0;border-bottom:1px solid var(--bd);padding:11px 0;cursor:pointer;font-size:13px}
 .err{color:#d6324a;font-size:12px;min-height:18px;margin-top:6px}
 .toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:8px 18px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:300;font-size:13px;box-shadow:0 5px 15px rgba(0,0,0,.2)}
@@ -316,9 +343,10 @@ dialog#add[open] { display: flex; flex-direction: column; }
     </button>
   </div>
   <div class="header-center">
-    <a href="javascript:void(0)" class="brand-group" onclick="resetAllFilters(event)">
+    <a href="javascript:void(0)" class="brand-group" onclick="brandClick(event)" id="brand-group">
       <div class="logo-box">◆</div>
       <div class="brand-title">افغان<b>بازار</b></div>
+      <span id="pwa-hint-bubble">💡 دو ضربه بزنید تا نصب شود</span>
     </a>
   </div>
   <div class="header-left">
@@ -447,7 +475,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
   <button class="capsule-btn" id="clear-compare-btn" style="padding:4px 6px;font-size:11px;color:#d6324a;">پاک‌کردن</button>
 </div>
 
-<footer><b>افغان‌بازار</b> — بازار آگهی‌های رایگان افغانستان (نقشه شعاعی و مقایسه کالاها)<br>نسخه ۲۷<br><button class="link" id="theme-btn" type="button">🌓 تغییر تم روشن/تیره</button> · <a href="#" class="link" id="terms-link">قوانین و حریم خصوصی</a></footer>
+<footer><b>افغان‌بازار</b> — بازار آگهی‌های رایگان افغانستان (نقشه شعاعی و مقایسه کالاها)<br>نسخه ۲۸<br><button class="link" id="theme-btn" type="button">🌓 تغییر تم روشن/تیره</button> · <a href="#" class="link" id="terms-link">قوانین و حریم خصوصی</a></footer>
 
 <nav class="bottom-nav">
   <button class="bnav-item active" data-target="retail">
@@ -647,6 +675,16 @@ dialog#add[open] { display: flex; flex-direction: column; }
 <b>مسئولیت:</b> افغان‌بازار فقط محل نمایش آگهی است؛ بررسی کالا و معامله به عهده خریدار و فروشنده است.<br>
 <b>حریم خصوصی:</b> ایمیل شما فقط برای ورود استفاده می‌شود و نمایش داده نمی‌شود. شماره تماسی که در آگهی می‌نویسید برای همه قابل مشاهده است. کد ورود و اطلاعات بانکی خود را با هیچ‌کس در میان نگذارید.</div>
 <div class="row"><button class="capsule-btn primary" id="close-terms">متوجه شدم</button></div></div></dialog>
+<dialog id="ios-install-dlg"><div class="dialog-content-pad" style="text-align:center">
+  <div style="font-size:40px">📲</div>
+  <h2>نصب افغان‌بازار</h2>
+  <p style="font-size:14px;line-height:2">
+    ۱. پایین صفحه روی دکمه <b>اشتراک‌گذاری ⬆️</b> بزنید.<br>
+    ۲. گزینه <b>«Add to Home Screen»</b> (افزودن به صفحه اصلی) را انتخاب کنید.<br>
+    ۳. روی <b>«Add»</b> بزنید.
+  </p>
+  <div class="row"><button class="capsule-btn primary" id="close-ios-install">متوجه شدم</button></div>
+</div></dialog>
 <div class="toast" id="toast" role="status"></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -818,6 +856,28 @@ $("#header-city-select").addEventListener("change", (e) => {
   draw();
 });
 
+let __brandTapCount=0, __brandTapTimer=null;
+function isIOS(){ return /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1); }
+function isPWAStandalone(){ return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true; }
+window.brandClick = function(e){
+  __brandTapCount++;
+  clearTimeout(__brandTapTimer);
+  __brandTapTimer=setTimeout(()=>{ __brandTapCount=0; },500);
+  if(__brandTapCount<2){ resetAllFilters(e); return; }
+  try { localStorage.setItem('ab_pwa_hint_stop', '1'); } catch(err){}
+  const __hb=$("#pwa-hint-bubble"); if(__hb) __hb.classList.remove("show");
+  __brandTapCount=0;
+  if(e) e.preventDefault();
+  if(isPWAStandalone()){ toast("افغان‌بازار از قبل نصب است ✅"); return; }
+  const dp = window.__pwaDeferredPrompt && window.__pwaDeferredPrompt();
+  if(dp){
+    dp.prompt();
+    dp.userChoice.finally(()=>{ window.__pwaDeferredPrompt=function(){return null;}; });
+    return;
+  }
+  if(isIOS()){ $("#ios-install-dlg").showModal(); return; }
+  toast("برای نصب، از منوی مرورگر (⋮) گزینه «Install app» یا «Add to Home screen» را بزنید.");
+};
 window.resetAllFilters = (e) => {
   if(e) e.preventDefault();
   ["#q","#pmin","#pmax","#q-wholesale","#wmin","#wmax"].forEach(s=>{const el=$(s);if(el)el.value="";});
@@ -2376,6 +2436,7 @@ document.body.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&
   $("#theme-btn").onclick=()=>{const cur=document.documentElement.dataset.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");const nx=cur==="dark"?"light":"dark";document.documentElement.dataset.theme=nx;put("ab_theme",nx)};
   $("#terms-link").onclick=e=>{e.preventDefault();$("#terms-dlg").showModal()};
   $("#close-terms").onclick=()=>$("#terms-dlg").close();
+  $("#close-ios-install").onclick=()=>$("#ios-install-dlg").close();
   const fromHash=()=>{if(location.hash==="#terms"){const d=$("#terms-dlg"); if(!d.open) d.showModal(); return;} const m=location.hash.match(/^#ad-(.+)$/); if(m) openAd(decodeURIComponent(m[1]));};
   window.__fromHash=fromHash; window.addEventListener("hashchange",fromHash); fromHash();
 })();
