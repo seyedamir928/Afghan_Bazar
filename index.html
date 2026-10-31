@@ -1721,6 +1721,7 @@ $("#show-compare-modal-btn").onclick = () => {
 $("#close-compare-dlg").onclick = () => $("#compare-dlg").close();
 
 function closeDetailDialog() {
+  if(currentChatChannel && sb()) { try { sb().removeChannel(currentChatChannel); } catch(e) {} currentChatChannel = null; }
   if(window._adViewMap) { try { window._adViewMap.remove(); } catch(e) {} window._adViewMap = null; }
   $("#dlg").close();
 }
@@ -2639,14 +2640,61 @@ async function remoteReview(a,rating,comment){
   const {error}=await sb().from("reviews").upsert({shop_phone:a.ph,shop_owner_id:a.ownerId,buyer_id:myId,buyer_name:users[me].name,rating,comment},{onConflict:"shop_phone,buyer_id"});
   if(error){console.warn(error);toast("ثبت نظر روی سرور انجام نشد.");}
 }
-async function loadChat(a){
-  if(!sb()||!myId||!a.ownerId) return;
-  const {data,error}=await sb().from("messages").select("*")
-    .eq("ad_id",String(a.id))
+let currentChatChannel = null; // برای بستن کانال قبلی وقتی مودال بسته می‌شود
+
+async function loadChat(a) {
+  if(!sb() || !myId || !a.ownerId) return;
+  
+  // 1. لود کردن پیام‌های قبلی
+  const {data, error} = await sb().from("messages").select("*")
+    .eq("ad_id", String(a.id))
     .or(`sender_id.eq.${myId},recipient_id.eq.${myId}`)
     .order("created_at");
-  if(error||!data) return;
-  messages[a.id] = data.map(r=>({sender:r.sender_id===myId?me:r.sender_id,senderId:r.sender_id,recipientId:r.recipient_id,name:r.sender_name,text:r.text,time:Date.parse(r.created_at)}));
+    
+  if(!error && data) {
+    messages[a.id] = data.map(r => ({
+      sender: r.sender_id === myId ? me : r.sender_id,
+      senderId: r.sender_id, recipientId: r.recipient_id, 
+      name: r.sender_name, text: r.text, time: Date.parse(r.created_at)
+    }));
+  }
+
+  // 2. گوش دادن به پیام‌های جدید در لحظه (Real-time)
+  if (currentChatChannel) sb().removeChannel(currentChatChannel);
+  
+  currentChatChannel = sb().channel('chat_' + a.id)
+    .on('postgres_changes', { 
+        event: 'INSERT', 
+        schema: 'public', 
+        table: 'messages',
+        filter: `ad_id=eq.${a.id}` 
+      }, 
+      payload => {
+        const r = payload.new;
+        // فقط پیام‌هایی که مربوط به من است را نشان بده
+        if(r.sender_id === myId || r.recipient_id === myId) {
+          if(!messages[a.id]) messages[a.id] = [];
+          // جلوگیری از تکراری نشان دادن پیام خودم (بر اساس متن و آیدی)
+          const isDuplicate = messages[a.id].some(m => m.text === r.text && m.senderId === r.sender_id);
+          if(!isDuplicate) {
+             messages[a.id].push({
+               sender: r.sender_id === myId ? me : r.sender_id,
+               senderId: r.sender_id, recipientId: r.recipient_id,
+               name: r.sender_name, text: r.text, time: Date.parse(r.created_at)
+             });
+             // آپدیت کردن باکس چت اگر مودال باز است
+             if(document.getElementById('chat-messages')) {
+                const renderChat = () => {
+                  const list = messages[a.id] || [];
+                  document.getElementById("chat-messages").innerHTML = list.map(m=>`<div class="chat-msg ${m.sender==me?'me':'other'}"><b>${esc(m.name || 'کاربر')}:</b> ${esc(m.text)}</div>`).join("");
+                  document.getElementById("chat-messages").scrollTop = document.getElementById("chat-messages").scrollHeight;
+                };
+                renderChat();
+             }
+          }
+        }
+      })
+    .subscribe();
 }
 async function sendRemote(a,txt){
   if(!sb()||!myId||!a.ownerId) return;
