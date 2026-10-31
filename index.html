@@ -1322,7 +1322,7 @@ function renderCard(a){
     ${a.isWholesale?'<span class="badge wholesale-badge" style="top:10px;left:70px;right:auto;">📦 عمده</span>':(a.isShop?`<span class="badge" style="background:var(--ac);color:#fff;top:10px;left:70px;right:auto;">🏪 فروشگاه (${shopRatingInfo?.avg || '—'} ★)</span>`:'')}
     <button class="fav ${favs.includes(a.id)?'on':''}" data-f="${a.id}" aria-label="نشان‌کردن">${favs.includes(a.id)?'♥':'♡'}</button>
     ${!a.isWholesale ? `<button class="compare-checkbox ${isCompared?'checked':''}" data-comp="${a.id}" aria-label="مقایسه" aria-pressed="${isCompared}" title="افزودن به مقایسه">⚖️</button>` : ''}
-    <div class="i"><b>${esc(a.t)}</b><div class="price">${fmtAd(a)}</div><div class="mu">${ago(a.age)} · ${locLabel}</div>${(view==="mine"||view==="admin")?`<div class="mu" style="margin-top:4px;font-size:11px;">👁️ ${nf(a.views||0)} · 📞 ${nf(a.calls||0)}</div>`:''}${(view==="fav"&&notes[me]&&notes[me][a.id])?`<div style="margin-top:4px;background:var(--chip);padding:3px 6px;border-radius:4px;font-size:11px;">📝 ${esc(notes[me][a.id])}</div>`:''}${view==="admin"?`<div style="margin-top:6px;display:flex;gap:4px;align-items:center;flex-wrap:wrap;"><span style="font-size:10px;padding:2px 6px;border-radius:4px;background:${(a.status||"approved")==="approved"?"var(--chip)":((a.status||"approved")==="pending"?"#fff3cd":"#f8d7da")};color:${(a.status||"approved")==="approved"?"var(--ac)":((a.status||"approved")==="pending"?"#856404":"#721c24")};">${(a.status||"approved")==="approved"?"✓ منتشرشده":((a.status||"approved")==="pending"?"⏳ در انتظار":"✕ رد شده")}</span>${!seed.some(x=>String(x.id)===String(a.id))?`${(a.status||"approved")!=="approved"?`<button class="capsule-btn" data-approve="${a.id}" style="padding:2px 8px;font-size:10px;background:#0e7a4b;color:#fff;">✅ تایید</button>`:''}${(a.status||"approved")!=="rejected"?`<button class="capsule-btn" data-reject="${a.id}" style="padding:2px 8px;font-size:10px;background:#d6324a;color:#fff;">❌ رد</button>`:''}`:`<span style="font-size:9px;color:var(--mu);">نمونه</span>`}</div>`:''}${view==="mine" && (a.status||"approved")!=="approved"?`<div style="margin-top:4px;font-size:10px;padding:2px 6px;border-radius:4px;display:inline-block;background:${(a.status||"approved")==="pending"?"#fff3cd":"#f8d7da"};color:${(a.status||"approved")==="pending"?"#856404":"#721c24"};">${(a.status||"approved")==="pending"?"⏳ در انتظار تایید ادمین":"✕ رد شده توسط ادمین"}</div>`:''}</div>
+    <div class="i"><b>${esc(a.t)}</b><div class="price">${fmtAd(a)}</div><div class="mu"><span title="${a.ts ? new Date(a.ts).toLocaleString('fa-IR') : ago(a.age)}">${ago(a.age)}</span> · ${locLabel}</div>${(view==="mine"||view==="admin")?`<div class="mu" style="margin-top:4px;font-size:11px;">👁️ ${nf(a.views||0)} · 📞 ${nf(a.calls||0)}</div>`:''}${(view==="fav"&&notes[me]&&notes[me][a.id])?`<div style="margin-top:4px;background:var(--chip);padding:3px 6px;border-radius:4px;font-size:11px;">📝 ${esc(notes[me][a.id])}</div>`:''}${view==="admin"?`<div style="margin-top:6px;display:flex;gap:4px;align-items:center;flex-wrap:wrap;"><span style="font-size:10px;padding:2px 6px;border-radius:4px;background:${(a.status||"approved")==="approved"?"var(--chip)":((a.status||"approved")==="pending"?"#fff3cd":"#f8d7da")};color:${(a.status||"approved")==="approved"?"var(--ac)":((a.status||"approved")==="pending"?"#856404":"#721c24")};">${(a.status||"approved")==="approved"?"✓ منتشرشده":((a.status||"approved")==="pending"?"⏳ در انتظار":"✕ رد شده")}</span>${!seed.some(x=>String(x.id)===String(a.id))?`${(a.status||"approved")!=="approved"?`<button class="capsule-btn" data-approve="${a.id}" style="padding:2px 8px;font-size:10px;background:#0e7a4b;color:#fff;">✅ تایید</button>`:''}${(a.status||"approved")!=="rejected"?`<button class="capsule-btn" data-reject="${a.id}" style="padding:2px 8px;font-size:10px;background:#d6324a;color:#fff;">❌ رد</button>`:''}`:`<span style="font-size:9px;color:var(--mu);">نمونه</span>`}</div>`:''}${view==="mine" && (a.status||"approved")!=="approved"?`<div style="margin-top:4px;font-size:10px;padding:2px 6px;border-radius:4px;display:inline-block;background:${(a.status||"approved")==="pending"?"#fff3cd":"#f8d7da"};color:${(a.status||"approved")==="pending"?"#856404":"#721c24"};">${(a.status||"approved")==="pending"?"⏳ در انتظار تایید ادمین":"✕ رد شده توسط ادمین"}</div>`:''}</div>
   </div>`;
 }
 
@@ -1466,7 +1466,23 @@ function draw(){
   const start = (currentPage - 1) * itemsPerPage;
   const paginatedItems = r.slice(start, start + itemsPerPage);
 
-  $("#list").innerHTML=paginatedItems.length?paginatedItems.map(renderCard).join(""):`<div class="empty">${view=="mine"?"هنوز آگهی‌ای ثبت نکرده‌اید.":view=="shop"?"فروشگاه شما هنوز محصولی ندارد.":view=="fav"?"آگهی نشان‌شده‌ای ندارید.":"آگهی‌ای پیدا نشد. فیلترها را بررسی کنید."}</div>`;
+  if (paginatedItems.length) {
+    $("#list").innerHTML = paginatedItems.map(renderCard).join("");
+  } else {
+    const _emptyMap = {
+      mine:  { icon: "📭", title: "هنوز آگهی‌ای ثبت نکرده‌اید", sub: "برای شروع، روی «+ ثبت آگهی» بزنید." },
+      shop:  { icon: "🏪", title: "فروشگاه شما هنوز محصولی ندارد", sub: "" },
+      fav:   { icon: "💔", title: "آگهی نشان‌شده‌ای ندارید", sub: "با کلیک روی قلب، آگهی‌ها را ذخیره کنید." },
+      all:   { icon: "🔍", title: "آگهی‌ای پیدا نشد", sub: "فیلترها را تغییر دهید یا دامنه جستجو را وسیع‌تر کنید." }
+    };
+    const em = _emptyMap[view] || _emptyMap.all;
+    $("#list").innerHTML = `<div class="empty" style="text-align:center;">
+      <div style="font-size:56px;margin-bottom:8px;">${em.icon}</div>
+      <div style="font-weight:700;font-size:15px;margin-bottom:6px;color:var(--tx);">${em.title}</div>
+      <div class="mu" style="margin-bottom:14px;">${em.sub}</div>
+      ${view === "all" ? `<button class="capsule-btn primary" onclick="resetAllFilters()" style="margin:0 auto;">پاک‌کردن فیلترها</button>` : ""}
+    </div>`;
+  }
   
   let paginationHTML = '';
   if(totalPages > 1) {
@@ -1561,7 +1577,8 @@ function draw(){
 window.changePage = (p) => { currentPage = p; draw(); $("#listing").scrollIntoView({behavior:"smooth"}); };
 window.changeWholesalePage = (p) => { wholesaleCurrentPage = p; draw(); window.scrollTo({top: 0, behavior: 'smooth'}); };
 
-["#q-wholesale","#wmin","#wmax"].forEach(x=>$(x).addEventListener("input", () => { wholesaleCurrentPage = 1; draw(); }));
+const _debouncedWholesaleDraw = debounce(()=>{wholesaleCurrentPage = 1; draw();},300);
+["#q-wholesale","#wmin","#wmax"].forEach(x=>$(x).addEventListener("input", _debouncedWholesaleDraw));
 $("#sort-wholesale").addEventListener("change", () => { wholesaleCurrentPage = 1; draw(); });
 $("#search-wholesale-btn").onclick = () => { wholesaleCurrentPage = 1; draw(); };
 
@@ -1572,6 +1589,7 @@ $("#wholesale-cats").onclick = e => {
 
 document.querySelectorAll(".bnav-item").forEach(btn => {
   btn.onclick = () => {
+    if (currentAppTab === btn.dataset.target) return;
     const doSwitch = () => {
       if($("#add").open) closeAdForm();
       document.querySelectorAll(".bnav-item").forEach(b => b.classList.remove("active"));
@@ -1603,8 +1621,13 @@ document.querySelectorAll(".bnav-item").forEach(btn => {
 });
 
 $("#cats").onclick=e=>{const b=e.target.closest(".cat");if(b){cat=+b.dataset.i;view="all";currentPage=1;draw();$("#listing").scrollIntoView({behavior:"smooth"})}};
-["#q","#sort","#pmin","#pmax","#urg","#f-cond","#f-has-photo","#f-shop-only"].forEach(s=>$(s).addEventListener("input",()=>{currentPage=1;draw();}));
+function debounce(fn, ms=300){let t;return(...args)=>{clearTimeout(t);t=setTimeout(()=>fn(...args),ms);};}
+const _debouncedDraw = debounce(()=>{currentPage=1;draw();},300);
+["#q","#pmin","#pmax"].forEach(s=>$(s).addEventListener("input",_debouncedDraw));
+["#sort","#urg","#f-cond","#f-has-photo","#f-shop-only"].forEach(s=>$(s).addEventListener("change",()=>{currentPage=1;draw();}));
 $("#search-btn").onclick=()=>{currentPage=1;draw();$("#listing").scrollIntoView({behavior:"smooth"})};
+$("#q").addEventListener("keypress", e=>{ if(e.key==="Enter"){ e.preventDefault(); currentPage=1; draw(); $("#listing").scrollIntoView({behavior:"smooth"}); } });
+$("#q-wholesale").addEventListener("keypress", e=>{ if(e.key==="Enter"){ e.preventDefault(); wholesaleCurrentPage=1; draw(); window.scrollTo({top:0,behavior:"smooth"}); } });
 $("#reset").onclick=()=>resetAllFilters();
 
 $("#ftog").onclick=()=>$("#flt").classList.toggle("o");
@@ -1831,7 +1854,7 @@ function openAd(id){
       <div class="kv"><span class="mu">دسته</span><span>${displayCatName}</span></div>
       ${a.moq?`<div class="kv"><span class="mu">حداقل سفارش</span><span>${nf(a.moq)} ${esc(a.unit||"")}</span></div>`:""}${a.brand?`<div class="kv"><span class="mu">مدل / برند</span><span>${esc(a.brand)}</span></div>`:""}${a.spec?`<div class="kv"><span class="mu">مشخصات</span><span>${esc(a.spec)}</span></div>`:""}
       <div class="kv"><span class="mu">ولایت / پوشش</span><span>${locText} ${a.mapLoc ? '— ' + esc(a.mapLoc) : ''}</span></div>
-      <div class="kv"><span class="mu">زمان ثبت</span><span>${ago(a.age)}</span></div>
+      <div class="kv"><span class="mu">زمان ثبت</span><span title="${a.ts ? new Date(a.ts).toLocaleString('fa-IR') : ago(a.age)}">${ago(a.age)}</span></div>
     </div>
     <p style="font-size:13px;">${esc(a.d)||"بدون توضیحات"}</p>
 
@@ -2110,27 +2133,8 @@ $("#g-login").onclick=async()=>{
 };
 $("#send-otp-btn").onclick = async () => {
   if (!supabaseClient) { $("#a-e").textContent = "خطا: سرور متصل نیست. اینترنت را چک کنید."; return; }
-  
-  const p = normDigits($("#a-p").value.trim());
   if(authMethod==="email") return sendEmailOtp();
-  if(!/^07\d{8}$/.test(p)) { $("#a-e").textContent = "لطفاً شماره را به‌صورت ۰۷… وارد کنید."; return; }
-  
-  // تبدیل 07... به +937...
-  let cleanPhone = p.replace(/\D/g, '');
-  if (cleanPhone.startsWith('0')) cleanPhone = cleanPhone.substring(1);
-  if (!cleanPhone.startsWith('93')) cleanPhone = '93' + cleanPhone;
-  const internationalPhone = '+' + cleanPhone;
-
-  $("#a-e").textContent = "در حال ارسال کد...";
-  
-  $("#send-otp-btn").disabled=true;
-  const { error } = await supabaseClient.auth.signInWithOtp({ phone: internationalPhone });
-  
-  if(error) {
-    $("#a-e").textContent = "خطا: " + error.message; $("#send-otp-btn").disabled=false;
-  } else {
-    $("#a-e").textContent = "کد تایید ارسال شد ✅"; startOtpCooldown();
-  }
+  $("#a-e").textContent = "ورود با پیامک فعلاً از دسترس خارج است. لطفاً از ایمیل یا گوگل استفاده کنید.";
 };
 
 // ==========================================
@@ -2138,63 +2142,9 @@ $("#send-otp-btn").onclick = async () => {
 // ==========================================
 $("#a-go").onclick = async () => {
   if (!supabaseClient) { $("#a-e").textContent = "خطا: سرور متصل نیست."; return; }
-
-  const n = $("#a-n").value.trim();
-  const p = normDigits($("#a-p").value.trim());
-  const w = "";
-  const otp = normDigits($("#a-otp").value.trim());
-  const er = m => $("#a-e").textContent = m;
-
   if(authMethod==="email") return verifyEmailOtp();
-  if(!/^07\d{8}$/.test(p)) return er("شماره موبایل را به‌صورت ۰۷… وارد کنید.");
-  if(!otp) return er("کد تایید را وارد کنید.");
-  if(mode=="up" && n.length < 2) return er("نام را وارد کنید.");
-  
-  let cleanPhone = p.replace(/\D/g, '');
-  if (cleanPhone.startsWith('0')) cleanPhone = cleanPhone.substring(1);
-  if (!cleanPhone.startsWith('93')) cleanPhone = '93' + cleanPhone;
-  const internationalPhone = '+' + cleanPhone;
-
-  $("#a-e").textContent = "در حال بررسی کد...";
-
-  const { data, error } = await supabaseClient.auth.verifyOtp({
-    phone: internationalPhone,
-    token: otp,
-    type: 'sms'
-  });
-
-  if(error) {
-    return er("خطا: کد اشتباه یا منقضی شده است.");
-  }
-
-  // وقتی کد از طرف سرور تایید شد، کاربر را در حافظه محلی ذخیره می‌کنیم
-  me = p; myId = (data && data.user) ? data.user.id : null;
-  put("ab_sess", me);
-  
-  if(mode == "up") {
-    if(n.length < 2) return er("نام را وارد کنید.");
-    const salt = crypto.getRandomValues(new Uint32Array(2)).join("-");
-    users[p] = { name: n, salt, h: await sha(salt + w), verified: /^07\d{8}$/.test(me), shopName: n + " دکان" };
-    put("ab_users", users);
-    toast("حساب شما ساخته شد! خوش آمدید.");
-  } else {
-    if(!users[p]) {
-      // اگر کاربر جدید با پیامک وارد شد
-      users[p] = { name: "کاربر " + p, verified: /^07\d{8}$/.test(me), shopName: "فروشگاه من" };
-      put("ab_users", users);
-    }
-    toast("خوش آمدید " + (users[p]?.name || ""));
-  }
-  
-  loadFavs();
-  $("#auth").close();
-  ["#a-n","#a-p","#a-otp"].forEach(s => $(s).value = "");
-  draw();
-  addNotification("به افغان‌بازار خوش آمدید!");
-  afterLogin(p);
-  
-  if(after){ const f = after; after = null; f(); }
-};
+  $("#a-e").textContent = "ورود با پیامک فعلاً از دسترس خارج است. لطفاً از ایمیل یا گوگل استفاده کنید.";
+};;
 
 $("#acc").onclick=()=>{
   if(!me||!users[me])return openAuth();
@@ -2277,30 +2227,31 @@ $("#me").onclick = async e => {
 let mapPicker = null;
 let pickerMarker = null;
 
-function initMapPicker(lat, lng) {
+function initMapPicker(lat, lng, _attempts = 0) {
   if(typeof L === 'undefined') { console.warn('Leaflet not loaded'); return; }
   if(!Number.isFinite(lat) || !Number.isFinite(lng)) { lat = 34.5553; lng = 69.2075; }
-  setTimeout(() => {
-    const mapContainer = document.getElementById('map-picker-container');
-    if(!mapContainer || !$("#add").open) return;
-    if(mapPicker) { try{ mapPicker.remove(); }catch(e){}; mapPicker = null; }
-    pickerMarker = null;
-    mapPicker = L.map('map-picker-container').setView([lat, lng], 13);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19, attribution: '© OpenStreetMap'
-    }).addTo(mapPicker);
-    pickerMarker = L.marker([lat, lng], {draggable: true}).addTo(mapPicker);
-    pickerMarker.on('dragend', function() {
-      const pos = pickerMarker.getLatLng();
-      $("#form-lat").value = pos.lat;
-      $("#form-lng").value = pos.lng;
-    });
-    mapPicker.on('click', function(e) {
-      pickerMarker.setLatLng(e.latlng);
-      $("#form-lat").value = e.latlng.lat;
-      $("#form-lng").value = e.latlng.lng;
-    });
-  }, 150);
+  const mapContainer = document.getElementById('map-picker-container');
+  if(!mapContainer || !$("#add").open) {
+    if (_attempts < 30) setTimeout(() => initMapPicker(lat, lng, _attempts + 1), 100);
+    return;
+  }
+  if(mapPicker) { try{ mapPicker.remove(); }catch(e){}; mapPicker = null; }
+  pickerMarker = null;
+  mapPicker = L.map('map-picker-container').setView([lat, lng], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19, attribution: '© OpenStreetMap'
+  }).addTo(mapPicker);
+  pickerMarker = L.marker([lat, lng], {draggable: true}).addTo(mapPicker);
+  pickerMarker.on('dragend', function() {
+    const pos = pickerMarker.getLatLng();
+    $("#form-lat").value = pos.lat;
+    $("#form-lng").value = pos.lng;
+  });
+  mapPicker.on('click', function(e) {
+    pickerMarker.setLatLng(e.latlng);
+    $("#form-lat").value = e.latlng.lat;
+    $("#form-lng").value = e.latlng.lng;
+  });
 }
 
 $("#f-ci").onchange = function() {
@@ -2534,18 +2485,33 @@ $("#save").onclick=async()=>{
   const phv=normDigits($("#f-ph").value.trim());
   if(!/^07\d{8}$/.test(phv)){ toast("شماره تماس را به‌صورت ۰۷… وارد کنید."); $("#f-ph").focus(); return; }
   put("ab_last_ph_"+me,phv);
+  const saveBtn = $("#save");
+  const _origSaveText = saveBtn.textContent;
   let imgUrls;
-  try{ $("#save").disabled=true; imgUrls = [];
-  for(const i of combinedImagesList) {
-    try {
-      const u = await uploadImg(i.src);
-      if(u) imgUrls.push(u);
-    } catch(err) {
-      console.warn("آپلود تصویر ناموفق بود:", err);
+  try {
+    saveBtn.disabled = true;
+    imgUrls = [];
+    if (combinedImagesList.length > 0) {
+      let done = 0;
+      for(const i of combinedImagesList) {
+        try {
+          const u = await uploadImg(i.src);
+          if(u) imgUrls.push(u);
+        } catch(err) {
+          console.warn("آپلود تصویر ناموفق بود:", err);
+        }
+        done++;
+        saveBtn.textContent = `آپلود ${nf(done)}/${nf(combinedImagesList.length)}...`;
+      }
     }
-  } }
-  catch(e){ $("#save").disabled=false; toast("آپلود تصویر ناموفق بود؛ دوباره تلاش کنید."); return; }
-  $("#save").disabled=false;
+  } catch(e) {
+    saveBtn.disabled = false;
+    saveBtn.textContent = _origSaveText;
+    toast("آپلود تصویر ناموفق بود؛ دوباره تلاش کنید.");
+    return;
+  }
+  saveBtn.disabled = false;
+  saveBtn.textContent = _origSaveText;
   const editId = $("#edit-ad-id").value;
   const isShopChecked = $("#form-is-shop").checked;
   const shopNameVal = $("#form-shop-name").value.trim() || ((users[me]?.name||"کاربر") + " فروشگاه");
@@ -2626,7 +2592,7 @@ $("#save").onclick=async()=>{
     $("#form-urg").checked = false;
     combinedImagesList = [];
     updatePreviewGrid();
-    cat=0; wholesaleCat=0; view="all"; currentPage=1; wholesaleCurrentPage=1; draw();
+    cat=0; wholesaleCat=0; view="mine"; currentPage=1; wholesaleCurrentPage=1; draw();
   } catch(err) {
     toast("خطا در ذخیره‌سازی.");
   }
@@ -2898,7 +2864,7 @@ async function initRemote(){
 }
 
 draw();
-initRemote();
+initRemote().catch(e => console.warn("initRemote:", e));
 document.body.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.classList&&e.target.classList.contains("ad")){e.preventDefault();openAd(e.target.dataset.id)}});
 (function(){
   const t=get("ab_theme",null); if(t) document.documentElement.dataset.theme=t;
@@ -3594,6 +3560,7 @@ const PushManagerClient = (() => {
    ========================================== */
 (function injectPushToggle() {
   if (!PushManagerClient.supported()) return;
+  if (!VAPID_PUBLIC_KEY || VAPID_PUBLIC_KEY.includes('REPLACE')) return; // کلید VAPID تنظیم نشده
   const tryInject = () => {
     const menu = document.querySelector('#me .menu');
     if (!menu || document.getElementById('push-toggle')) return false;
