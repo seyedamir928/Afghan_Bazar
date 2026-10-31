@@ -656,6 +656,25 @@ dialog#add[open] { display: flex; flex-direction: column; }
   #ptr-indicator { transition: none; }
 }
 
+
+/* ==========================================
+   SVG ICONS SYSTEM
+   ========================================== */
+.icon {
+  width: 1.2em;
+  height: 1.2em;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  display: inline-block;
+  vertical-align: middle;
+  transition: transform 0.2s ease;
+}
+.icon-lg { width: 1.5em; height: 1.5em; }
+.icon-sm { width: 1em; height: 1em; }
+
 </style>
 <!-- PWA Configurations -->
 <link rel="manifest" href="manifest.json">
@@ -665,21 +684,53 @@ dialog#add[open] { display: flex; flex-direction: column; }
 <link rel="apple-touch-icon" href="icon-192.png">
 </head>
 <body>
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></symbol>
+  <symbol id="i-map-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-cart" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></symbol>
+  <symbol id="i-package" viewBox="0 0 24 24"><path d="M16.5 9.4l-9-5.19M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></symbol>
+  <symbol id="i-lightbulb" viewBox="0 0 24 24"><path d="M9 18h6M10 22h4M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1.78.72 3.35 1.5 4.5.76.76 1.23 1.52 1.41 2.5"/></symbol>
+  <symbol id="i-warning" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M5 21h14M18 9l-6-6-6 6"/><path d="M18 9a3 3 0 0 1-6 0M6 9a3 3 0 0 0 6 0"/></symbol>
+  <symbol id="i-store" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+  <symbol id="i-inbox" viewBox="0 0 24 24"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+  <symbol id="i-locate" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></symbol>
+  <symbol id="i-smartphone" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></symbol>
+  <symbol id="i-note" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></symbol>
+</svg>
+
 <header>
   <div class="header-right">
     <div class="header-province-selector" title="انتخاب ولایت">
-      <span>📍 ولایت:</span>
+      <span><svg class="icon icon-sm"><use href="#i-map-pin"></use></svg> ولایت:</span>
       <select id="header-city-select" aria-label="انتخاب ولایت"></select>
     </div>
     <button class="notif-bell-btn" id="notif-bell-btn" title="اعلان‌ها">
-      🔔<span class="notif-badge" id="notif-count-badge" style="display:none;">0</span>
+      <svg class="icon icon-lg"><use href="#i-bell"></use></svg><span class="notif-badge" id="notif-count-badge" style="display:none;">0</span>
     </button>
   </div>
   <div class="header-center">
     <a href="javascript:void(0)" class="brand-group" onclick="brandClick(event)" id="brand-group">
       <div class="logo-box">◆</div>
       <div class="brand-title">افغان<b>بازار</b></div>
-      <span id="pwa-hint-bubble">💡 دو ضربه بزنید تا نصب شود</span>
+      <span id="pwa-hint-bubble"><svg class="icon icon-sm"><use href="#i-lightbulb"></use></svg> دو ضربه بزنید تا نصب شود</span>
     </a>
   </div>
   <div class="header-left">
@@ -698,7 +749,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
     <p>خرید و فروش امن و رایگان خرده‌فروشی در ۳۴ ولایت؛ با فروشگاه‌های رسمی، نقشه شعاعی و مقایسه کالاها.</p>
     <div class="sbox">
       <input id="q" placeholder="جستجو در عنوان و توضیحات پرچون: موتر، خانه، موبایل…" aria-label="جستجو">
-      <button class="capsule-btn primary" id="search-btn" style="border-radius:12px;padding:0 20px;margin:2px;">جستجو</button>
+      <button class="capsule-btn primary" id="search-btn" style="border-radius:12px;padding:0 20px;margin:2px; display:flex; align-items:center; gap:6px;"><svg class="icon icon-sm"><use href="#i-search"></use></svg> جستجو</button>
     </div>
     <div class="stats" id="stats"></div></div></section>
 
@@ -717,7 +768,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
       <aside class="filters" id="flt">
         <div class="filter-mobile-close">
           <span>فیلترهای پیشرفته جستجو</span>
-          <button class="capsule-btn" id="close-filters-drawer" style="border:1px solid var(--bd);padding:2px 8px;">✕ بستن</button>
+          <button class="capsule-btn" id="close-filters-drawer" style="border:1px solid var(--bd);padding:2px 8px;"><svg class="icon icon-sm"><use href="#i-x"></use></svg> بستن</button>
         </div>
         <h3>قیمت پرچون (افغانی)</h3>
         <div class="two"><input id="pmin" type="number" min="0" placeholder="از" aria-label="حداقل قیمت"><input id="pmax" type="number" min="0" placeholder="تا" aria-label="حداکثر قیمت"></div>
@@ -737,7 +788,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
 
         <div style="margin-top:12px;border-top:1px solid var(--bd);padding-top:10px;">
           <h3 style="margin-bottom:6px;">🌐 جستجوی شعاعی نقشه</h3>
-          <button class="capsule-btn primary" id="open-radius-modal-btn" style="width:100%;text-align:center;font-size:12px;background:var(--ac2);">📍 فیلتر شعاعی روی نقشه</button>
+          <button class="capsule-btn primary" id="open-radius-modal-btn" style="width:100%;text-align:center;font-size:12px;background:var(--ac2); display:flex; align-items:center; justify-content:center; gap:6px;"><svg class="icon icon-sm"><use href="#i-map-pin"></use></svg> فیلتر شعاعی روی نقشه</button>
           <div id="radius-status-badge" class="mu" style="font-size:11px;margin-top:4px;text-align:center;">شعاع فعال نیست</div>
         </div>
 
@@ -749,7 +800,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
         <div class="bar">
           <h2 id="title"></h2>
           <div class="bar-actions">
-            <button class="capsule-btn primary fbtn" id="ftog" style="font-size:12px;">⚙️ فیلترها</button>
+            <button class="capsule-btn primary fbtn" id="ftog" style="font-size:12px; display:flex; align-items:center; gap:4px;"><svg class="icon icon-sm"><use href="#i-sliders"></use></svg> فیلترها</button>
             <select id="sort" aria-label="مرتب‌سازی">
               <option value="new">جدیدترین</option>
               <option value="lo">ارزان‌ترین</option>
@@ -782,7 +833,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
     <p>ویژه تجار، دکان‌داران و واردکنندگان. تأمین مستقیم کالا از بندرهای مرزی و عمده‌فروشی‌های سراسر کشور.</p>
     <div class="sbox">
       <input id="q-wholesale" placeholder="جستجو در آگهی‌های عمده: برنج، روغن، لوازم الکترونیکی…" aria-label="جستجوی عمده">
-      <button class="capsule-btn primary" id="search-wholesale-btn" style="background:#1b3b6f;border-radius:12px;padding:0 20px;margin:2px;">جستجوی عمده</button>
+      <button class="capsule-btn primary" id="search-wholesale-btn" style="background:#1b3b6f;border-radius:12px;padding:0 20px;margin:2px; display:flex; align-items:center; gap:6px;"><svg class="icon icon-sm"><use href="#i-search"></use></svg> جستجوی عمده</button>
     </div>
     <div class="stats" id="wholesale-stats"></div></div></section>
 
@@ -803,7 +854,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
 </div>
 
 <div class="compare-floating-bar" id="compare-bar">
-  <span>⚖️ مقایسه کالاها (<b id="compare-count">0</b> انتخاب شده)</span>
+  <span><svg class="icon icon-sm"><use href="#i-scale"></use></svg> مقایسه کالاها (<b id="compare-count">0</b> انتخاب شده)</span>
   <button class="capsule-btn primary" id="show-compare-modal-btn" style="padding:4px 10px;font-size:11px;">مشاهده جدول</button>
   <button class="capsule-btn" id="clear-compare-btn" style="padding:4px 6px;font-size:11px;color:#d6324a;">پاک‌کردن</button>
 </div>
@@ -812,11 +863,11 @@ dialog#add[open] { display: flex; flex-direction: column; }
 
 <nav class="bottom-nav">
   <button class="bnav-item active" data-target="retail">
-    <span class="icon">🛒</span>
+    <svg class="icon icon-lg"><use href="#i-cart"></use></svg>
     <span>پرچون (خرده)</span>
   </button>
   <button class="bnav-item" data-target="wholesale">
-    <span class="icon">📦</span>
+    <svg class="icon icon-lg"><use href="#i-package"></use></svg>
     <span>عمده (تجار)</span>
   </button>
 </nav>
@@ -827,7 +878,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
   <div class="dialog-content-pad">
     <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--bd);padding-bottom:10px;margin-bottom:12px;">
       <h2 style="margin:0;font-size:17px;">🔔 اعلان‌های درون‌برنامه‌ای</h2>
-      <button class="capsule-btn" id="close-notif-dlg" style="border:1px solid var(--bd);">✕ بستن</button>
+      <button class="capsule-btn" id="close-notif-dlg" style="border:1px solid var(--bd);"><svg class="icon icon-sm"><use href="#i-x"></use></svg> بستن</button>
     </div>
     <div id="notif-list-container" style="max-height:55vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px;"></div>
   </div>
@@ -835,14 +886,14 @@ dialog#add[open] { display: flex; flex-direction: column; }
 
 <dialog id="radius-dlg">
   <div class="dialog-content-pad">
-    <h2>📍 تنظیم جستجوی شعاعی روی نقشه</h2>
+    <h2><svg class="icon icon-sm"><use href="#i-map-pin"></use></svg> تنظیم جستجوی شعاعی روی نقشه</h2>
     <div class="mu" style="font-size:12px;margin-bottom:8px;">روی نقطه دلخواه در نقشه کلیک کنید یا شعاع جستجو را تغییر دهید تا فقط آگهی‌های آن محدوده نمایش داده شوند.</div>
     <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px;">
       <label for="radius-slider" style="margin:0;font-size:12px;white-space:nowrap;">شعاع (ک‌م):</label>
       <input id="radius-slider" type="range" min="5" max="200" step="5" value="50" style="flex:1;">
       <b id="radius-val" style="color:var(--ac);font-size:13px;min-width:40px;">50 ک‌م</b>
     </div>
-    <button class="capsule-btn" id="radius-gps-btn" type="button" style="border:1px solid var(--bd);margin-bottom:6px;">📍 موقعیت من</button>
+    <button class="capsule-btn" id="radius-gps-btn" type="button" style="border:1px solid var(--bd);margin-bottom:6px; display:flex; align-items:center; justify-content:center; gap:6px;"><svg class="icon icon-sm"><use href="#i-locate"></use></svg> موقعیت من</button>
     <div id="radius-map-container"></div>
     <div class="row" style="margin-top:14px;">
       <button class="capsule-btn primary" id="apply-radius-btn" style="flex:2;">اعمال فیلتر شعاعی</button>
@@ -855,7 +906,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
   <div class="dialog-content-pad">
     <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--bd);padding-bottom:10px;margin-bottom:12px;">
       <h2 style="margin:0;font-size:17px;">⚖️ جدول مقایسه تخصصی کالاها</h2>
-      <button class="capsule-btn" id="close-compare-dlg" style="border:1px solid var(--bd);">✕ بستن</button>
+      <button class="capsule-btn" id="close-compare-dlg" style="border:1px solid var(--bd);"><svg class="icon icon-sm"><use href="#i-x"></use></svg> بستن</button>
     </div>
     <div id="compare-table-container" style="overflow-x:auto;max-height:65vh;"></div>
   </div>
@@ -887,15 +938,15 @@ dialog#add[open] { display: flex; flex-direction: column; }
 <dialog id="me">
   <div class="dialog-content-pad">
     <h2 id="me-n"></h2><div class="mu" id="me-p"></div>
-    <div style="margin-top:6px;" id="me-verified-badge-box"><span class="badge-verified">✓ شماره تاییدشده</span></div>
+    <div style="margin-top:6px;" id="me-verified-badge-box"><span class="badge-verified"><svg class="icon icon-sm"><use href="#i-check"></use></svg> شماره تاییدشده</span></div>
     <div class="menu" style="margin-top:10px">
       <button data-v="mine">آگهی‌های من و آمار بازدید</button>
-      <button data-v="edit-profile" style="color:var(--ac);">✏️ ویرایش نام پروفایل</button>
+      <button data-v="edit-profile" style="color:var(--ac);"><svg class="icon icon-sm"><use href="#i-edit"></use></svg> ویرایش نام پروفایل</button>
       <button data-v="fav">نشان‌شده‌ها و یادداشت‌ها</button>
-      <button data-v="shop" style="color:var(--ac);font-weight:bold;">🏪 مدیریت فروشگاه رسمی من و نظرات</button>
-      <button data-v="inbox" style="color:var(--ac);font-weight:bold;">📥 صندوق پیام‌های من</button>
+      <button data-v="shop" style="color:var(--ac);font-weight:bold;"><svg class="icon icon-sm"><use href="#i-store"></use></svg> مدیریت فروشگاه رسمی من و نظرات</button>
+      <button data-v="inbox" style="color:var(--ac);font-weight:bold;"><svg class="icon icon-sm"><use href="#i-inbox"></use></svg> صندوق پیام‌های من</button>
       <button data-v="all">همه آگهی‌ها</button>
-      <button id="admin-btn" data-v="admin" style="color:var(--ac);font-weight:bold;" hidden>🛡️ پنل مدیریت کل</button>
+      <button id="admin-btn" data-v="admin" style="color:var(--ac);font-weight:bold;" hidden><svg class="icon icon-sm"><use href="#i-shield"></use></svg> پنل مدیریت کل</button>
       <button data-v="out">خروج از حساب</button>
     </div>
   </div>
@@ -905,7 +956,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
   <div class="dialog-content-pad" style="padding:0;">
     <div style="background:var(--ac);color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10;">
       <h2 style="margin:0;font-size:17px;color:#fff;">📥 پیام‌های من</h2>
-      <button class="capsule-btn" id="close-inbox" style="padding:3px 10px;background:rgba(255,255,255,.2);color:#fff;border:0;">✕ بستن</button>
+      <button class="capsule-btn" id="close-inbox" style="padding:3px 10px;background:rgba(255,255,255,.2);color:#fff;border:0;"><svg class="icon icon-sm"><use href="#i-x"></use></svg> بستن</button>
     </div>
     <div id="inbox-list" style="padding:10px;max-height:65vh;overflow-y:auto;display:flex;flex-direction:column;gap:8px;background:var(--bg);">
       <!-- پیام‌ها اینجا لود می‌شوند -->
@@ -916,7 +967,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
 <dialog id="add">
   <div class="modal-header" id="modal-header-bg" style="background: linear-gradient(135deg, var(--ac), var(--ac2));">
     <h2 id="modal-title-text">✨ ثبت آگهی پرچون جدید</h2>
-    <button class="capsule-btn" id="cancel-top" style="padding:3px 8px;font-size:11px;background:rgba(255,255,255,.2);color:#fff;border:0;">✕ بستن</button>
+    <button class="capsule-btn" id="cancel-top" style="padding:3px 8px;font-size:11px;background:rgba(255,255,255,.2);color:#fff;border:0;"><svg class="icon icon-sm"><use href="#i-x"></use></svg> بستن</button>
   </div>
   <div class="modal-body">
     <input type="hidden" id="edit-ad-id" value="">
@@ -1352,7 +1403,7 @@ function draw(){
   else if(s=="pop") r.sort((a,b)=>(b.views||0)-(a.views||0));
   else r.sort((a,b)=>a.age-b.age);
   
-  const titleMap = {all:cat?(cats[cat]?.[0]||"همه"):"همه آگهی‌های پرچون", mine:"آگهی‌های من و آمار بازدید", fav:"نشان‌شده‌ها و یادداشت‌ها", admin:"🛡️ پنل مدیریت کل آگهی‌ها", shop:"🏪 مدیریت فروشگاه رسمی من و نظرات"};
+  const titleMap = {all:cat?(cats[cat]?.[0]||"همه"):"همه آگهی‌های پرچون", mine:"آگهی‌های من و آمار بازدید", fav:"نشان‌شده‌ها و یادداشت‌ها", admin:"<svg class="icon icon-sm"><use href="#i-shield"></use></svg> پنل مدیریت کل آگهی‌ها", shop:"<svg class="icon icon-sm"><use href="#i-store"></use></svg> مدیریت فروشگاه رسمی من و نظرات"};
   $("#title").innerHTML=titleMap[view]+`<span>${nf(r.length)} آگهی</span>`;
   
   if(view == "shop" && me && users[me]) {
@@ -1770,9 +1821,9 @@ function openAd(id){
     <div class="price" style="font-size:18px;margin-top:3px;">${fmtAd(a)}</div>
     
     <div class="stat-box">
-      <span>👁️ ${nf(a.views)} بازدید</span>
-      <span>📞 ${nf(a.calls || 3)} تماس</span>
-      <span>🏷️ ${a.isWholesale ? '📦 عمده‌فروشی' : '🛒 پرچون'}</span>
+      <span><svg class="icon icon-sm"><use href="#i-eye"></use></svg> ${nf(a.views)} بازدید</span>
+      <span><svg class="icon icon-sm"><use href="#i-phone"></use></svg> ${nf(a.calls || 3)} تماس</span>
+      <span><svg class="icon icon-sm"><use href="${a.isWholesale ? '#i-package' : '#i-tag'}"></use></svg> ${a.isWholesale ? 'عمده‌فروشی' : 'پرچون'}</span>
     </div>
 
     <div style="margin:8px 0">
@@ -1790,7 +1841,7 @@ function openAd(id){
     
     ${me && users[me] ? `
       <div style="background:var(--bg);border:1px solid var(--bd);padding:8px 10px;border-radius:10px;margin-top:10px;">
-        <label for="personal-note-input" style="font-size:11px;margin-bottom:3px;">📝 یادداشت شخصی شما روی این آگهی:</label>
+        <label for="personal-note-input" style="font-size:11px;margin-bottom:3px;display:flex;align-items:center;gap:4px;"><svg class="icon icon-sm"><use href="#i-note"></use></svg> یادداشت شخصی شما روی این آگهی:</label>
         <div style="display:flex;gap:6px;">
           <input id="personal-note-input" value="${esc(userNote)}" placeholder="مثلاً: قیمت نهایی توافق شد..." style="font-size:12px;padding:4px 8px;">
           <button class="capsule-btn primary" id="save-note-btn" style="padding:4px 10px;font-size:11px;">ذخیره</button>
@@ -1800,17 +1851,17 @@ function openAd(id){
 
     <div class="seller-card">
       <div>
-        <b style="font-size:13px;display:block;">👤 فروشنده: ${esc(a.sellerName || 'کاربر')} ${a.isShop ? '— <span style="color:var(--ac);">['+esc(a.shopName || 'فروشگاه')+'] (⭐ '+(shopRating?.avg || '—')+')</span>' : ''}</b>
+        <b style="font-size:13px;display:block;"><svg class="icon icon-sm"><use href="#i-user"></use></svg> فروشنده: ${esc(a.sellerName || 'کاربر')} ${a.isShop ? '— <span style="color:var(--ac);">['+esc(a.shopName || 'فروشگاه')+'] (⭐ '+(shopRating?.avg || '—')+')</span>' : ''}</b>
         <span class="mu" style="font-size:11px;">عضو افغان‌بازار</span>
       </div>
       <div>
-        ${a.verified !== false ? '<span class="badge-verified">✓ شماره تاییدشده</span>' : ''}
+        ${a.verified !== false ? '<span class="badge-verified"><svg class="icon icon-sm"><use href="#i-check"></use></svg> شماره تاییدشده</span>' : ''}
       </div>
     </div>
 
     ${a.isShop ? `
       <div style="background:var(--card);border:1px solid var(--bd);padding:10px;border-radius:10px;margin-top:10px;">
-        <h4 style="margin:0 0 6px;font-size:13px;color:var(--ac);">⭐ امتیازدهی به این فروشگاه <span class="mu">(${shopRating.avg} ★ از ${nf(shopRating.count)} نظر)</span></h4>
+        <h4 style="margin:0 0 6px;font-size:13px;color:var(--ac);"><svg class="icon icon-sm"><use href="#i-star"></use></svg> امتیازدهی به این فروشگاه <span class="mu">(${shopRating.avg} ★ از ${nf(shopRating.count)} نظر)</span></h4>
         <div style="max-height:110px;overflow-y:auto;font-size:11px;margin-bottom:6px;">${(shopReviews[a.ph]||[]).slice(-5).reverse().map(rv=>`<div style="border-bottom:1px solid var(--bd);padding:3px 0;">⭐ ${nf(rv.rating)}/۵ — <b>${esc(rv.buyer||"کاربر")}</b>: ${esc(rv.comment||"")}</div>`).join("")||'<span class="mu">هنوز نظری ثبت نشده.</span>'}</div>
         <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px;">
           <select id="review-stars" style="padding:3px;border-radius:6px;border:1px solid var(--bd);font-size:11px;">
@@ -1828,7 +1879,7 @@ function openAd(id){
       </div>
     ` : ''}
 
-    <h3 style="font-size:14px;margin-top:14px;">💬 گفتگو با فروشنده</h3>
+    <h3 style="font-size:14px;margin-top:14px;"><svg class="icon icon-sm"><use href="#i-chat"></use></svg> گفتگو با فروشنده</h3>
     <div class="chat-box" id="chat-messages"></div>
     <div style="display:flex;gap:6px;margin-top:6px;">
       <input id="chat-input" placeholder="پیام خود را بنویسید..." style="flex:1;border:1px solid var(--bd);background:var(--bg);border-radius:8px;padding:6px 10px;font-size:12px;">
@@ -1836,19 +1887,19 @@ function openAd(id){
     </div>
 
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:11px;">
-      <button type="button" class="capsule-btn" id="wake-toggle-btn" style="margin-top:8px;width:100%;border:1px solid var(--bd);font-size:12px;">💡 روشن ماندن صفحه هنگام مشاهده</button>
+      <button type="button" class="capsule-btn" id="wake-toggle-btn" style="margin-top:8px;width:100%;border:1px solid var(--bd);font-size:12px;"><svg class="icon icon-sm"><use href="#i-lightbulb"></use></svg> روشن ماندن صفحه هنگام مشاهده</button>
     </div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:11px;">
-      <span style="color:#d6324a;cursor:pointer;" id="report-ad-btn">⚠️ گزارش تخلف یا کلاه‌برداری</span>
+      <span style="color:#d6324a;cursor:pointer;" id="report-ad-btn"><svg class="icon icon-sm"><use href="#i-warning"></use></svg> گزارش تخلف یا کلاه‌برداری</span>
       <span class="mu">کد: <bdi dir="ltr">${a.id}</bdi></span>
     </div>
 
     <div class="row" style="margin-top:14px;">
-      <a class="capsule-btn primary" href="tel:${esc(a.ph)}" onclick="recordCall('${a.id}')" style="text-align:center;">تماس: <bdi dir="ltr">${esc(a.ph)}</bdi></a>
+      <a class="capsule-btn primary" href="tel:${esc(a.ph)}" style="display:flex;align-items:center;justify-content:center;gap:6px;" onclick="recordCall('${a.id}')"><svg class="icon icon-sm"><use href="#i-phone"></use></svg> تماس: <bdi dir="ltr">${esc(a.ph)}</bdi></a>
       <button class="capsule-btn" id="x" style="border:1px solid var(--bd);">بستن</button>
     </div>
-    ${a.owner&&a.owner==me?'<div style="display:flex;gap:6px;margin-top:6px;"><button class="capsule-btn" id="edit-ad-btn" style="flex:1;border:1px solid var(--bd);">✏️ ویرایش</button><button class="capsule-btn" id="renew-ad-btn" style="flex:1;border:1px solid var(--bd);">🔄 تمدید</button></div>':''}
-    ${((a.owner&&a.owner==me)||adminFlag) && !seed.some(x=>String(x.id)===String(a.id))?'<button class="link danger" id="del" style="color:#d6324a;display:block;margin:8px auto 0;font-size:12px;">حذف این آگهی</button>':''}
+    ${a.owner&&a.owner==me?'<div style="display:flex;gap:6px;margin-top:6px;"><button class="capsule-btn" id="edit-ad-btn" style="flex:1;border:1px solid var(--bd);"><svg class="icon icon-sm"><use href="#i-edit"></use></svg> ویرایش</button><button class="capsule-btn" id="renew-ad-btn" style="flex:1;border:1px solid var(--bd);"><svg class="icon icon-sm"><use href="#i-refresh"></use></svg> تمدید</button></div>':''}
+    ${((a.owner&&a.owner==me)||adminFlag) && !seed.some(x=>String(x.id)===String(a.id))?'<button class="link danger" id="del" style="color:#d6324a;display:block;margin:8px auto 0;font-size:12px;"><svg class="icon icon-sm"><use href="#i-trash"></use></svg> حذف این آگهی</button>':''}
   `;
 
   $("#dlg").showModal();
@@ -2150,7 +2201,7 @@ $("#acc").onclick=()=>{
   $("#me-p").textContent=me;
   const isPhone = /^07\d{8}$/.test(me);
   $("#me-verified-badge-box").innerHTML = isPhone
-    ? '<span class="badge-verified">✓ شماره تاییدشده</span>'
+    ? '<span class="badge-verified"><svg class="icon icon-sm"><use href="#i-check"></use></svg> شماره تاییدشده</span>'
     : '<span class="badge-verified" style="background:#1b3b6f;">✓ حساب تاییدشده</span>';
     
   const adminBtn = $("#admin-btn");
@@ -2371,7 +2422,7 @@ $("#cancel-top").onclick=closeAdForm;
 
 function openEditModal(ad) {
   const isWholesaleMode = ad.isWholesale;
-  $("#modal-title-text").textContent = isWholesaleMode ? "✏️ ویرایش آگهی عمده‌فروشی" : "✏️ ویرایش آگهی پرچون";
+  $("#modal-title-text").innerHTML = isWholesaleMode ? '<svg class="icon icon-sm"><use href="#i-edit"></use></svg> ویرایش آگهی عمده‌فروشی' : '<svg class="icon icon-sm"><use href="#i-edit"></use></svg> ویرایش آگهی پرچون';
   $("#modal-header-bg").style.background = isWholesaleMode ? "linear-gradient(135deg, #1b3b6f, #152c48)" : "linear-gradient(135deg, var(--ac), var(--ac2))";
   $("#edit-ad-id").value = ad.id;
   $("#f-t").value = ad.t; $("#f-ph").value = ad.ph || "";
@@ -3344,7 +3395,7 @@ function wrapText(ctx, text, x, y, maxW, lineH, maxLines) {
     btn.type = 'button';
     const render = () => {
       const on = Haptics.isEnabled();
-      btn.innerHTML = `📳 لرزش لمسی: <b style="color:${on ? 'var(--ac)' : 'var(--mu)'};">${on ? 'فعال' : 'غیرفعال'}</b>`;
+      btn.innerHTML = `<svg class="icon icon-sm"><use href="#i-smartphone"></use></svg> لرزش لمسی: <b style="color:${on ? 'var(--ac)' : 'var(--mu)'};">${on ? 'فعال' : 'غیرفعال'}</b>`;
     };
     render();
     btn.onclick = () => {
@@ -3551,7 +3602,7 @@ const PushManagerClient = (() => {
     btn.type = 'button';
     const render = async () => {
       const on = await PushManagerClient.isSubscribed();
-      btn.innerHTML = `🔔 اعلان‌های پوش: <b style="color:${on ? 'var(--ac)' : 'var(--mu)'};">${on ? 'فعال' : 'غیرفعال'}</b>`;
+      btn.innerHTML = `<svg class="icon icon-sm"><use href="#i-bell"></use></svg> اعلان‌های پوش: <b style="color:${on ? 'var(--ac)' : 'var(--mu)'};">${on ? 'فعال' : 'غیرفعال'}</b>`;
     };
     render();
     btn.onclick = async () => {
