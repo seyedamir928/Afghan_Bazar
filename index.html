@@ -35,8 +35,10 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card)
 .logo-box{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--ac),var(--ac2));color:var(--gd);display:grid;place-items:center;font-size:13px;font-weight:bold;box-shadow:0 3px 10px rgba(14,122,75,.3)}
 .brand-title{font-weight:800;font-size:11px;letter-spacing:-0.3px;line-height:1.1}
 .brand-title span,.brand-title b{color:var(--ac)}
-.header-left{display:flex;align-items:center;flex-shrink:0}
-.split-capsule{display:flex;align-items:center;background:var(--card);border:1px solid var(--bd);border-radius:99px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.header-left{display:flex;align-items:center;flex-shrink:1;min-width:0}
+.split-capsule{display:flex;align-items:center;background:var(--card);border:1px solid var(--bd);border-radius:99px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);min-width:0}
+.split-capsule .capsule-btn{min-width:0;flex-shrink:1;overflow:hidden;text-overflow:ellipsis}
+#lang-toggle{flex-shrink:0}
 .capsule-btn{background:none;border:0;padding:5px 9px;font-weight:600;font-size:11px;cursor:pointer;color:var(--tx);transition:background .15s, color .15s;white-space:nowrap}
 .capsule-btn:hover{background:var(--chip)}
 .capsule-divider{width:1px;height:16px;background:var(--bd)}
@@ -3004,6 +3006,7 @@ $("#save").onclick=async()=>{
   let imgUrls;
   try {
     saveBtn.disabled = true;
+    await ensureSession(); // رفع مسابقه‌ی زمانی احتمالی بین UI و نشست واقعی سرور
     imgUrls = [];
     if (combinedImagesList.length > 0) {
       let done = 0, failedUploads = 0;
@@ -3156,8 +3159,23 @@ $("#add").addEventListener("close", () => {
 // لایه Supabase: آگهی، عکس، پیام، نظر، گزارش
 // ==========================================
 
+async function ensureSession(){
+  // در برخی دستگاه‌ها (اینترنت کند، مرورگرهای داخل‌اپلیکیشن، استارت‌آپ کند) myId
+  // هنوز از localStorage/کش قدیمی resolve نشده، درحالیکه UI کاربر را واردشده نشان می‌دهد.
+  // قبل از آپلود/ثبت، یک‌بار نشست واقعی سرور را دوباره چک می‌کنیم تا این مسابقه (race) رفع شود.
+  if(!sb()) return !!myId;
+  if(myId) return true;
+  try{
+    const {data}=await sb().auth.getSession();
+    const ses=data&&data.session;
+    if(ses){ myId=ses.user.id; const ident=ses.user.email||ses.user.phone; if(ident) me=ident; return true; }
+  }catch(e){ console.warn("بررسی نشست ناموفق بود:",e); }
+  return false;
+}
 async function uploadImg(src){
-  if(!src||!src.startsWith("data:")||!sb()||!myId) return src;
+  if(!src||!src.startsWith("data:")) return src;
+  if(!sb()) return src; // حالت کاملاً آفلاین/بدون سرور: محلی نگه‌داشته می‌شود
+  if(!myId) throw new Error("نشست معتبر نیست؛ عکس آپلود نشد (دوباره وارد حساب شوید).");
   const blob=await (await fetch(src)).blob();
   const path=`${myId}/${Date.now()}-${Math.random().toString(36).slice(2,8)}.jpg`;
   const {error}=await sb().storage.from("ad-images").upload(path,blob,{contentType:"image/jpeg"});
@@ -3165,11 +3183,21 @@ async function uploadImg(src){
   return sb().storage.from("ad-images").getPublicUrl(path).data.publicUrl;
 }
 async function syncAd(ad){
-  if(!sb()||!myId) return null;
-  const {id,owner,ownerId,age,status,...rest}=ad;
-  const {data,error}=await sb().from("ads").upsert({id:String(id),owner_id:myId,status:status||"approved",data:rest}).select("status").single();
-  if(error){console.warn(error);toast("ذخیره روی سرور انجام نشد؛ فقط در این دستگاه ذخیره شد.");return null;}
-  ad.status=data.status; return data.status;
+  if(!sb()) return null;
+  if(!myId){
+    toast("⚠️ نشست شما معتبر نیست؛ آگهی فقط روی همین دستگاه ذخیره شد. لطفاً دوباره وارد حساب شوید.");
+    return null;
+  }
+  try{
+    const {id,owner,ownerId,age,status,...rest}=ad;
+    const {data,error}=await sb().from("ads").upsert({id:String(id),owner_id:myId,status:status||"approved",data:rest}).select("status").single();
+    if(error){console.warn(error);toast("ذخیره روی سرور انجام نشد؛ فقط در این دستگاه ذخیره شد.");return null;}
+    ad.status=data.status; return data.status;
+  }catch(e){
+    console.warn("خطای شبکه در ثبت آگهی روی سرور:",e);
+    toast("⚠️ اتصال با سرور برقرار نشد؛ آگهی فقط در این دستگاه ذخیره شد. وقتی اینترنت وصل شد دوباره ذخیره کنید.");
+    return null;
+  }
 }
 const adMsg=(st,verb)=> st==="approved"?"✅ آگهی "+verb+" و منتشر شد":st==="rejected"?"❌ آگهی به‌دلیل محتوای ممنوعه رد شد":st==="pending"?"⏳ آگهی ثبت شد و پس از بررسی منتشر می‌شود":"آگهی با موفقیت "+verb+" شد";
 async function remoteDelete(id,wasRemote){
@@ -4364,5 +4392,3 @@ const PushManagerClient = (() => {
 
 </body>
 </html>
-
-
