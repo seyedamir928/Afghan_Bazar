@@ -323,6 +323,339 @@ dialog#add[open] { display: flex; flex-direction: column; }
 .filter-mobile-close { display: none; }
 :root[data-theme="dark"]{--bg:#0b110e;--card:#151d18;--tx:#eaf2ed;--mu:#93a39a;--bd:#25322b;--chip:#1d2923;--ac:#37b676;--ac2:#0a3322;--on:#06130c;--hl:#37b676;--sh:none}
 :root[data-theme="dark"] .tile{background:hsl(var(--h) 28% 19%);color:var(--tx)}
+
+
+/* ==========================================
+   ANIMATION SYSTEM — Material You
+   ========================================== */
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    --ease-out: cubic-bezier(0.2, 0, 0, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* ---- Ripple (لمس مایع دکمه‌ها) ---- */
+  .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: .28;
+    transform: scale(0);
+    animation: rippleGo .55s var(--ease-out);
+    pointer-events: none;
+    will-change: transform, opacity;
+  }
+  @keyframes rippleGo { to { transform: scale(2.6); opacity: 0; } }
+
+  /* ---- ورود کارت‌ها با Stagger ---- */
+  .grid > .ad, .rail > .ad {
+    animation: cardIn .35s var(--ease-out) both;
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(14px) scale(.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  /* Stagger: ریزموج ورود */
+  .grid > .ad:nth-child(1){animation-delay:0ms}
+  .grid > .ad:nth-child(2){animation-delay:30ms}
+  .grid > .ad:nth-child(3){animation-delay:60ms}
+  .grid > .ad:nth-child(4){animation-delay:90ms}
+  .grid > .ad:nth-child(5){animation-delay:120ms}
+  .grid > .ad:nth-child(6){animation-delay:150ms}
+  .grid > .ad:nth-child(7){animation-delay:180ms}
+  .grid > .ad:nth-child(8){animation-delay:210ms}
+  .rail > .ad:nth-child(2){animation-delay:40ms}
+  .rail > .ad:nth-child(3){animation-delay:80ms}
+  .rail > .ad:nth-child(4){animation-delay:120ms}
+  .rail > .ad:nth-child(n+5){animation-delay:160ms}
+
+  /* ---- بازخورد لمسی (Tap feedback) ---- */
+  /* نکته: بعد از .ad:hover نوشته شود تا :active در برخورد حذف نکند */
+  .ad:active {
+    transform: scale(.97) !important;
+    transition: transform .12s var(--ease-out) !important;
+  }
+
+  .capsule-btn, .bnav-item, .cat, .tile, .ccity,
+  .media-btn, .fav, .compare-checkbox, .link {
+    transition: transform .2s var(--ease-out),
+                background .15s ease,
+                color .15s ease,
+                box-shadow .2s ease;
+  }
+  .capsule-btn:active:not(:disabled),
+  .bnav-item:active,
+  .cat:active, .tile:active, .ccity:active,
+  .media-btn:active, .link:active,
+  .fav:active, .compare-checkbox:active {
+    transform: scale(.94);
+  }
+
+  /* ---- ورود دیالوگ‌ها (Material Bottom-Sheet feel) ---- */
+  dialog[open] {
+    animation: dlgIn .32s var(--ease-out);
+  }
+  dialog[open]::backdrop {
+    animation: backdropIn .25s ease;
+  }
+  @keyframes dlgIn {
+    from { opacity: 0; transform: translateY(28px) scale(.92); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes backdropIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* ---- Toast (اسلاید از پایین + فنر) ---- */
+  .toast {
+    transform: translateX(-50%) translateY(24px);
+    transition: transform .32s var(--ease-spring),
+                opacity .22s ease;
+  }
+  .toast.s {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  /* ---- قلب علاقه‌مندی (Pop) ---- */
+  .fav.on { animation: heartPop .45s var(--ease-spring); }
+  @keyframes heartPop {
+    0%{transform:scale(1)} 40%{transform:scale(1.32)}
+    70%{transform:scale(.9)} 100%{transform:scale(1)}
+  }
+
+  /* ---- تیک مقایسه (Pop) ---- */
+  .compare-checkbox.checked { animation: chkPop .3s var(--ease-spring); }
+  @keyframes chkPop {
+    0%{transform:scale(1)} 50%{transform:scale(1.22)} 100%{transform:scale(1)}
+  }
+
+  /* ---- تصاویر آگهی (Fade + Zoom نرم) ---- */
+  .ph img { animation: imgIn .45s var(--ease-out); }
+  @keyframes imgIn {
+    from { opacity: 0; transform: scale(1.05); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  /* ---- آیکون تب پایین (Bounce هنگام فعال شدن) ---- */
+  .bnav-item .icon {
+    display: inline-block;
+    transition: transform .3s var(--ease-spring);
+  }
+  .bnav-item.active .icon {
+    animation: iconBounce .5s var(--ease-spring);
+  }
+  @keyframes iconBounce {
+    0%{transform:scale(1)} 40%{transform:scale(1.22) translateY(-2px)}
+    100%{transform:scale(1) translateY(0)}
+  }
+
+  /* ---- نوار شناور مقایسه ---- */
+  .compare-floating-bar.active {
+    animation: cmpPop .38s var(--ease-spring);
+  }
+  @keyframes cmpPop {
+    from { transform: translateX(-50%) translateY(20px) scale(.85); opacity: 0; }
+    to   { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; }
+  }
+
+  /* ---- PWA Banner ---- */
+  #pwa-install-banner.show {
+    animation: bannerIn .38s var(--ease-out);
+  }
+  @keyframes bannerIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+  }
+
+  /* ---- Focus glow نرم روی ورودی‌ها ---- */
+  input:focus, select:focus, textarea:focus {
+    transition: border-color .2s ease, box-shadow .2s ease;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ac) 18%, transparent);
+  }
+
+  /* ---- View Transitions API (بین تب پرچون/عمده) ---- */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: .3s;
+    animation-timing-function: var(--ease-out);
+  }
+}
+
+/* ---- احترام به Reduced Motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+
+/* ==========================================
+   PULL-TO-REFRESH INDICATOR
+   ========================================== */
+#ptr-indicator {
+  position: fixed;
+  top: 0; left: 50%;
+  transform: translate(-50%, -60px);
+  width: 44px; height: 44px;
+  background: var(--card);
+  border: 1px solid var(--bd);
+  border-radius: 50%;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  display: grid;
+  place-items: center;
+  z-index: 400;
+  opacity: 0;
+  transition: opacity .2s ease, transform .25s var(--ease-out, ease-out);
+  pointer-events: none;
+}
+#ptr-indicator.ready {
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--ac) 45%, transparent);
+  border-color: var(--ac);
+}
+.ptr-spinner {
+  width: 22px; height: 22px;
+  border: 2.5px solid var(--bd);
+  border-top-color: var(--mu);
+  border-radius: 50%;
+  transition: border-color .2s ease;
+}
+#ptr-indicator.ready .ptr-spinner { border-top-color: var(--ac); }
+#ptr-indicator.loading .ptr-spinner {
+  animation: ptrSpin .8s linear infinite;
+  border-top-color: var(--ac);
+}
+@keyframes ptrSpin { to { transform: rotate(360deg); } }
+
+/* ==========================================
+   SKELETON LOADING
+   ========================================== */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--chip) 25%,
+    var(--bd) 50%,
+    var(--chip) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: 8px;
+}
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.skeleton-card {
+  pointer-events: none;
+  cursor: default;
+  background: var(--card);
+  border: 1px solid var(--bd);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.skeleton-card.ad { animation: none !important; }
+
+/* ==========================================
+   WAKE LOCK INDICATOR
+   ========================================== */
+#wakelock-indicator {
+  position: fixed;
+  top: 72px; left: 50%;
+  transform: translate(-50%, -20px);
+  background: var(--card);
+  border: 1px solid var(--ac);
+  border-radius: 99px;
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ac);
+  box-shadow: 0 4px 16px rgba(0,0,0,.15);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 350;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease, transform .25s var(--ease-out, ease-out);
+}
+#wakelock-indicator.active {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+#wakelock-indicator .wl-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--ac);
+  animation: wlPulse 1.8s ease-in-out infinite;
+}
+@keyframes wlPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(.6); opacity: .4; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #wakelock-indicator .wl-dot { animation: none; }
+  #wakelock-indicator { transition: none; }
+}
+
+/* ==========================================
+   BELL RING — وقتی اعلان جدید است
+   ========================================== */
+@media (prefers-reduced-motion: no-preference) {
+  .notif-bell-btn.has-new {
+    animation: bellRing 1.2s ease-in-out 2;
+  }
+  @keyframes bellRing {
+    0%, 100% { transform: rotate(0); }
+    15% { transform: rotate(-12deg); }
+    30% { transform: rotate(10deg); }
+    45% { transform: rotate(-8deg); }
+    60% { transform: rotate(6deg); }
+    75% { transform: rotate(-3deg); }
+  }
+}
+
+/* ==========================================
+   PING BADGE — هالهٔ نرم دور عدد اعلان
+   ========================================== */
+@media (prefers-reduced-motion: no-preference) {
+  .notif-badge {
+    position: relative;
+  }
+  .notif-badge::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: 99px;
+    background: rgba(214, 50, 74, 0.5);
+    animation: badgePing 2s ease-out infinite;
+    pointer-events: none;
+  }
+  @keyframes badgePing {
+    0% { transform: scale(1); opacity: .7; }
+    100% { transform: scale(2.2); opacity: 0; }
+  }
+}
+.skeleton-card .sk-img {
+  aspect-ratio: 4 / 3;
+  border-radius: 0;
+}
+.skeleton-card .sk-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.skeleton-card .sk-line { height: 12px; }
+.skeleton-card .sk-line.short { width: 60%; }
+
+/* احترام به کاربران حساس به حرکت */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none; }
+  #ptr-indicator { transition: none; }
+}
+
 </style>
 <!-- PWA Configurations -->
 <link rel="manifest" href="manifest.json">
@@ -815,6 +1148,10 @@ function updateNotifBadge() {
   } else {
     badge.style.display = "none";
   }
+  const bell = document.querySelector('.notif-bell-btn');
+  if (bell) {
+    bell.classList.toggle('has-new', unread > 0);
+  }
 }
 
 $("#notif-bell-btn").onclick = () => {
@@ -1182,24 +1519,33 @@ $("#wholesale-cats").onclick = e => {
 
 document.querySelectorAll(".bnav-item").forEach(btn => {
   btn.onclick = () => {
-    if($("#add").open) closeAdForm();
-    document.querySelectorAll(".bnav-item").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    currentAppTab = btn.dataset.target;
-    const postBtn = $("#header-post-btn");
-    if(currentAppTab === "retail") {
-      $("#view-retail").style.display = "block";
-      $("#view-wholesale").style.display = "none";
-      postBtn.textContent = "+ ثبت پرچون";
-      postBtn.style.background = "var(--ac)";
+    const doSwitch = () => {
+      if($("#add").open) closeAdForm();
+      document.querySelectorAll(".bnav-item").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentAppTab = btn.dataset.target;
+      const postBtn = $("#header-post-btn");
+      if(currentAppTab === "retail") {
+        $("#view-retail").style.display = "block";
+        $("#view-wholesale").style.display = "none";
+        postBtn.textContent = "+ ثبت پرچون";
+        postBtn.style.background = "var(--ac)";
+      } else {
+        $("#view-retail").style.display = "none";
+        $("#view-wholesale").style.display = "block";
+        postBtn.textContent = "+ ثبت عمده";
+        postBtn.style.background = "#1b3b6f";
+      }
+      window.scrollTo({top: 0, behavior: 'smooth'});
+      draw();
+    };
+
+    if (document.startViewTransition &&
+        !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.startViewTransition(doSwitch);
     } else {
-      $("#view-retail").style.display = "none";
-      $("#view-wholesale").style.display = "block";
-      postBtn.textContent = "+ ثبت عمده";
-      postBtn.style.background = "#1b3b6f";
+      doSwitch();
     }
-    window.scrollTo({top: 0, behavior: 'smooth'});
-    draw();
   };
 });
 
@@ -1488,6 +1834,9 @@ function openAd(id){
     </div>
 
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:11px;">
+      <button type="button" class="capsule-btn" id="wake-toggle-btn" style="margin-top:8px;width:100%;border:1px solid var(--bd);font-size:12px;">💡 روشن ماندن صفحه هنگام مشاهده</button>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:11px;">
       <span style="color:#d6324a;cursor:pointer;" id="report-ad-btn">⚠️ گزارش تخلف یا کلاه‌برداری</span>
       <span class="mu">کد: <bdi dir="ltr">${a.id}</bdi></span>
     </div>
@@ -1539,14 +1888,7 @@ function openAd(id){
     };
   }
 
-  $("#share-btn").onclick = async () => {
-    try{
-      await navigator.clipboard.writeText(adUrl(a.id));
-      toast("لینک آگهی کپی شد!");
-    }catch(e){
-      toast("کپی نشد. لطفاً دستی کپی کنید.");
-    }
-  };
+  $("#share-btn").onclick = () => shareAdCard(a);
 
   const saveNoteBtn = $("#save-note-btn");
   if(saveNoteBtn) {
@@ -1598,6 +1940,10 @@ function openAd(id){
       if(callItem) callItem.innerHTML = "📞 " + nf(a.calls) + " تماس";
     }
   };
+  const wakeBtn = document.getElementById('wake-toggle-btn');
+  if (wakeBtn) {
+    wakeBtn.onclick = () => WakeLockManager.toggle();
+  }
   $("#report-ad-btn").onclick = () => { 
     if(!myId){ toast("برای ثبت گزارش، وارد حساب شوید."); return; }
     reportRemote(id); toast("گزارش تخلف ثبت شد. متشکریم.");
@@ -2508,6 +2854,654 @@ window.openAdFromInbox = (adId) => {
 
 $("#close-inbox").onclick = () => $("#inbox-dlg").close();
 
+
+
+/* ==========================================
+   ANIMATION ENHANCEMENTS
+   ========================================== */
+
+// --- Ripple سبک روی دکمه‌ها (بدون سنگینی) ---
+(function(){
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const RIPPLE_SELECTOR =
+    '.capsule-btn,.bnav-item,.tile,.ccity,.cat,.media-btn,.link';
+
+  document.addEventListener('pointerdown', (e) => {
+    const target = e.target.closest(RIPPLE_SELECTOR);
+    if (!target || target.disabled) return;
+    const rect = target.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    const size = Math.max(rect.width, rect.height) * 2.2;
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+    ripple.style.top  = (e.clientY - rect.top  - size / 2) + 'px';
+    const cs = getComputedStyle(target);
+    if (cs.position === 'static') target.style.position = 'relative';
+    if (cs.overflow !== 'hidden') target.style.overflow = 'hidden';
+    target.appendChild(ripple);
+    ripple.addEventListener('animationend', () => ripple.remove(), { once: true });
+  }, { passive: true });
+})();
+
+
+
+/* ==========================================
+   PULL-TO-REFRESH + SKELETON + MORPH
+   ========================================== */
+
+const __reduceMotion = () =>
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- Skeleton helpers ---------- */
+const skeletonHTML = () => Array.from({ length: 8 }, () => `
+  <div class="skeleton-card ad" aria-hidden="true">
+    <div class="sk-img skeleton"></div>
+    <div class="sk-body">
+      <div class="sk-line skeleton"></div>
+      <div class="sk-line skeleton short"></div>
+      <div class="sk-line skeleton" style="width:80%;"></div>
+    </div>
+  </div>
+`).join('');
+
+async function doRefresh() {
+  const retail = document.getElementById('list');
+  const whole  = document.getElementById('wholesale-list');
+  if (retail) retail.innerHTML = skeletonHTML();
+  if (whole)  whole.innerHTML  = skeletonHTML();
+  try {
+    if (typeof sb === 'function' && sb()) {
+      await loadRemote();
+      if (document.querySelector('.skeleton-card')) draw();
+    } else {
+      await new Promise(r => setTimeout(r, 350));
+      draw();
+    }
+  } catch (e) {
+    console.warn(e);
+    draw();
+  }
+}
+
+/* ---------- Pull-to-Refresh ---------- */
+(function () {
+  if (__reduceMotion()) return;
+  let startY = 0, dist = 0, pulling = false;
+  const THRESHOLD = 70;
+
+  function indicator() {
+    let el = document.getElementById('ptr-indicator');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'ptr-indicator';
+      el.innerHTML = '<div class="ptr-spinner"></div>';
+      document.body.appendChild(el);
+    }
+    return el;
+  }
+
+  function resetIndicator(el) {
+    el.classList.remove('ready', 'loading');
+    el.style.opacity = '0';
+    el.style.transform = 'translate(-50%, -60px)';
+  }
+
+  document.addEventListener('touchstart', (e) => {
+    if (document.querySelector('dialog[open]')) return;
+    if (document.scrollingElement.scrollTop > 2) return;
+    const t = e.target;
+    if (t.closest('.rail, .cats, dialog, #add, #dlg, #me, #auth, .chat-box, .thumbs-row, .filters')) return;
+    if (e.touches.length !== 1) return;
+    startY = e.touches[0].clientY;
+    pulling = true;
+    dist = 0;
+  }, { passive: true });
+
+  document.addEventListener('touchmove', (e) => {
+    if (!pulling) return;
+    const dy = e.touches[0].clientY - startY;
+    if (dy <= 0) { resetIndicator(indicator()); dist = 0; return; }
+    // مقاومت کشش
+    dist = Math.min(dy * 0.55, THRESHOLD * 1.5);
+    const el = indicator();
+    const pct = Math.min(dist / THRESHOLD, 1);
+    el.style.opacity = String(pct);
+    el.style.transform = `translate(-50%, ${dist - 60}px) rotate(${dist * 3.5}deg)`;
+    el.classList.toggle('ready', dist >= THRESHOLD);
+  }, { passive: true });
+
+  document.addEventListener('touchend', () => {
+    if (!pulling) return;
+    pulling = false;
+    const el = indicator();
+    if (dist >= THRESHOLD) {
+      el.classList.add('loading');
+      el.style.opacity = '1';
+      el.style.transform = 'translate(-50%, 14px) rotate(0deg)';
+      doRefresh().finally(() => {
+        setTimeout(() => resetIndicator(el), 500);
+      });
+    } else {
+      resetIndicator(el);
+    }
+    dist = 0;
+  });
+})();
+
+/* ---------- Shared Element Transition (کارت → مودال) ---------- */
+(function () {
+  if (__reduceMotion()) return;
+  if (!document.startViewTransition) return;
+
+  document.addEventListener('click', (e) => {
+    const card = e.target.closest('.ad');
+    if (!card) return;
+    if (e.target.closest('.fav, .compare-checkbox, [data-approve], [data-reject], .capsule-btn, .link, a')) return;
+
+    const img = card.querySelector('.ph img');
+    if (!img) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+
+    const adId = card.dataset.id;
+    img.style.viewTransitionName = 'ad-hero';
+
+    const transition = document.startViewTransition(() => {
+      openAd(adId);
+      const modalImg = document.querySelector('#active-modal-img');
+      if (modalImg) modalImg.style.viewTransitionName = 'ad-hero';
+    });
+
+    transition.finished.finally(() => {
+      img.style.viewTransitionName = '';
+      const mi = document.querySelector('#active-modal-img');
+      if (mi) mi.style.viewTransitionName = '';
+    });
+  }, true);
+
+  const dlg = document.getElementById('dlg');
+  if (dlg) dlg.addEventListener('close', () => {
+    const mi = document.querySelector('#active-modal-img');
+    if (mi) mi.style.viewTransitionName = '';
+  });
+})();
+
+
+
+/* ==========================================
+   HAPTICS — لرزش لمسی هوشمند
+   ========================================== */
+window.Haptics = (() => {
+  const supported = 'vibrate' in navigator;
+  const enabled = () => { try { return get('ab_haptics', true) !== false; } catch(e){ return true; } };
+  const setEnabled = (v) => put('ab_haptics', v);
+  const fire = (p) => {
+    if (!supported || !enabled()) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    try { navigator.vibrate(p); } catch(e) {}
+  };
+  return {
+    light: () => fire(10),
+    medium: () => fire(20),
+    heavy: () => fire(32),
+    selection: () => fire(12),
+    success: () => fire([10, 40, 10]),
+    warning: () => fire([18, 70, 18]),
+    error: () => fire([30, 55, 30, 55, 30]),
+    isSupported: supported,
+    isEnabled: enabled,
+    setEnabled
+  };
+})();
+
+/* ==========================================
+   HAPTIC HOOKS — بدون تغییر در کد موجود
+   ========================================== */
+// لرزش بسیار سبک روی هر لمس دکمه (Ripple همراهی)
+document.addEventListener('pointerdown', (e) => {
+  const t = e.target.closest(
+    '.capsule-btn, .bnav-item, .cat, .tile, .ccity, .media-btn, .link, .fav, .compare-checkbox'
+  );
+  if (t && !t.disabled) Haptics.selection();
+}, { passive: true });
+
+// لرزش موفقیت/خطا به‌طور خودکار روی toast
+(function wrapToast(){
+  const orig = window.toast;
+  if (typeof orig !== 'function') return;
+  window.toast = function(m) {
+    orig(m);
+    if (!window.Haptics) return;
+    if (/✅|موفق|خوش آمدید|پیروز|کپی شد|ذخیره شد|ثبت شد/.test(m)) Haptics.success();
+    else if (/خطا|نشد|ناموفق|ممنوع|اشتباه|نامعتبر|نمی‌توانید/.test(m)) Haptics.error();
+    else if (/⚠️|توجه|حداکثر|مجاز نیست|فقط/.test(m)) Haptics.warning();
+  };
+})();
+
+/* ==========================================
+   SHARE CARD — اشتراک‌گذاری به‌صورت تصویر
+   ========================================== */
+async function shareAdCard(ad) {
+  const text = `🛒 ${ad.t}\n💰 ${fmtAd(ad)}\n📍 ${cities[ad.ci] || ''}\n🔗 ${adUrl(ad.id)}`;
+
+  // Level 2: با فایل تصویری (اندروید/iOS مدرن)
+  if (navigator.canShare) {
+    try {
+      const file = await renderAdCardAsImage(ad);
+      if (file && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: ad.t, text });
+        Haptics.success();
+        return;
+      }
+    } catch(err) {
+      if (err.name === 'AbortError') return;
+    }
+  }
+
+  // Level 1: فقط متن
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: ad.t, text, url: adUrl(ad.id) });
+      Haptics.success();
+      return;
+    } catch(err) { if (err.name === 'AbortError') return; }
+  }
+
+  // Fallback: دانلود تصویر + کپی متن
+  try {
+    const file = await renderAdCardAsImage(ad);
+    if (file) {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(file);
+      a.download = `afghanbazar-${ad.id}.png`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+    await navigator.clipboard.writeText(text);
+    toast('تصویر دانلود و متن کپی شد ✅');
+  } catch(e) {
+    toast('اشتراک‌گذاری در این مرورگر پشتیبانی نمی‌شود.');
+  }
+}
+
+/* ==========================================
+   RENDER AD CARD AS IMAGE (Canvas 1080×1080)
+   ========================================== */
+async function renderAdCardAsImage(ad) {
+  try {
+    if (document.fonts?.ready) await document.fonts.ready;
+
+    const W = 1080, H = 1080;
+    const canvas = document.createElement('canvas');
+    canvas.width = W; canvas.height = H;
+    const ctx = canvas.getContext('2d');
+
+    // پس‌زمینه گرادیانت سبز
+    const grad = ctx.createLinearGradient(0, 0, W, H);
+    grad.addColorStop(0, '#08432c');
+    grad.addColorStop(1, '#0e7a4b');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    // کارت سفید
+    ctx.fillStyle = '#ffffff';
+    roundRect(ctx, 60, 60, W - 120, H - 120, 44);
+    ctx.fill();
+
+    // ناحیه تصویر
+    const imgUrl = (Array.isArray(ad.imgs) && ad.imgs[0]) || ad.img;
+    const imgH = 480;
+    if (imgUrl) {
+      try {
+        const img = await loadImage(imgUrl);
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(60 + 44, 60);
+        ctx.arcTo(60 + W - 120, 60, 60 + W - 120, 60 + imgH, 44);
+        ctx.lineTo(60 + W - 120, 60 + imgH);
+        ctx.lineTo(60, 60 + imgH);
+        ctx.arcTo(60, 60, 60 + 44, 60, 44);
+        ctx.closePath();
+        ctx.clip();
+        drawImageCover(ctx, img, 60, 60, W - 120, imgH);
+        ctx.restore();
+      } catch(e) {}
+    } else {
+      ctx.fillStyle = '#f0f6f2';
+      ctx.fillRect(60, 60, W - 120, imgH);
+      ctx.font = '180px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('🛒', W / 2, 60 + imgH / 2);
+      ctx.textBaseline = 'alphabetic';
+    }
+
+    // عنوان
+    ctx.direction = 'rtl';
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#12211a';
+    ctx.font = 'bold 46px Vazirmatn, Tahoma, sans-serif';
+    wrapText(ctx, ad.t, W - 120, 620, W - 240, 58, 3);
+
+    // قیمت
+    ctx.fillStyle = '#0e7a4b';
+    ctx.font = 'bold 52px Vazirmatn, Tahoma, sans-serif';
+    ctx.fillText(fmtAd(ad), W - 120, 815);
+
+    // موقعیت + زمان
+    ctx.fillStyle = '#62736a';
+    ctx.font = '30px Vazirmatn, Tahoma, sans-serif';
+    ctx.fillText(`📍 ${cities[ad.ci] || ''}  ·  ${ago(ad.age)}`, W - 120, 875);
+
+    // برندینگ پایین
+    ctx.fillStyle = '#0e7a4b';
+    ctx.font = 'bold 40px Vazirmatn, Tahoma, sans-serif';
+    ctx.fillText('◆ افغان‌بازار', W - 120, H - 95);
+    ctx.fillStyle = '#62736a';
+    ctx.font = '24px Vazirmatn, Tahoma, sans-serif';
+    ctx.fillText(location.host || 'afghanbazar', W - 120, H - 55);
+
+    return await new Promise((res) => {
+      canvas.toBlob((blob) => {
+        res(blob ? new File([blob], `ad-${ad.id}.png`, { type: 'image/png' }) : null);
+      }, 'image/png', 0.92);
+    });
+  } catch (e) {
+    console.warn('Render card failed:', e);
+    return null;
+  }
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+function loadImage(src) {
+  return new Promise((res, rej) => {
+    const i = new Image();
+    i.crossOrigin = 'anonymous';
+    i.onload = () => res(i);
+    i.onerror = rej;
+    i.src = src;
+  });
+}
+function drawImageCover(ctx, img, x, y, w, h) {
+  const s = Math.max(w / img.width, h / img.height);
+  const dw = img.width * s, dh = img.height * s;
+  ctx.drawImage(img, x + (w - dw) / 2, y + (h - dh) / 2, dw, dh);
+}
+function wrapText(ctx, text, x, y, maxW, lineH, maxLines) {
+  const words = String(text).split(' ');
+  let line = '', cy = y, n = 0;
+  for (let i = 0; i < words.length; i++) {
+    const test = line + words[i] + ' ';
+    if (ctx.measureText(test).width > maxW && line) {
+      if (n >= maxLines - 1) {
+        ctx.fillText(line.trim() + '…', x, cy);
+        return;
+      }
+      ctx.fillText(line.trim(), x, cy);
+      line = words[i] + ' ';
+      cy += lineH;
+      n++;
+    } else {
+      line = test;
+    }
+  }
+  ctx.fillText(line.trim(), x, cy);
+}
+
+/* ==========================================
+   HAPTICS SETTINGS — تزریق دکمه در منوی من
+   ========================================== */
+(function injectHapticsToggle() {
+  if (!Haptics.isSupported) return;
+  const tryInject = () => {
+    const menu = document.querySelector('#me .menu');
+    if (!menu || document.getElementById('haptics-toggle')) return false;
+    const outBtn = menu.querySelector('[data-v="out"]');
+    if (!outBtn) return false;
+    const btn = document.createElement('button');
+    btn.id = 'haptics-toggle';
+    btn.type = 'button';
+    const render = () => {
+      const on = Haptics.isEnabled();
+      btn.innerHTML = `📳 لرزش لمسی: <b style="color:${on ? 'var(--ac)' : 'var(--mu)'};">${on ? 'فعال' : 'غیرفعال'}</b>`;
+    };
+    render();
+    btn.onclick = () => {
+      const next = !Haptics.isEnabled();
+      Haptics.setEnabled(next);
+      render();
+      if (next) Haptics.medium();
+      toast(next ? 'لرزش لمسی فعال شد' : 'لرزش لمسی غیرفعال شد');
+    };
+    outBtn.parentNode.insertBefore(btn, outBtn);
+    return true;
+  };
+  if (!tryInject()) {
+    const obs = new MutationObserver(() => { if (tryInject()) obs.disconnect(); });
+    obs.observe(document.body, { childList: true, subtree: true });
+    setTimeout(() => obs.disconnect(), 5000);
+  }
+})();
+
+
+
+/* ==========================================
+   SCREEN WAKE LOCK
+   ========================================== */
+const WakeLockManager = (() => {
+  let sentinel = null;
+  let wantsLock = false;
+
+  function indicator(show) {
+    let el = document.getElementById('wakelock-indicator');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'wakelock-indicator';
+      el.innerHTML = '<span class="wl-dot"></span> صفحه روشن می‌ماند';
+      document.body.appendChild(el);
+    }
+    el.classList.toggle('active', show);
+  }
+
+  async function acquire() {
+    if (!('wakeLock' in navigator)) {
+      toast('مرورگر شما از روشن ماندن صفحه پشتیبانی نمی‌کند.');
+      return false;
+    }
+    if (sentinel) return true;
+    try {
+      sentinel = await navigator.wakeLock.request('screen');
+      sentinel.addEventListener('release', () => {
+        sentinel = null;
+        if (!wantsLock) indicator(false);
+      });
+      return true;
+    } catch (err) {
+      console.warn('WakeLock rejected:', err);
+      toast('اجازه روشن ماندن صفحه داده نشد.');
+      return false;
+    }
+  }
+
+  async function release() {
+    wantsLock = false;
+    indicator(false);
+    if (sentinel) {
+      try { await sentinel.release(); } catch(e) {}
+      sentinel = null;
+    }
+  }
+
+  async function toggle() {
+    wantsLock = !wantsLock;
+    if (wantsLock) {
+      const ok = await acquire();
+      if (ok) {
+        indicator(true);
+        Haptics?.success?.();
+        toast('صفحه تا زمانی که این تب باز است روشن می‌ماند ✅');
+      } else {
+        wantsLock = false;
+      }
+    } else {
+      await release();
+      Haptics?.medium?.();
+      toast('روشن ماندن صفحه غیرفعال شد');
+    }
+  }
+
+  document.addEventListener('visibilitychange', async () => {
+    if (document.visibilityState === 'visible' && wantsLock && !sentinel) {
+      const ok = await acquire();
+      if (ok) indicator(true);
+    }
+  });
+
+  return { toggle, isActive: () => !!sentinel, wantsLock: () => wantsLock };
+})();
+
+/* ==========================================
+   WEB PUSH — ثبت‌نام و مدیریت اشتراک
+   ========================================== */
+const VAPID_PUBLIC_KEY = 'REPLACE_WITH_YOUR_PUBLIC_KEY'; // 🔑 کلید عمومی VAPID خود را از Supabase یا سرور خودتان اینجا وارد کنید تا Web Push فعال شود
+
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+  const raw = atob(base64);
+  return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
+}
+
+const PushManagerClient = (() => {
+  const supported = () =>
+    'serviceWorker' in navigator &&
+    'PushManager' in window &&
+    'Notification' in window;
+
+  async function getRegistration() {
+    if (!('serviceWorker' in navigator)) return null;
+    try { return await navigator.serviceWorker.ready; }
+    catch(e) { return null; }
+  }
+
+  async function subscribe() {
+    if (!supported()) {
+      toast('مرورگر شما از اعلان پوش پشتیبانی نمی‌کند.');
+      return null;
+    }
+    if (!VAPID_PUBLIC_KEY || VAPID_PUBLIC_KEY.includes('REPLACE')) {
+      toast('اعلان پوش هنوز توسط مدیر تنظیم نشده است.');
+      return null;
+    }
+    if (Notification.permission === 'denied') {
+      toast('اعلان‌ها در تنظیمات مرورگر مسدود شده است.');
+      return null;
+    }
+    const permission = await Notification.requestPermission();
+    if (permission !== 'granted') {
+      toast('اجازه اعلان داده نشد.');
+      return null;
+    }
+
+    const reg = await getRegistration();
+    if (!reg) return null;
+
+    let sub = await reg.pushManager.getSubscription();
+    if (!sub) {
+      sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+      });
+    }
+
+    if (sb() && myId) {
+      const json = sub.toJSON();
+      await sb().from('push_subscriptions').upsert({
+        user_id: myId,
+        endpoint: json.endpoint,
+        p256dh: json.keys.p256dh,
+        auth: json.keys.auth,
+      }, { onConflict: 'user_id,endpoint' });
+    }
+
+    toast('اعلان‌های پوش فعال شدند ✅');
+    Haptics?.success?.();
+    return sub;
+  }
+
+  async function unsubscribe() {
+    const reg = await getRegistration();
+    if (!reg) return;
+    const sub = await reg.pushManager.getSubscription();
+    if (sub) {
+      await sub.unsubscribe();
+      if (sb() && myId) {
+        await sb().from('push_subscriptions').delete().eq('user_id', myId);
+      }
+    }
+    toast('اعلان‌های پوش غیرفعال شدند');
+    Haptics?.medium?.();
+  }
+
+  async function isSubscribed() {
+    if (!supported()) return false;
+    const reg = await getRegistration();
+    if (!reg) return false;
+    const sub = await reg.pushManager.getSubscription();
+    return !!sub;
+  }
+
+  return { subscribe, unsubscribe, isSubscribed, supported };
+})();
+
+/* ==========================================
+   PUSH TOGGLE & WAKE LOCK INJECTORS
+   ========================================== */
+(function injectPushToggle() {
+  if (!PushManagerClient.supported()) return;
+  const tryInject = () => {
+    const menu = document.querySelector('#me .menu');
+    if (!menu || document.getElementById('push-toggle')) return false;
+    const outBtn = menu.querySelector('[data-v="out"]');
+    if (!outBtn) return false;
+
+    const btn = document.createElement('button');
+    btn.id = 'push-toggle';
+    btn.type = 'button';
+    const render = async () => {
+      const on = await PushManagerClient.isSubscribed();
+      btn.innerHTML = `🔔 اعلان‌های پوش: <b style="color:${on ? 'var(--ac)' : 'var(--mu)'};">${on ? 'فعال' : 'غیرفعال'}</b>`;
+    };
+    render();
+    btn.onclick = async () => {
+      const on = await PushManagerClient.isSubscribed();
+      if (on) await PushManagerClient.unsubscribe();
+      else await PushManagerClient.subscribe();
+      render();
+    };
+    outBtn.parentNode.insertBefore(btn, outBtn);
+    return true;
+  };
+  if (!tryInject()) {
+    const obs = new MutationObserver(() => { if (tryInject()) obs.disconnect(); });
+    obs.observe(document.body, { childList: true, subtree: true });
+    setTimeout(() => obs.disconnect(), 5000);
+  }
+})();
+
 </script>
+
 </body>
 </html>
