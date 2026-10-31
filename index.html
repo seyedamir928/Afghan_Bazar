@@ -3547,7 +3547,7 @@ async function afterLogin(p){
     users[p] = { name: base, verified: true, shopName: base + " دکان" };
     put("ab_users", users); put("ab_sess", p);
   }
-  const pr=await sb().from("profiles").select("name,shop_name").eq("id",myId).maybeSingle();
+  const pr=await sb().from("profiles").select("id, name, shop_name").eq("id",myId).maybeSingle();
   if(pr.data&&pr.data.name&&users[p]&&String(users[p].name).startsWith("کاربر ")){ users[p].name=pr.data.name; if(pr.data.shop_name) users[p].shopName=pr.data.shop_name; put("ab_users",users); }
   await sb().from("profiles").upsert({id:myId,phone:p,name:users[p]?.name||null,shop_name:users[p]?.shopName||null});
   await loadRemote();
