@@ -1403,7 +1403,7 @@ function draw(){
   else if(s=="pop") r.sort((a,b)=>(b.views||0)-(a.views||0));
   else r.sort((a,b)=>a.age-b.age);
   
-  const titleMap = {all:cat?(cats[cat]?.[0]||"همه"):"همه آگهی‌های پرچون", mine:"آگهی‌های من و آمار بازدید", fav:"نشان‌شده‌ها و یادداشت‌ها", admin:"<svg class="icon icon-sm"><use href="#i-shield"></use></svg> پنل مدیریت کل آگهی‌ها", shop:"<svg class="icon icon-sm"><use href="#i-store"></use></svg> مدیریت فروشگاه رسمی من و نظرات"};
+  const titleMap = {all:cat?(cats[cat]?.[0]||"همه"):"همه آگهی‌های پرچون", mine:"آگهی‌های من و آمار بازدید", fav:"نشان‌شده‌ها و یادداشت‌ها", admin:'<svg class="icon icon-sm"><use href="#i-shield"></use></svg> پنل مدیریت کل آگهی‌ها', shop:'<svg class="icon icon-sm"><use href="#i-store"></use></svg> مدیریت فروشگاه رسمی من و نظرات'};
   $("#title").innerHTML=titleMap[view]+`<span>${nf(r.length)} آگهی</span>`;
   
   if(view == "shop" && me && users[me]) {
@@ -1814,7 +1814,7 @@ function openAd(id){
       <div style="display:flex;gap:5px;">
         <a href="https://wa.me/?text=${encodeURIComponent(a.t + ' - قیمت: ' + fmtAd(a) + ' ' + adUrl(a.id))}" target="_blank" class="capsule-btn" style="background:#25d366;color:#fff;padding:3px 8px;font-size:11px;">واتساپ</a>
         <a href="https://t.me/share/url?url=${encodeURIComponent(adUrl(a.id))}&text=${encodeURIComponent(a.t)}" target="_blank" class="capsule-btn" style="background:#0088cc;color:#fff;padding:3px 8px;font-size:11px;">تلگرام</a>
-        <button class="capsule-btn" id="share-btn" style="padding:3px 8px;font-size:11px;border:1px solid var(--bd);">🔗 کپی</button>
+        <button class="capsule-btn" id="share-btn" style="padding:3px 8px;font-size:11px;border:1px solid var(--bd); display:flex; align-items:center; gap:4px;"><svg class="icon icon-sm"><use href="#i-link"></use></svg> کپی</button>
       </div>
     </div>
     
@@ -1835,7 +1835,7 @@ function openAd(id){
     <p style="font-size:13px;">${esc(a.d)||"بدون توضیحات"}</p>
 
     <div style="margin-top:12px;">
-      <b style="font-size:12px;display:block;margin-bottom:4px;">📍 موقعیت روی نقشه:</b>
+      <b style="font-size:12px;display:block;margin-bottom:4px;"><svg class="icon icon-sm"><use href="#i-map-pin"></use></svg> موقعیت روی نقشه:</b>
       <div id="ad-view-map" style="width:100%;height:150px;border-radius:10px;border:1px solid var(--bd);"></div>
     </div>
     
@@ -1990,7 +1990,7 @@ function openAd(id){
     const callStat = $("#det .stat-box");
     if(callStat) {
       const callItem = Array.from(callStat.children).find(el => el.textContent.includes("تماس"));
-      if(callItem) callItem.innerHTML = "📞 " + nf(a.calls) + " تماس";
+      if(callItem) callItem.innerHTML = '<svg class="icon icon-sm"><use href="#i-phone"></use></svg> ' + nf(a.calls) + " تماس";
     }
   };
   const wakeBtn = document.getElementById('wake-toggle-btn');
@@ -2207,7 +2207,9 @@ $("#acc").onclick=()=>{
   const adminBtn = $("#admin-btn");
   adminBtn.hidden = !adminFlag;
   if(adminFlag) {
-      adminBtn.textContent = (view === 'admin') ? '🔙 خروج از پنل مدیریت' : '🛡️ ورود به پنل مدیریت';
+      adminBtn.innerHTML = (view === 'admin') 
+  ? '<svg class="icon icon-sm"><use href="#i-x"></use></svg> خروج از پنل مدیریت'
+  : '<svg class="icon icon-sm"><use href="#i-shield"></use></svg> ورود به پنل مدیریت';
   }
   $("#me").showModal();
 };
@@ -2335,7 +2337,7 @@ function saveFormDraft() {
 
 $("#header-post-btn").onclick = () => need(()=>{
   const isWholesaleMode = (currentAppTab === "wholesale");
-  $("#modal-title-text").textContent = isWholesaleMode ? "📦 ثبت آگهی عمده‌فروشی جدید" : "✨ ثبت آگهی پرچون جدید";
+  $("#modal-title-text").innerHTML = isWholesaleMode ? '<svg class="icon icon-sm"><use href="#i-edit"></use></svg> ویرایش آگهی عمده‌فروشی' : '<svg class="icon icon-sm"><use href="#i-edit"></use></svg> ویرایش آگهی پرچون';
   $("#modal-header-bg").style.background = isWholesaleMode ? "linear-gradient(135deg, #1b3b6f, #152c48)" : "linear-gradient(135deg, var(--ac), var(--ac2))";
   $("#edit-ad-id").value = "";
   
@@ -2813,8 +2815,8 @@ async function renderReports(){
           <div class="mu" style="font-size:11px; margin-top:4px;">زمان ثبت گزارش: ${ago((Date.now()-Date.parse(r.created_at))/36e5)}</div>
         </div>
         <div style="display:flex; gap:8px;">
-          <button class="admin-action-btn approve" onclick="openAd('${esc(r.ad_id)}')">👁️ مشاهده آگهی</button> 
-          <button class="admin-action-btn reject" onclick="closeReport('${r.id}')">بستن گزارش</button>
+          <button class="admin-action-btn approve" onclick="openAd('${esc(r.ad_id)}')" style="display:flex;align-items:center;gap:4px;"><svg class="icon icon-sm"><use href="#i-eye"></use></svg> مشاهده آگهی</button> 
+          <button class="admin-action-btn reject" onclick="closeReport('${r.id}')" style="display:flex;align-items:center;gap:4px;"><svg class="icon icon-sm"><use href="#i-check"></use></svg> بستن گزارش</button>
         </div>
       </div>
     `).join("")}
