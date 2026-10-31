@@ -1028,6 +1028,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
 const SUPABASE_URL = 'https://snhyzmwgazifdqyvqsnu.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNuaHl6bXdnYXppZmRxeXZxc251Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMyOTkxNjEsImV4cCI6MjEwODg3NTE2MX0.TuvApVWN-fTtd3aLQy0aerNgy3vJq1ZXuZehtytpNNo';
 let supabaseClient = null;
+const sb=()=>supabaseClient;
 try {
   if (window.supabase) supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 } catch(e) { console.error("خطا در اتصال به سرور:", e); }
@@ -1964,8 +1965,12 @@ function openAd(id){
   
   const renderChat = () => {
     const list = messages[id] || [];
-    $("#chat-messages").innerHTML = list.length ? list.map(m=>`<div class="chat-msg ${m.sender==me?'me':'other'}"><b>${esc(m.name || 'کاربر')}:</b> ${esc(m.text)}</div>`).join("") : '<div class="mu" style="text-align:center;font-size:12px;">هنوز پیامی فرستاده نشده است.</div>';
-    $("#chat-messages").scrollTop = $("#chat-messages").scrollHeight;
+    const chatBox = $("#chat-messages");
+    const isAtBottom = chatBox.scrollHeight - chatBox.scrollTop - chatBox.clientHeight < 150;
+    chatBox.innerHTML = list.length ? list.map(m=>`<div class="chat-msg ${m.sender==me?'me':'other'}"><b>${esc(m.name || 'کاربر')}:</b> ${esc(m.text)}</div>`).join("") : '<div class="mu" style="text-align:center;font-size:12px;">هنوز پیامی فرستاده نشده است.</div>';
+    if(isAtBottom || chatBox.scrollTop === 0) {
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
   };
   renderChat();
   loadChat(a).then(renderChat);
@@ -2597,7 +2602,7 @@ $("#add").addEventListener("close", () => {
 // ==========================================
 // لایه Supabase: آگهی، عکس، پیام، نظر، گزارش
 // ==========================================
-const sb=()=>supabaseClient;
+
 async function uploadImg(src){
   if(!src||!src.startsWith("data:")||!sb()||!myId) return src;
   const blob=await (await fetch(src)).blob();
@@ -2652,11 +2657,19 @@ async function loadChat(a) {
     .order("created_at");
     
   if(!error && data) {
-    messages[a.id] = data.map(r => ({
+    const fetchedMsgs = data.map(r => ({
       sender: r.sender_id === myId ? me : r.sender_id,
       senderId: r.sender_id, recipientId: r.recipient_id, 
       name: r.sender_name, text: r.text, time: Date.parse(r.created_at)
     }));
+    // مخلوط کردن پیام‌های قبلی با پیام‌هایی که شاید کاربر در همین لحظه فرستاده باشد
+    if(messages[a.id]) {
+       const existingTexts = new Set(fetchedMsgs.map(m => m.text + m.senderId + Math.floor(m.time / 3000)));
+       messages[a.id].forEach(m => {
+          if(!existingTexts.has(m.text + m.senderId + Math.floor(m.time / 3000))) fetchedMsgs.push(m);
+       });
+    }
+    messages[a.id] = fetchedMsgs.sort((a,b) => a.time - b.time);
   }
 
   // 2. گوش دادن به پیام‌های جدید در لحظه (Real-time)
@@ -2675,7 +2688,11 @@ async function loadChat(a) {
         if(r.sender_id === myId || r.recipient_id === myId) {
           if(!messages[a.id]) messages[a.id] = [];
           // جلوگیری از تکراری نشان دادن پیام خودم (بر اساس متن و آیدی)
-          const isDuplicate = messages[a.id].some(m => m.text === r.text && m.senderId === r.sender_id);
+          const isDuplicate = messages[a.id].some(m => 
+    m.text === r.text && 
+    m.senderId === r.sender_id && 
+    Math.abs(m.time - Date.parse(r.created_at)) < 3000
+);
           if(!isDuplicate) {
              messages[a.id].push({
                sender: r.sender_id === myId ? me : r.sender_id,
@@ -2686,8 +2703,12 @@ async function loadChat(a) {
              if(document.getElementById('chat-messages')) {
                 const renderChat = () => {
                   const list = messages[a.id] || [];
-                  document.getElementById("chat-messages").innerHTML = list.map(m=>`<div class="chat-msg ${m.sender==me?'me':'other'}"><b>${esc(m.name || 'کاربر')}:</b> ${esc(m.text)}</div>`).join("");
-                  document.getElementById("chat-messages").scrollTop = document.getElementById("chat-messages").scrollHeight;
+                  const chatBox = document.getElementById("chat-messages");
+                  const isAtBottom = chatBox.scrollHeight - chatBox.scrollTop - chatBox.clientHeight < 150;
+                  chatBox.innerHTML = list.map(m=>`<div class="chat-msg ${m.sender==me?'me':'other'}"><b>${esc(m.name || 'کاربر')}:</b> ${esc(m.text)}</div>`).join("");
+                  if(isAtBottom || chatBox.scrollTop === 0) {
+                      chatBox.scrollTop = chatBox.scrollHeight;
+                  }
                 };
                 renderChat();
              }
