@@ -45,8 +45,10 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card)
 .capsule-btn.primary{background:var(--ac);color:#fff}
 .capsule-btn.primary:hover{background:#0a5e3a}
 
-.bottom-nav{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom, 0px));left:16px;right:16px;height:65px;background:color-mix(in srgb,var(--card) 85%,transparent);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:24px;display:flex;z-index:120;box-shadow:0 10px 40px rgba(0,0,0,.15);padding-bottom:0;}
-.bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:none;border:0;cursor:pointer;color:var(--mu);font-size:11px;font-weight:600;gap:2px;transition:color .15s, background .15s}
+.bottom-nav{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom, 0px));left:16px;right:16px;height:65px;background:color-mix(in srgb,var(--card) 85%,transparent);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:24px;display:flex;gap:6px;padding:6px;box-sizing:border-box;z-index:120;box-shadow:0 10px 40px rgba(0,0,0,.15);}
+/* هایلایت تب فعال: یک قرص منحنی هم‌مرکز با کپسول بیرونی (۲۴ = ۱۸ + ۶ فاصله) */
+.bnav-item{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:transparent;border:0;border-radius:18px;cursor:pointer;color:var(--mu);font-size:11px;font-weight:600;gap:2px;line-height:1.3;padding:0 4px;-webkit-tap-highlight-color:transparent;transition:color .15s, background .15s}
+.bnav-item span:not(.icon){max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .bnav-item span.icon{font-size:17px;line-height:1}
 .bnav-item.active{color:var(--ac);background:var(--chip)}
 
