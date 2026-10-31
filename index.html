@@ -1603,7 +1603,17 @@ window.openTextPrompt = function(title, defaultValue = "") {
   });
 };
 
-function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("s");setTimeout(()=>t.classList.remove("s"),2200)}
+let _toastTimer=null;
+function toast(m){
+  const t=$("#toast"); if(!t) return;
+  // <dialog> باز در top-layer است و هر المان بیرون از آن (حتی با z-index بالا) زیرش پنهان می‌شود.
+  const dlg=document.querySelector("dialog[open]");
+  const host=dlg||document.body;
+  if(t.parentNode!==host) host.appendChild(t);
+  t.textContent=m; t.classList.add("s");
+  clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(()=>t.classList.remove("s"), Math.min(6000, Math.max(2200, String(m).length*65)));
+}
 
 function getShopAverageRating(ownerPhone) {
   const revs = shopReviews[ownerPhone] || [];
@@ -2791,6 +2801,14 @@ function saveFormDraft() {
   $(sel).addEventListener("change", saveFormDraft);
 });
 
+// بعضی گوشی‌های کم‌حافظه هنگام باز شدن دوربین تب مرورگر را می‌بندند؛ پیش‌نویس را همان لحظه ذخیره می‌کنیم
+document.addEventListener("visibilitychange",()=>{ if(document.hidden) try{saveFormDraft()}catch(e){} });
+window.addEventListener("pagehide",()=>{ try{saveFormDraft()}catch(e){} });
+$("#camera-file-input").addEventListener("click",()=>{ try{saveFormDraft(); S.setItem("ab_cam_pending","1");}catch(e){} });
+if(S.getItem("ab_cam_pending")){
+  S.removeItem("ab_cam_pending");
+  setTimeout(()=>toast("⚠️ مرورگر هنگام دوربین بسته شد و عکس نرسید. پیش‌نویس حفظ شده؛ دوباره «ثبت آگهی» را بزنید و عکس را از «گالری» انتخاب کنید."),1500);
+}
 $("#header-post-btn").onclick = () => need(()=>{
   const isWholesaleMode = (currentAppTab === "wholesale");
   $("#modal-title-text").innerHTML = isWholesaleMode
@@ -2804,7 +2822,7 @@ $("#header-post-btn").onclick = () => need(()=>{
   const draft = get(DRAFT_KEY(), null);
   let loadedDraft = null;
   if (draft && String(draft.w || "false") === String(isWholesaleMode)) {
-    if (confirm("پیش‌نویس آگهی قبلی موجود است. بارگذاری شود؟")) {
+    if (confirm(t("adDraft"))) {
       loadedDraft = draft;
     } else {
       S.removeItem(DRAFT_KEY());
@@ -2857,7 +2875,7 @@ $("#header-post-btn").onclick = () => need(()=>{
   populateModalCategorySelect(isWholesaleMode);
   if(!isWholesaleMode) $("#f-c").value = loadedDraft && loadedDraft.c ? loadedDraft.c : 1;
 
-  combinedImagesList = [];
+  combinedImagesList = []; imgEpoch++;
   updatePreviewGrid();
   
   const modalEl = $("#add");
@@ -2921,7 +2939,7 @@ function openEditModal(ad) {
   $("#form-lat").value = ad.lat || provinceCoords[ad.ci]?.lat || 34.5553;
   $("#form-lng").value = ad.lng || provinceCoords[ad.ci]?.lng || 69.2075;
   
-  combinedImagesList = [];
+  combinedImagesList = []; imgEpoch++;
   if(Array.isArray(ad.imgs) && ad.imgs.length > 0) {
     ad.imgs.forEach(im => combinedImagesList.push({ src: im, type: 'ذخیره شده' }));
   } else if(ad.img) {
@@ -2933,8 +2951,50 @@ function openEditModal(ad) {
 }
 
 const MAX_IMGS=6;
-function compressImage(file){return new Promise((res,rej)=>{const fr=new FileReader();fr.onerror=rej;fr.onload=()=>{const im=new Image();im.onerror=rej;im.onload=()=>{const k=Math.min(1,1000/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);c.getContext("2d").drawImage(im,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",.7))};im.src=fr.result};fr.readAsDataURL(file)})}
+async function compressImage(file){
+  const MAXD=1280;
+  let src=null, bmp=null, url=null;
+  try{
+    if(window.createImageBitmap){
+      try{ bmp=await createImageBitmap(file,{imageOrientation:"from-image"}); }catch(e){ bmp=null; }
+    }
+    if(!bmp){
+      url=URL.createObjectURL(file);
+      src=await new Promise((res,rej)=>{ const im=new Image(); im.onload=()=>res(im); im.onerror=()=>rej(new Error("decode")); im.src=url; });
+    }
+    const w=(bmp||src).width, h=(bmp||src).height;
+    if(!w||!h) throw new Error("empty-image");
+    const k=Math.min(1,MAXD/Math.max(w,h));
+    const c=document.createElement("canvas");
+    c.width=Math.max(1,Math.round(w*k)); c.height=Math.max(1,Math.round(h*k));
+    const ctx=c.getContext("2d");
+    ctx.fillStyle="#fff"; ctx.fillRect(0,0,c.width,c.height);
+    ctx.drawImage(bmp||src,0,0,c.width,c.height);
+    const out=c.toDataURL("image/jpeg",.75);
+    c.width=c.height=0;
+    // در حافظه‌ی کم، toDataURL به‌جای خطا "data:," برمی‌گرداند
+    if(!out||out.length<500||out==="data:,") throw new Error("canvas-failed");
+    return out;
+  } finally {
+    if(bmp&&bmp.close) try{bmp.close()}catch(e){}
+    if(url) URL.revokeObjectURL(url);
+  }
+}
 let combinedImagesList = [];
+let imgEpoch = 0;            // با هر بازنشانی فرم زیاد می‌شود تا عکسِ دیررسیده وارد فرم بعدی نشود
+let pendingImgJobs = [];     // پردازش‌های در حال انجام عکس
+function addImageFile(file, type){
+  const ep = imgEpoch;
+  const job = compressImage(file).then(src=>{
+    if(ep!==imgEpoch) return;
+    combinedImagesList.push({src,type}); updatePreviewGrid();
+  }).catch(err=>{
+    console.warn("خواندن تصویر ناموفق:",err);
+    toast("⚠️ این عکس خوانده نشد (فرمت یا حجم پشتیبانی نمی‌شود). از گالری عکس دیگری انتخاب کنید.");
+  }).finally(()=>{ pendingImgJobs=pendingImgJobs.filter(j=>j!==job); });
+  pendingImgJobs.push(job);
+  return job;
+}
 
 function updatePreviewGrid() {
   const grid = $("#preview-grid");
@@ -2962,7 +3022,7 @@ $("#preview-grid").onclick = (e) => {
   updatePreviewGrid();
 };
 
-const MAX_FILE_MB = 10;
+const MAX_FILE_MB = 60; // عکس‌های دوربین گوشی‌های جدید بیشتر از ۱۰MB‌اند؛ قبل از ارسال فشرده می‌شوند
 const MAX_FILE_BYTES = MAX_FILE_MB * 1024 * 1024;
 $("#gallery-file-input").onchange = function(e) {
   const files = e.target.files;
@@ -2971,7 +3031,7 @@ $("#gallery-file-input").onchange = function(e) {
   if(files.length > room) toast("حداکثر "+nf(MAX_IMGS)+" تصویر مجاز است.");
   Array.from(files).slice(0, room).forEach(file => {
     if (file.size > MAX_FILE_BYTES) { toast(`فایل ${file.name} بزرگ است (بیشتر از ${nf(MAX_FILE_MB)} مگابایت)`); return; }
-    compressImage(file).then(src => { combinedImagesList.push({ src, type: 'گالری' }); updatePreviewGrid(); }).catch(()=>toast("تصویر خوانده نشد."));
+    addImageFile(file, 'گالری');
   });
   this.value = "";
 };
@@ -2981,7 +3041,7 @@ $("#camera-file-input").onchange = function(e) {
   if(!file) return;
   if(combinedImagesList.length >= MAX_IMGS){ toast("حداکثر "+nf(MAX_IMGS)+" تصویر مجاز است."); this.value=""; return; }
   if (file.size > MAX_FILE_BYTES) { toast(`فایل بزرگ است (بیشتر از ${nf(MAX_FILE_MB)} مگابایت)`); this.value=""; return; }
-  compressImage(file).then(src => { combinedImagesList.push({ src, type: 'دوربین' }); updatePreviewGrid(); }).catch(()=>toast("تصویر خوانده نشد."));
+  addImageFile(file, 'دوربین');
   this.value = "";
 };
 
@@ -3006,6 +3066,7 @@ $("#save").onclick=async()=>{
   let imgUrls;
   try {
     saveBtn.disabled = true;
+    if(pendingImgJobs.length){ saveBtn.textContent="در حال آماده‌سازی عکس‌ها..."; await Promise.allSettled(pendingImgJobs.slice()); }
     await ensureSession(); // رفع مسابقه‌ی زمانی احتمالی بین UI و نشست واقعی سرور
     imgUrls = [];
     if (combinedImagesList.length > 0) {
@@ -3023,7 +3084,10 @@ $("#save").onclick=async()=>{
         saveBtn.textContent = `آپلود ${nf(done)}/${nf(combinedImagesList.length)}...`;
       }
       if (failedUploads > 0) {
-        toast(`⚠️ ${nf(failedUploads)} تصویر آپلود نشد. آگهی بدون آن‌ها ذخیره می‌شود.`);
+        // آگهی را بدون عکس منتشر نمی‌کنیم؛ عکس‌ها در فرم می‌مانند تا کاربر دوباره تلاش کند
+        saveBtn.disabled = false; saveBtn.textContent = _origSaveText;
+        toast(`⚠️ ${nf(failedUploads)} عکس آپلود نشد (اینترنت ضعیف یا نشست منقضی). آگهی ثبت نشد؛ دوباره «انتشار» را بزنید.`);
+        return;
       }
     }
   } catch(e) {
@@ -3112,7 +3176,7 @@ $("#save").onclick=async()=>{
     ["#f-t","#f-p","#f-d","#form-map","#edit-ad-id","#form-shop-name"].forEach(s=>$(s).value="");
     $("#form-is-shop").checked = false;
     $("#form-urg").checked = false;
-    combinedImagesList = [];
+    combinedImagesList = []; imgEpoch++;
     updatePreviewGrid();
     cat=0; wholesaleCat=0; view="mine"; currentPage=1; wholesaleCurrentPage=1; draw();
   } catch(err) {
@@ -3159,7 +3223,21 @@ $("#add").addEventListener("close", () => {
 // لایه Supabase: آگهی، عکس، پیام، نظر، گزارش
 // ==========================================
 
+function loadScriptOnce(url){
+  return new Promise((res,rej)=>{ const el=document.createElement("script"); el.src=url; el.onload=res; el.onerror=()=>rej(new Error("load-failed")); document.head.appendChild(el); });
+}
+async function ensureClient(){
+  if(sb()) return true;
+  for(const u of ["https://unpkg.com/@supabase/supabase-js@2","https://cdnjs.cloudflare.com/ajax/libs/supabase-js/2.39.7/supabase.min.js"]){
+    try{
+      await withTimeout(loadScriptOnce(u),12000);
+      if(window.supabase){ supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY); return true; }
+    }catch(e){ console.warn("بارگذاری کتابخانه‌ی سرور ناموفق:",u,e); }
+  }
+  return false;
+}
 async function ensureSession(){
+  if(!sb()) await ensureClient();
   // در برخی دستگاه‌ها (اینترنت کند، مرورگرهای داخل‌اپلیکیشن، استارت‌آپ کند) myId
   // هنوز از localStorage/کش قدیمی resolve نشده، درحالیکه UI کاربر را واردشده نشان می‌دهد.
   // قبل از آپلود/ثبت، یک‌بار نشست واقعی سرور را دوباره چک می‌کنیم تا این مسابقه (race) رفع شود.
@@ -3172,18 +3250,40 @@ async function ensureSession(){
   }catch(e){ console.warn("بررسی نشست ناموفق بود:",e); }
   return false;
 }
+function dataUrlToBlob(src){
+  const m=/^data:([^;,]+)?(;base64)?,([\s\S]*)$/.exec(src);
+  if(!m) throw new Error("bad-data-url");
+  const mime=m[1]||"image/jpeg";
+  const bin=m[2]?atob(m[3]):decodeURIComponent(m[3]);
+  const u8=new Uint8Array(bin.length);
+  for(let k=0;k<bin.length;k++) u8[k]=bin.charCodeAt(k);
+  if(u8.length<200) throw new Error("empty-image");
+  return new Blob([u8],{type:mime});
+}
+const withTimeout=(p,ms)=>Promise.race([p,new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")),ms))]);
 async function uploadImg(src){
   if(!src||!src.startsWith("data:")) return src;
-  if(!sb()) return src; // حالت کاملاً آفلاین/بدون سرور: محلی نگه‌داشته می‌شود
+  if(!sb()) throw new Error("اتصال به سرور برقرار نیست؛ عکس آپلود نشد.");
   if(!myId) throw new Error("نشست معتبر نیست؛ عکس آپلود نشد (دوباره وارد حساب شوید).");
-  const blob=await (await fetch(src)).blob();
+  const blob=dataUrlToBlob(src);
   const path=`${myId}/${Date.now()}-${Math.random().toString(36).slice(2,8)}.jpg`;
-  const {error}=await sb().storage.from("ad-images").upload(path,blob,{contentType:"image/jpeg"});
-  if(error) throw error;
-  return sb().storage.from("ad-images").getPublicUrl(path).data.publicUrl;
+  let lastErr=null;
+  for(let attempt=0;attempt<3;attempt++){
+    try{
+      const {error}=await withTimeout(sb().storage.from("ad-images").upload(path,blob,{contentType:"image/jpeg",cacheControl:"31536000"}),45000);
+      if(!error) return sb().storage.from("ad-images").getPublicUrl(path).data.publicUrl;
+      lastErr=error;
+      if(error.statusCode==="403"||error.statusCode==="401"||error.status===401||error.status===403) break; // تکرار فایده ندارد
+    }catch(e){ lastErr=e; }
+    await new Promise(r=>setTimeout(r,800*(attempt+1)));
+  }
+  throw lastErr||new Error("upload-failed");
 }
 async function syncAd(ad){
-  if(!sb()) return null;
+  if(!sb()){
+    toast("⚠️ اتصال به سرور برقرار نیست؛ آگهی فقط روی همین دستگاه ذخیره شد.");
+    return null;
+  }
   if(!myId){
     toast("⚠️ نشست شما معتبر نیست؛ آگهی فقط روی همین دستگاه ذخیره شد. لطفاً دوباره وارد حساب شوید.");
     return null;
