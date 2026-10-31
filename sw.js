@@ -1,96 +1,71 @@
-const CACHE_NAME = 'afghan-bazar-v2'; // نسخه را به v2 ارتقا دادیم تا کش‌های قدیمی پاک شوند
-const ASSETS_TO_CACHE = [
-  './',
-  './index.html',
-  './manifest.json',
-  'https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap',
-  'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
-  'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
-  'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'
-];
+/* افغان‌بازار — Service Worker (نسخه 32)
+   - صفحه اصلی: اول شبکه، اگر آفلاین بود از حافظه (کاربر همیشه آخرین نسخه را می‌گیرد)
+   - فایل‌های ثابت همین سایت: کش با به‌روزرسانی پس‌زمینه
+   - هیچ درخواستی به Supabase یا CDN کش نمی‌شود
+   - پشتیبانی از اعلان پوش */
+const VERSION = 'v32';
+const CACHE = 'ab-shell-' + VERSION;
+const ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
-// 1. نصب سرویس‌ورکر
 self.addEventListener('install', (e) => {
-  self.skipWaiting(); // مجبور کردن سرویس‌ورکر جدید به فعال شدن فوری
-  e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS_TO_CACHE))
-  );
+  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)).then(() => self.skipWaiting()));
 });
 
-// 2. فعال‌سازی و پاک‌سازی کش‌های قدیمی
 self.addEventListener('activate', (e) => {
   e.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
-        keys.map((key) => {
-          if (key !== CACHE_NAME) return caches.delete(key);
-        })
-      );
-    }).then(() => self.clients.claim()) // کنترل فوری تب‌های باز
+    caches.keys()
+      .then((keys) => Promise.all(keys.filter((k) => k.startsWith('ab-shell-') && k !== CACHE).map((k) => caches.delete(k))))
+      .then(() => self.clients.claim())
   );
 });
 
-// 3. استراتژی دریافت اطلاعات (Fetch)
 self.addEventListener('fetch', (e) => {
-  // درخواست‌های مربوط به Supabase و متدهای غیر GET را کش نکن
-  if (e.request.url.includes('supabase.co') || e.request.method !== 'GET') return;
+  const req = e.request;
+  if (req.method !== 'GET') return;
+  const url = new URL(req.url);
+  if (url.origin !== self.location.origin) return;
 
-  e.respondWith(
-    fetch(e.request)
-      .then((response) => {
-        // اگر درخواست موفق بود، یک کپی از آن را کش کن (Network First)
-        const resClone = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(e.request, resClone));
-        return response;
-      })
-      .catch(() => caches.match(e.request)) // اگر اینترنت قطع بود، از کش بخوان
-  );
-});
-
-// ==========================================
-// 4. بخش حیاتی: پشتیبانی از Web Push (اعلان‌ها)
-// ==========================================
-self.addEventListener('push', (event) => {
-  let data = {};
-  try {
-    data = event.data ? event.data.json() : {};
-  } catch(e) {
-    data = { title: 'افغان‌بازار', body: event.data ? event.data.text() : 'پیام جدید دارید' };
+  if (req.mode === 'navigate') {
+    e.respondWith(
+      fetch(req)
+        .then((res) => { const copy = res.clone(); caches.open(CACHE).then((c) => c.put('./index.html', copy)); return res; })
+        .catch(() => caches.match('./index.html'))
+    );
+    return;
   }
 
-  const title = data.title || 'افغان‌بازار';
-  const options = {
-    body: data.body || 'پیام جدیدی در افغان‌بازار دارید',
-    icon: data.icon || './icon-192.png',
-    badge: data.badge || './icon-192.png',
-    tag: data.tag || 'afghanbazar-general',
-    data: { url: data.url || './' },
-    vibrate: [100, 50, 100], // لرزش هنگام دریافت اعلان
-    renotify: !!data.tag,    // اگر اعلان قبلی باز است، دوباره زنگ بزن
-  };
-
-  event.waitUntil(self.registration.showNotification(title, options));
+  e.respondWith(
+    caches.match(req).then((hit) => {
+      const net = fetch(req)
+        .then((res) => { if (res && res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(req, copy)); } return res; })
+        .catch(() => hit);
+      return hit || net;
+    })
+  );
 });
 
-// وقتی کاربر روی اعلان کلیک کرد چه شود؟
-self.addEventListener('notificationclick', (event) => {
-  event.notification.close();
-  const url = event.notification.data?.url || './';
+self.addEventListener('push', (e) => {
+  let d = {};
+  try { d = e.data ? e.data.json() : {}; } catch (_) { d = { body: e.data ? e.data.text() : '' }; }
+  e.waitUntil(self.registration.showNotification(d.title || 'افغان‌بازار', {
+    body: d.body || '',
+    icon: './icon-192.png',
+    badge: './icon-192.png',
+    data: { url: d.url || './' }
+  }));
+});
 
-  event.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {
-      // اگر سایت از قبل باز است، به آن تب برو
-      for (let i = 0; i < windowClients.length; i++) {
-        const client = windowClients[i];
-        if (client.url.includes(self.location.origin) && 'focus' in client) {
-          client.navigate(url);
-          return client.focus();
-        }
-      }
-      // اگر سایت باز نیست، یک تب جدید باز کن
-      if (clients.openWindow) {
-        return clients.openWindow(url);
-      }
+self.addEventListener('notificationclick', (e) => {
+  e.notification.close();
+  let target = './';
+  try {
+    const u = new URL((e.notification.data && e.notification.data.url) || './', self.location.origin);
+    if (u.origin === self.location.origin) target = u.href;
+  } catch (_) {}
+  e.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
+      for (const c of list) { if ('focus' in c) { if (c.navigate) c.navigate(target); return c.focus(); } }
+      return clients.openWindow(target);
     })
   );
 });
