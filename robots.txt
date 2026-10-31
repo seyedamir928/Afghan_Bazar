@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://seyedamir928.github.io/Afghan_Bazar/sitemap.xml
+
+Sitemap: https://afghan-bazar.pages.dev/sitemap.xml
