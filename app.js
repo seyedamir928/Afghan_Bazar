@@ -582,16 +582,36 @@ function toWhatsAppNumber(ph) {
 }
 
 
-// ===== Map reliability (Leaflet) =====
+/* ===== Map reliability (Leaflet) ===== */
 let _leafletP=null;
 window.__mapDiag=window.__mapDiag||[];
 document.addEventListener('securitypolicyviolation',e=>{ try{ window.__mapDiag.push('CSP-blocked: '+String(e.blockedURI).replace(/^https?:\/\//,'').split('/')[0]+' ('+e.violatedDirective+')'); }catch(_){} });
+
+// منبع اصلی CARTO (بدون کلید، پایدارتر برای ترافیک سایت) — OSM پشتیبان دوم
 const TILE_SOURCES=[
+  {u:'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',s:'abcd',a:'© OpenStreetMap © CARTO'},
   {u:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',s:'abc',a:'© OpenStreetMap'},
-  {u:'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png',s:'abcd',a:'© OpenStreetMap © CARTO'},
   {u:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',s:'abc',a:'Tiles © Esri'},
   {u:'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',s:'abc',a:'© OpenTopoMap'}
 ];
+
+// invalidateSize تکراری تا وقتی کانتینر واقعاً اندازه بگیرد (انیمیشن دیالوگ)
+function fixMapSize(map, ms){
+  if(!map) return;
+  const step=50, max=Math.max(1,Math.ceil((ms||1200)/step));
+  let n=0, iv=null;
+  const once=()=>{ try{ const el=map.getContainer(); if(el && el.offsetWidth && el.offsetHeight) map.invalidateSize({animate:false}); }catch(_){} };
+  once();
+  iv=setInterval(()=>{ once(); if(++n>=max){ clearInterval(iv); iv=null; } }, step);
+  try{ map.on('unload', ()=>{ if(iv) clearInterval(iv); }); }catch(_){}
+}
+function prepMapContainer(el){
+  if(!el) return;
+  el.style.position='relative';
+  el.style.zIndex='0';
+  el.style.isolation='isolate';
+}
+
 function hookLeaflet(){
   if(window._lfHooked||typeof L==='undefined') return;
   window._lfHooked=1;
@@ -600,19 +620,43 @@ function hookLeaflet(){
     L.Marker.prototype.options.icon=L.icon({iconUrl:'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(pin),iconSize:[30,42],iconAnchor:[15,41],popupAnchor:[0,-36]});
   }catch(_){}
   L.Map.addInitHook(function(){
-    const m=this, fix=()=>{ try{m.invalidateSize();}catch(_){} };
-    setTimeout(fix,400);
-    if(window.ResizeObserver){ const ro=new ResizeObserver(fix); ro.observe(m.getContainer()); m.on('unload',()=>ro.disconnect()); }
+    const m=this;
+    prepMapContainer(m.getContainer());
+    fixMapSize(m, 1600);
+    if(window.ResizeObserver){
+      let last=0;
+      const ro=new ResizeObserver(()=>{
+        const el=m.getContainer(); if(!el) return;
+        if(!el.offsetWidth||!el.offsetHeight) return;
+        const now=Date.now(); if(now-last<120) return; last=now;
+        try{ m.invalidateSize({animate:false}); }catch(_){}
+      });
+      try{ ro.observe(m.getContainer()); }catch(_){}
+      m.on('unload',()=>ro.disconnect());
+    }
   });
   L.TileLayer.addInitHook(function(){
     if(!this.options._osm) return;
-    const self=this; let idx=0, errs=0, ok=false, timer=null;
-    const arm=()=>{ clearTimeout(timer); timer=setTimeout(()=>{ if(!ok && self._map) next(); },8000); };
+    const self=this; let errs=0, ok=false, timer=null, exhausted=false;
+    const arm=()=>{ clearTimeout(timer); timer=setTimeout(()=>{ if(!ok && self._map && !exhausted) next(); },8000); };
     const next=()=>{
-      if(idx>=TILE_SOURCES.length-1){ toast('تصاویر نقشه بارگذاری نمی‌شود؛ اینترنت را بررسی کنید.'); return; }
-      idx++; errs=0; ok=false;
-      const s=TILE_SOURCES[idx];
+      const cur=self.options._srcIdx||0;
+      const idx=cur+1;
+      if(idx>=TILE_SOURCES.length){
+        exhausted=true; clearTimeout(timer);
+        toast('تصاویر نقشه بارگذاری نمی‌شود؛ اینترنت را بررسی کنید.');
+        return;
+      }
+      self.options._srcIdx=idx; errs=0; ok=false;
+      const prev=TILE_SOURCES[cur], s=TILE_SOURCES[idx];
       self.options.subdomains=s.s.split(''); self.options.attribution=s.a;
+      self.options.detectRetina=/\{r\}/.test(s.u);
+      try{
+        if(self._map&&self._map.attributionControl){
+          self._map.attributionControl.removeAttribution(prev.a);
+          self._map.attributionControl.addAttribution(s.a);
+        }
+      }catch(_){}
       self.setUrl(s.u); arm();
     };
     this.on('tileload',()=>{ ok=true; clearTimeout(timer); });
@@ -632,7 +676,6 @@ function ensureLeaflet(){
     document.head.appendChild(s);
   });
   _leafletP=(async()=>{
-    // استایل نقشه: چند منبع پشتیبان (اگر یکی فیلتر/کند بود، دیگری کار می‌کند)
     if(!document.querySelector('link[data-lf]')){
       ['./vendor/leaflet/leaflet.css','https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css','https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css','https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'].forEach(href=>{
         try{ const l=document.createElement('link'); l.rel='stylesheet'; l.href=href; l.dataset.lf='1'; document.head.appendChild(l); }catch(_){}
@@ -664,7 +707,8 @@ function mapFail(el, retry){
   const b=el.querySelector('[data-retry]'); if(b) b.onclick=()=>{ _leafletP=null; window.__mapDiag=[]; el.innerHTML='<div style="padding:12px;text-align:center;font-size:12px;color:var(--mu)">در حال بارگذاری…</div>'; ensureLeaflet().then(ok=>{ if(ok){ el.innerHTML=''; retry&&retry(); } else mapFail(el,retry); }); };
 }
 function baseTiles(){
-  return L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap',_osm:true});
+  const s=TILE_SOURCES[0];
+  return L.tileLayer(s.u,{maxZoom:19,subdomains:s.s.split(''),attribution:s.a,detectRetina:true,_osm:true,_srcIdx:0});
 }
 try{ hookLeaflet(); }catch(_){}
 
@@ -1264,17 +1308,33 @@ let radiusMap = null;
 let radiusMarker = null;
 let radiusCircle = null;
 
+// هر بار یک دیالوگ حاوی نقشه باز شد، اندازه را تازه کن
+document.addEventListener('toggle', e => {
+  const dlg = e.target;
+  if(!dlg || dlg.tagName !== 'DIALOG' || !dlg.open) return;
+  try{
+    if(dlg.id === 'radius-dlg') fixMapSize(radiusMap, 1600);
+    else if(dlg.id === 'add') fixMapSize(mapPicker, 1600);
+    else if(dlg.id === 'dlg') fixMapSize(window._adViewMap, 1200);
+  }catch(_){}
+}, true);
+
 function destroyRadiusMap() {
   if(radiusMap) { try{ radiusMap.remove(); }catch(e){}; }
   radiusMap = null; radiusMarker = null; radiusCircle = null;
 }
 
 document.getElementById("open-radius-modal-btn").onclick = () => {
+  const dlg = document.getElementById("radius-dlg");
+  if(dlg.open) return;
   if(typeof L === 'undefined') { toast('در حال بارگذاری نقشه...'); ensureLeaflet().then(ok => { if(ok) document.getElementById("open-radius-modal-btn").click(); else toast('نقشه در دسترس نیست؛ اینترنت را بررسی کنید.'); }); return; }
-  document.getElementById("radius-dlg").showModal();
-  setTimeout(() => {
-    destroyRadiusMap();
+  destroyRadiusMap();
+  dlg.showModal();
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    if(!dlg.open) return;
+    prepMapContainer(document.getElementById('radius-map-container'));
     radiusMap = L.map('radius-map-container').setView([radiusCenterLat, radiusCenterLng], 10);
+    fixMapSize(radiusMap, 1600);
     baseTiles().addTo(radiusMap);
     radiusMarker = L.marker([radiusCenterLat, radiusCenterLng], {draggable: true}).addTo(radiusMap);
     radiusCircle = L.circle([radiusCenterLat, radiusCenterLng], {
@@ -1296,7 +1356,7 @@ document.getElementById("open-radius-modal-btn").onclick = () => {
     };
     document.getElementById("radius-slider").value = radiusMaxKm;
     document.getElementById("radius-val").textContent = radiusMaxKm + " ک‌م";
-  }, 150);
+  }));
 };
 
 document.getElementById("radius-gps-btn").onclick = () => {
@@ -1608,7 +1668,9 @@ function openAd(id){
     const lngNum = Number(a.lng);
     const lat = Number.isFinite(latNum) && latNum >= 20 && latNum <= 40 ? latNum : 34.5553;
     const lng = Number.isFinite(lngNum) && lngNum >= 55 && lngNum <= 80 ? lngNum : 69.2075;
+    prepMapContainer(container);
     const map = L.map('ad-view-map').setView([lat, lng], 13);
+    fixMapSize(map, 1200);
     baseTiles().addTo(map);
     L.marker([lat, lng]).addTo(map).bindPopup(esc(a.t)).openPopup();
     window._adViewMap = map;
@@ -1998,13 +2060,14 @@ function initMapPicker(lat, lng, _attempts = 0) {
   if(!Number.isFinite(lat) || !Number.isFinite(lng)) { lat = 34.5553; lng = 69.2075; }
   const mapContainer = document.getElementById('map-picker-container');
   if(!mapContainer || !document.getElementById("add").open) {
-    if (_attempts < 30) setTimeout(() => initMapPicker(lat, lng, _attempts + 1), 100);
+    if (_attempts < 60) setTimeout(() => initMapPicker(lat, lng, _attempts + 1), 100);
     return;
   }
   if(mapPicker) { try{ mapPicker.remove(); }catch(e){}; mapPicker = null; }
   pickerMarker = null;
+  prepMapContainer(mapContainer);
   mapPicker = L.map('map-picker-container').setView([lat, lng], 13);
-  setTimeout(()=>{ try{ mapPicker && mapPicker.invalidateSize(); }catch(e){} }, 300);
+  fixMapSize(mapPicker, 1600);
   baseTiles().addTo(mapPicker);
   pickerMarker = L.marker([lat, lng], {draggable: true}).addTo(mapPicker);
   pickerMarker.on('dragend', function() {
@@ -2082,7 +2145,11 @@ function goToStep(n){
   document.getElementById("cancel").textContent = n===1 ? t("adCancel") : t("prevBtn");
   document.getElementById("save").textContent = n<TOTAL_STEPS ? t("nextBtn") : t("adSave");
   const body=document.querySelector("#add .modal-body"); if(body) body.scrollTop=0;
-  if(n===TOTAL_STEPS) setTimeout(()=>initMapPicker(parseFloat(document.getElementById("form-lat").value)||34.5553,parseFloat(document.getElementById("form-lng").value)||69.2075),180);
+  if(n===TOTAL_STEPS) setTimeout(()=>{
+    const latv=parseFloat(document.getElementById("form-lat").value);
+    const lngv=parseFloat(document.getElementById("form-lng").value);
+    initMapPicker(Number.isFinite(latv)?latv:34.5553, Number.isFinite(lngv)?lngv:69.2075);
+  }, 260);
 }
 function buildCategoryTiles(){
   const box=document.getElementById("step-cat-tiles"); if(!box) return;
