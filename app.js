@@ -592,20 +592,57 @@ function hookLeaflet(){
     setTimeout(fix,400);
     if(window.ResizeObserver){ const ro=new ResizeObserver(fix); ro.observe(m.getContainer()); m.on('unload',()=>ro.disconnect()); }
   });
-  L.TileLayer.addInitHook(function(){ let n=0; this.on('tileerror',()=>{ if(++n===3) toast('تصاویر نقشه بارگذاری نمی‌شود؛ اینترنت را بررسی کنید.'); }); });
+  L.TileLayer.addInitHook(function(){
+    let n=0, switched=false; const self=this;
+    this.on('tileerror',()=>{
+      if(++n!==3) return;
+      // اگر سرور OSM در دسترس نبود، خودکار به سرور پشتیبان می‌رویم
+      if(self.options._osm && !switched){
+        switched=true; n=0;
+        self.options.subdomains=['a','b','c','d'];
+        self.options.attribution='© OpenStreetMap © CARTO';
+        self.setUrl('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png');
+      } else toast('تصاویر نقشه بارگذاری نمی‌شود؛ اینترنت را بررسی کنید.');
+    });
+  });
 }
 function ensureLeaflet(){
   if(typeof L!=='undefined'){ hookLeaflet(); return Promise.resolve(true); }
   if(_leafletP) return _leafletP;
+  const loadJs=(u,ms)=>new Promise((res,rej)=>{
+    const s=document.createElement('script'); s.src=u; s.async=true;
+    const to=setTimeout(()=>{ s.remove(); rej(new Error('timeout')); },ms);
+    s.onload=()=>{ clearTimeout(to); res(); };
+    s.onerror=()=>{ clearTimeout(to); s.remove(); rej(new Error('load-failed')); };
+    document.head.appendChild(s);
+  });
   _leafletP=(async()=>{
-    try{ if(!document.querySelector('link[data-lf]')){ const l=document.createElement('link'); l.rel='stylesheet'; l.href='https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css'; l.dataset.lf='1'; document.head.appendChild(l); } }catch(_){}
-    for(const u of ['https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js','https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js']){
-      try{ await loadScriptOnce(u); if(typeof L!=='undefined'){ hookLeaflet(); return true; } }catch(_){}
+    // استایل نقشه: چند منبع پشتیبان (اگر یکی فیلتر/کند بود، دیگری کار می‌کند)
+    if(!document.querySelector('link[data-lf]')){
+      ['https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css','https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css','https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'].forEach(href=>{
+        try{ const l=document.createElement('link'); l.rel='stylesheet'; l.href=href; l.dataset.lf='1'; document.head.appendChild(l); }catch(_){}
+      });
     }
-    return false;
+    const urls=[
+      'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js',
+      'https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js',
+      'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+      'https://cdn.bootcdn.net/ajax/libs/leaflet/1.9.4/leaflet.min.js',
+      'https://cdn.staticfile.org/leaflet/1.9.4/leaflet.min.js'
+    ];
+    for(let round=0; round<2; round++){
+      for(const u of urls){
+        if(typeof L!=='undefined'){ hookLeaflet(); return true; }
+        try{ await loadJs(u, 12000); if(typeof L!=='undefined'){ hookLeaflet(); return true; } }catch(_){}
+      }
+    }
+    return typeof L!=='undefined';
   })();
   _leafletP.then(ok=>{ if(!ok) _leafletP=null; });
   return _leafletP;
+}
+function baseTiles(){
+  return L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap',_osm:true});
 }
 try{ hookLeaflet(); }catch(_){}
 
@@ -807,6 +844,7 @@ function renderCard(a){
 
 let adminTab="all";
 function draw(){
+  if(view==="admin" && !adminFlag){ view="all"; adminTab="all"; }
   const q=document.getElementById("q").value.trim(),city=+document.getElementById("header-city-select").value,s=document.getElementById("sort").value;
   const pminV = document.getElementById("pmin").value, pmaxV = document.getElementById("pmax").value;
   const mn = pminV === "" ? 0 : (+pminV || 0);
@@ -1215,9 +1253,7 @@ document.getElementById("open-radius-modal-btn").onclick = () => {
   setTimeout(() => {
     destroyRadiusMap();
     radiusMap = L.map('radius-map-container').setView([radiusCenterLat, radiusCenterLng], 10);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19, attribution: '© OpenStreetMap'
-    }).addTo(radiusMap);
+    baseTiles().addTo(radiusMap);
     radiusMarker = L.marker([radiusCenterLat, radiusCenterLng], {draggable: true}).addTo(radiusMap);
     radiusCircle = L.circle([radiusCenterLat, radiusCenterLng], {
       radius: radiusMaxKm * 1000, color: '#0e7a4b', fillColor: '#37b676', fillOpacity: 0.2
@@ -1552,9 +1588,7 @@ function openAd(id){
     const lat = Number.isFinite(latNum) && latNum >= 20 && latNum <= 40 ? latNum : 34.5553;
     const lng = Number.isFinite(lngNum) && lngNum >= 55 && lngNum <= 80 ? lngNum : 69.2075;
     const map = L.map('ad-view-map').setView([lat, lng], 13);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19, attribution: '© OpenStreetMap'
-    }).addTo(map);
+    baseTiles().addTo(map);
     L.marker([lat, lng]).addTo(map).bindPopup(esc(a.t)).openPopup();
     window._adViewMap = map;
   });
@@ -1829,22 +1863,31 @@ document.getElementById("a-go").onclick = async () => {
 
 document.getElementById("acc").onclick=()=>{
   if(!me||!users[me])return openAuth();
-  document.getElementById("me-n").textContent=users[me].name;
+  const nm=users[me].name||"کاربر";
+  document.getElementById("me-n").textContent=nm;
   document.getElementById("me-p").textContent=me;
+  document.getElementById("me-avatar").textContent=(Array.from(nm.trim())[0]||"؟").toUpperCase();
   const isPhone = /^07\d{8}$/.test(me);
-  document.getElementById("me-verified-badge-box").innerHTML = isPhone
+  let badges = isPhone
     ? '<span class="badge-verified"><svg class="icon icon-sm"><use href="#i-check"></use></svg> شماره تاییدشده</span>'
-    : '<span class="badge-verified" style="background:#1b3b6f;">✓ حساب تاییدشده</span>';
-    
+    : '<span class="badge-verified">✓ حساب تاییدشده</span>';
+  if(adminFlag) badges += '<span class="badge-verified" style="background:rgba(244,183,63,.9);color:#2a1d00;border-color:transparent;"><svg class="icon icon-sm"><use href="#i-shield"></use></svg> مدیر</span>';
+  document.getElementById("me-verified-badge-box").innerHTML = badges;
+  const myAds = mine.filter(a => !a.owner || a.owner === me);
+  document.getElementById("me-stat-ads").textContent = nf(myAds.length);
+  document.getElementById("me-stat-views").textContent = nf(myAds.reduce((s,x)=>s+(Number(x.views)||0),0));
+  document.getElementById("me-stat-favs").textContent = nf(Array.isArray(favs)?favs.length:0);
+
   const adminBtn = document.getElementById("admin-btn");
   adminBtn.hidden = !adminFlag;
   if(adminFlag) {
-      adminBtn.innerHTML = (view === 'admin') 
+      adminBtn.innerHTML = (view === 'admin')
       ? '<svg class="icon icon-sm"><use href="#i-x"></use></svg> خروج از پنل مدیریت'
       : '<svg class="icon icon-sm"><use href="#i-shield"></use></svg> ورود به پنل مدیریت';
   }
   document.getElementById("me").showModal();
 };
+document.getElementById("me-close").onclick=()=>document.getElementById("me").close();
 
 document.getElementById("me").onclick = async e => {
   if(e.target==document.getElementById("me"))return document.getElementById("me").close();
@@ -1892,6 +1935,7 @@ document.getElementById("me").onclick = async e => {
     view = "all";
   }
   else if(b.dataset.v=="admin"){
+    if(!adminFlag){ toast("دسترسی مجاز نیست."); return; }
     if(view === 'admin') {
       view = 'all'; 
       adminTab = 'all';
@@ -1936,9 +1980,7 @@ function initMapPicker(lat, lng, _attempts = 0) {
   pickerMarker = null;
   mapPicker = L.map('map-picker-container').setView([lat, lng], 13);
   setTimeout(()=>{ try{ mapPicker && mapPicker.invalidateSize(); }catch(e){} }, 300);
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19, attribution: '© OpenStreetMap'
-  }).addTo(mapPicker);
+  baseTiles().addTo(mapPicker);
   pickerMarker = L.marker([lat, lng], {draggable: true}).addTo(mapPicker);
   pickerMarker.on('dragend', function() {
     const pos = pickerMarker.getLatLng();
