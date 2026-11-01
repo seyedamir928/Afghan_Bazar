@@ -824,8 +824,7 @@ function draw(){
   let r = retailAds.filter(a=>{
     if(cat && a.c != cat) return false;
     if(city >= 0 && a.ci != city) return false;
-    const extrasText = a.extras && typeof a.extras === "object" ? Object.values(a.extras).join(" ") : "";
-    if(q && !normFa((a.t||"")+" "+(a.d||"")+" "+(a.brand||"")+" "+(a.spec||"")+" "+extrasText).includes(normFa(q))) return false;
+    if(q && !normFa((a.t||"")+" "+(a.d||"")+" "+(a.brand||"")+" "+(a.spec||"")).includes(normFa(q))) return false;
     if(pf && (afn(a) < mn || afn(a) > mx)) return false;
     if(u && !a.u) return false;
     if(condFilter && a.cond != condFilter) return false;
@@ -1053,8 +1052,7 @@ function draw(){
       const matchMulti = (Array.isArray(a.provinces) && a.provinces.includes(city));
       if(!matchSingle && !matchMulti) return false;
     }
-    const extrasText = a.extras && typeof a.extras === "object" ? Object.values(a.extras).join(" ") : "";
-    if(qWholesale && !normFa((a.t||"")+" "+(a.d||"")+" "+(a.brand||"")+" "+(a.spec||"")+" "+extrasText).includes(normFa(qWholesale))) return false;
+    if(qWholesale && !normFa((a.t||"")+" "+(a.d||"")+" "+(a.brand||"")+" "+(a.spec||"")).includes(normFa(qWholesale))) return false;
     const wminV = document.getElementById("wmin").value, wmaxV = document.getElementById("wmax").value;
     const wmn = wminV === "" ? 0 : (+wminV || 0);
     const wmx = wmaxV === "" ? Infinity : (+wmaxV || 0);
@@ -1356,11 +1354,7 @@ document.getElementById("show-compare-modal-btn").onclick = () => {
     </tr>
     <tr style="border-bottom:1px solid var(--bd);">
       <td style="padding:8px;font-weight:bold;color:var(--mu);">وضعیت کالا</td>
-      ${adsToCompare.map(a => {
-        const meta = getCatMeta(a.c);
-        if (!meta.condition) return `<td style="padding:8px;text-align:center;">—</td>`;
-        return `<td style="padding:8px;text-align:center;">${a.cond === 'new' ? 'نو' : 'کارکرده'}</td>`;
-      }).join("")}
+      ${adsToCompare.map(a => `<td style="padding:8px;text-align:center;">${a.cond === 'new' ? 'نو' : 'کارکرده'}</td>`).join("")}
     </tr>
     <tr style="border-bottom:1px solid var(--bd);"><td style="padding:8px;font-weight:bold;color:var(--mu);">مدل / برند</td>${adsToCompare.map(a => `<td style="padding:8px;text-align:center;">${esc(a.brand||'—')}</td>`).join("")}</tr>
     <tr style="border-bottom:1px solid var(--bd);"><td style="padding:8px;font-weight:bold;color:var(--mu);">مشخصات</td>${adsToCompare.map(a => `<td style="padding:8px;text-align:center;">${esc(a.spec||'—')}</td>`).join("")}</tr>
@@ -2371,10 +2365,8 @@ document.getElementById("save").onclick=async()=>{
         }
         targetAd.p = +document.getElementById("f-p").value || 0;
         targetAd.d = document.getElementById("f-d").value.trim();
-        const extrasVal = collectExtras();
-        const editCatMeta = isWholesaleVal ? DEFAULT_CAT_META : getCatMeta(+document.getElementById("f-c").value);
-        targetAd.cond = editCatMeta.condition ? document.getElementById("form-cond").value : ""; targetAd.ph = phv;
-        targetAd.brand=document.getElementById("form-brand").value.trim() || (extrasVal && extrasVal.brand) || ""; targetAd.spec=document.getElementById("form-spec").value.trim(); targetAd.cur=document.getElementById("f-cur").value; targetAd.neg=document.getElementById("f-neg").checked; targetAd.moq=+document.getElementById("f-moq").value||0; targetAd.unit=document.getElementById("f-unit").value;
+        targetAd.cond = document.getElementById("form-cond").value; targetAd.ph = phv;
+        targetAd.brand=document.getElementById("form-brand").value.trim(); targetAd.spec=document.getElementById("form-spec").value.trim(); targetAd.cur=document.getElementById("f-cur").value; targetAd.neg=document.getElementById("f-neg").checked; targetAd.moq=+document.getElementById("f-moq").value||0; targetAd.unit=document.getElementById("f-unit").value;
         targetAd.mapLoc = document.getElementById("form-map").value.trim();
         targetAd.isShop = isShopChecked;
         targetAd.shopName = shopNameVal;
@@ -2382,7 +2374,7 @@ document.getElementById("save").onclick=async()=>{
         targetAd.isWholesale = isWholesaleVal;
         targetAd.lat = latVal;
         targetAd.lng = lngVal;
-        targetAd.extras = extrasVal;
+        targetAd.extras = collectExtras();
         targetAd.imgs = imgUrls;
         put("ab_ads", mine);
         syncAd(targetAd).then(st=>{ if(st) toast(adMsg(st,"ویرایش")); put("ab_ads", mine); draw(); }).catch(()=>{ put("ab_ads", mine); draw(); });
@@ -2390,10 +2382,6 @@ document.getElementById("save").onclick=async()=>{
       }
     } else {
       const ts=Date.now();
-      const extrasVal = collectExtras();
-      const createCat = isWholesaleVal ? 1 : +document.getElementById("f-c").value;
-      const createCatMeta = isWholesaleVal ? DEFAULT_CAT_META : getCatMeta(createCat);
-      const brandVal = document.getElementById("form-brand").value.trim() || (extrasVal && extrasVal.brand) || "";
       mine.unshift({
         id: (crypto.randomUUID ? crypto.randomUUID() : 'id-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8)), ts, t,
         c: isWholesaleVal ? 1 : +document.getElementById("f-c").value,
@@ -2404,14 +2392,14 @@ document.getElementById("save").onclick=async()=>{
         d:document.getElementById("f-d").value.trim(),
         ph:phv, u: isUrg, owner:me, ownerId: myId,
         imgs: imgUrls,
-        cond: createCatMeta.condition ? document.getElementById("form-cond").value : "",
+        cond: document.getElementById("form-cond").value,
         mapLoc: document.getElementById("form-map").value.trim(),
-        brand:brandVal, spec:document.getElementById("form-spec").value.trim(), cur:document.getElementById("f-cur").value, neg:document.getElementById("f-neg").checked, moq:+document.getElementById("f-moq").value||0, unit:document.getElementById("f-unit").value,
+        brand:document.getElementById("form-brand").value.trim(), spec:document.getElementById("form-spec").value.trim(), cur:document.getElementById("f-cur").value, neg:document.getElementById("f-neg").checked, moq:+document.getElementById("f-moq").value||0, unit:document.getElementById("f-unit").value,
         sellerName: users[me] ? users[me].name : "کاربر",
         verified: /^07\d{8}$/.test(me),
         isShop: isShopChecked, shopName: shopNameVal,
         isWholesale: isWholesaleVal,
-        lat: latVal, lng: lngVal, extras: extrasVal,
+        lat: latVal, lng: lngVal, extras: collectExtras(),
         status: adminFlag ? "approved" : "pending",
         views: 1, calls: 0
       });
