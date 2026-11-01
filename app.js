@@ -721,6 +721,7 @@ function refreshCategoryFields(values){
   const condRow=document.getElementById("retail-cond-row"), specRow=document.getElementById("retail-spec-row");
   if(condRow) condRow.style.display=(!wholesale&&meta.condition)?"grid":"none";
   if(specRow) specRow.style.display=(!wholesale&&meta.specRow)?"grid":"none";
+  if(!wholesale&&!meta.condition) document.getElementById("form-cond").value="new";
   const fields=wholesale?[]:meta.fields;
   if(!fields.length){ box.innerHTML=""; return; }
   box.innerHTML=`<div style="margin:12px 0 2px;font-size:13px;font-weight:700;color:var(--ac);">${t('specSection')}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:0 8px;">`+fields.map(f=>{
@@ -823,8 +824,7 @@ function draw(){
   let r = retailAds.filter(a=>{
     if(cat && a.c != cat) return false;
     if(city >= 0 && a.ci != city) return false;
-    const extrasText = a.extras && typeof a.extras === "object" ? Object.values(a.extras).map(v => String(v) + " " + extraLabel(v)).join(" ") : "";
-    if(q && !normFa((a.t||"")+" "+(a.d||"")+" "+(a.brand||"")+" "+extraLabel(a.brand||"")+" "+(a.spec||"")+" "+extrasText).includes(normFa(q))) return false;
+    if(q && !normFa((a.t||"")+" "+(a.d||"")+" "+(a.brand||"")+" "+(a.spec||"")).includes(normFa(q))) return false;
     if(pf && (afn(a) < mn || afn(a) > mx)) return false;
     if(u && !a.u) return false;
     if(condFilter && a.cond != condFilter) return false;
@@ -1052,8 +1052,7 @@ function draw(){
       const matchMulti = (Array.isArray(a.provinces) && a.provinces.includes(city));
       if(!matchSingle && !matchMulti) return false;
     }
-    const extrasText = a.extras && typeof a.extras === "object" ? Object.values(a.extras).map(v => String(v) + " " + extraLabel(v)).join(" ") : "";
-    if(qWholesale && !normFa((a.t||"")+" "+(a.d||"")+" "+(a.brand||"")+" "+extraLabel(a.brand||"")+" "+(a.spec||"")+" "+extrasText).includes(normFa(qWholesale))) return false;
+    if(qWholesale && !normFa((a.t||"")+" "+(a.d||"")+" "+(a.brand||"")+" "+(a.spec||"")).includes(normFa(qWholesale))) return false;
     const wminV = document.getElementById("wmin").value, wmaxV = document.getElementById("wmax").value;
     const wmn = wminV === "" ? 0 : (+wminV || 0);
     const wmx = wmaxV === "" ? Infinity : (+wmaxV || 0);
@@ -1355,13 +1354,9 @@ document.getElementById("show-compare-modal-btn").onclick = () => {
     </tr>
     <tr style="border-bottom:1px solid var(--bd);">
       <td style="padding:8px;font-weight:bold;color:var(--mu);">وضعیت کالا</td>
-      ${adsToCompare.map(a => {
-        const meta = getCatMeta(a.c);
-        if (!meta.condition) return `<td style="padding:8px;text-align:center;">—</td>`;
-        return `<td style="padding:8px;text-align:center;">${a.cond === 'new' ? 'نو' : 'کارکرده'}</td>`;
-      }).join("")}
+      ${adsToCompare.map(a => `<td style="padding:8px;text-align:center;">${a.cond === 'new' ? 'نو' : 'کارکرده'}</td>`).join("")}
     </tr>
-    <tr style="border-bottom:1px solid var(--bd);"><td style="padding:8px;font-weight:bold;color:var(--mu);">مدل / برند</td>${adsToCompare.map(a => `<td style="padding:8px;text-align:center;">${esc(a.brand ? extraLabel(a.brand) : '—')}</td>`).join("")}</tr>
+    <tr style="border-bottom:1px solid var(--bd);"><td style="padding:8px;font-weight:bold;color:var(--mu);">مدل / برند</td>${adsToCompare.map(a => `<td style="padding:8px;text-align:center;">${esc(a.brand||'—')}</td>`).join("")}</tr>
     <tr style="border-bottom:1px solid var(--bd);"><td style="padding:8px;font-weight:bold;color:var(--mu);">مشخصات</td>${adsToCompare.map(a => `<td style="padding:8px;text-align:center;">${esc(a.spec||'—')}</td>`).join("")}</tr>
     <tr style="border-bottom:1px solid var(--bd);">
       <td style="padding:8px;font-weight:bold;color:var(--mu);">فروشنده</td>
@@ -1466,7 +1461,7 @@ function openAd(id){
 
     <div style="margin:8px 0">
       <div class="kv"><span class="mu">دسته</span><span>${displayCatName}</span></div>
-      ${a.moq?`<div class="kv"><span class="mu">حداقل سفارش</span><span>${nf(a.moq)} ${esc(a.unit||"")}</span></div>`:""}${a.brand?`<div class="kv"><span class="mu">مدل / برند</span><span>${esc(extraLabel(a.brand))}</span></div>`:""}${a.spec?`<div class="kv"><span class="mu">مشخصات</span><span>${esc(a.spec)}</span></div>`:""}
+      ${a.moq?`<div class="kv"><span class="mu">حداقل سفارش</span><span>${nf(a.moq)} ${esc(a.unit||"")}</span></div>`:""}${a.brand?`<div class="kv"><span class="mu">مدل / برند</span><span>${esc(a.brand)}</span></div>`:""}${a.spec?`<div class="kv"><span class="mu">مشخصات</span><span>${esc(a.spec)}</span></div>`:""}
       <div class="kv"><span class="mu">ولایت / پوشش</span><span>${locText} ${a.mapLoc ? '— ' + esc(a.mapLoc) : ''}</span></div>
       <div class="kv"><span class="mu">زمان ثبت</span><span title="${a.ts ? new Date(a.ts).toISOString() : ''}">${ago(a.age)}</span></div>
     </div>
@@ -2015,11 +2010,8 @@ function goToStep(n){
   n=Math.max(1,Math.min(TOTAL_STEPS,n)); currentFormStep=n;
   document.querySelectorAll("#add .form-step").forEach(el=>el.classList.toggle("active",+el.dataset.step===n));
   document.querySelectorAll("#step-progress .step-dot").forEach(el=>{ const k=+el.dataset.step; el.classList.toggle("active",k===n); el.classList.toggle("done",k<n); });
-  const btnCancel = document.getElementById("cancel");
-  const btnSave = document.getElementById("save");
-  btnCancel.textContent = n===1 ? t("adCancel") : t("prevBtn");
-  btnCancel.style.color = n===1 ? "var(--mu)" : "var(--tx)";
-  btnSave.textContent = n<TOTAL_STEPS ? t("nextBtn") : t("adSave");
+  document.getElementById("cancel").textContent = n===1 ? t("adCancel") : t("prevBtn");
+  document.getElementById("save").textContent = n<TOTAL_STEPS ? t("nextBtn") : t("adSave");
   const body=document.querySelector("#add .modal-body"); if(body) body.scrollTop=0;
   if(n===TOTAL_STEPS) setTimeout(()=>initMapPicker(parseFloat(document.getElementById("form-lat").value)||34.5553,parseFloat(document.getElementById("form-lng").value)||69.2075),180);
 }
@@ -2373,10 +2365,8 @@ document.getElementById("save").onclick=async()=>{
         }
         targetAd.p = +document.getElementById("f-p").value || 0;
         targetAd.d = document.getElementById("f-d").value.trim();
-        const extrasVal = collectExtras();
-        const editCatMeta = isWholesaleVal ? DEFAULT_CAT_META : getCatMeta(+document.getElementById("f-c").value);
-        targetAd.cond = editCatMeta.condition ? document.getElementById("form-cond").value : ""; targetAd.ph = phv;
-        targetAd.brand=document.getElementById("form-brand").value.trim() || (extrasVal && extrasVal.brand) || ""; targetAd.spec=document.getElementById("form-spec").value.trim(); targetAd.cur=document.getElementById("f-cur").value; targetAd.neg=document.getElementById("f-neg").checked; targetAd.moq=+document.getElementById("f-moq").value||0; targetAd.unit=document.getElementById("f-unit").value;
+        targetAd.cond = document.getElementById("form-cond").value; targetAd.ph = phv;
+        targetAd.brand=document.getElementById("form-brand").value.trim(); targetAd.spec=document.getElementById("form-spec").value.trim(); targetAd.cur=document.getElementById("f-cur").value; targetAd.neg=document.getElementById("f-neg").checked; targetAd.moq=+document.getElementById("f-moq").value||0; targetAd.unit=document.getElementById("f-unit").value;
         targetAd.mapLoc = document.getElementById("form-map").value.trim();
         targetAd.isShop = isShopChecked;
         targetAd.shopName = shopNameVal;
@@ -2384,7 +2374,7 @@ document.getElementById("save").onclick=async()=>{
         targetAd.isWholesale = isWholesaleVal;
         targetAd.lat = latVal;
         targetAd.lng = lngVal;
-        targetAd.extras = extrasVal;
+        targetAd.extras = collectExtras();
         targetAd.imgs = imgUrls;
         put("ab_ads", mine);
         syncAd(targetAd).then(st=>{ if(st) toast(adMsg(st,"ویرایش")); put("ab_ads", mine); draw(); }).catch(()=>{ put("ab_ads", mine); draw(); });
@@ -2392,10 +2382,6 @@ document.getElementById("save").onclick=async()=>{
       }
     } else {
       const ts=Date.now();
-      const extrasVal = collectExtras();
-      const createCat = isWholesaleVal ? 1 : +document.getElementById("f-c").value;
-      const createCatMeta = isWholesaleVal ? DEFAULT_CAT_META : getCatMeta(createCat);
-      const brandVal = document.getElementById("form-brand").value.trim() || (extrasVal && extrasVal.brand) || "";
       mine.unshift({
         id: (crypto.randomUUID ? crypto.randomUUID() : 'id-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8)), ts, t,
         c: isWholesaleVal ? 1 : +document.getElementById("f-c").value,
@@ -2406,14 +2392,14 @@ document.getElementById("save").onclick=async()=>{
         d:document.getElementById("f-d").value.trim(),
         ph:phv, u: isUrg, owner:me, ownerId: myId,
         imgs: imgUrls,
-        cond: createCatMeta.condition ? document.getElementById("form-cond").value : "",
+        cond: document.getElementById("form-cond").value,
         mapLoc: document.getElementById("form-map").value.trim(),
-        brand:brandVal, spec:document.getElementById("form-spec").value.trim(), cur:document.getElementById("f-cur").value, neg:document.getElementById("f-neg").checked, moq:+document.getElementById("f-moq").value||0, unit:document.getElementById("f-unit").value,
+        brand:document.getElementById("form-brand").value.trim(), spec:document.getElementById("form-spec").value.trim(), cur:document.getElementById("f-cur").value, neg:document.getElementById("f-neg").checked, moq:+document.getElementById("f-moq").value||0, unit:document.getElementById("f-unit").value,
         sellerName: users[me] ? users[me].name : "کاربر",
         verified: /^07\d{8}$/.test(me),
         isShop: isShopChecked, shopName: shopNameVal,
         isWholesale: isWholesaleVal,
-        lat: latVal, lng: lngVal, extras: extrasVal,
+        lat: latVal, lng: lngVal, extras: collectExtras(),
         status: adminFlag ? "approved" : "pending",
         views: 1, calls: 0
       });
