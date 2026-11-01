@@ -182,12 +182,32 @@ dialog input,dialog select,dialog textarea{width:100%;border:1px solid var(--bd)
 .chat-msg.me{background:var(--ac);color:#fff;margin-inline-start:auto;margin-inline-end:0;align-self:flex-end}
 .chat-msg.other{background:var(--card);border:1px solid var(--bd);margin-inline-end:auto;margin-inline-start:0;align-self:flex-start}
 
+/* ===== Modal Form (Dialog #add) ===== */
 dialog#add { overflow: hidden; width:min(540px, 95vw); max-height:90vh; }
 dialog#add[open] { display: flex; flex-direction: column; }
-.modal-header { background: linear-gradient(135deg, var(--ac), var(--ac2)); color: #fff; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
+.modal-header { background: linear-gradient(135deg, var(--ac), var(--ac2)); color: #fff; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
 .modal-header h2 { margin: 0; font-size: 17px; color: #fff; }
-.modal-body { padding: 18px 20px; overflow-y: auto; flex:1; max-height: calc(90vh - 120px); }
-.modal-footer { padding: 14px 20px; background: var(--bg); border-top: 1px solid var(--bd); display: flex; gap: 10px; }
+.modal-body { padding: 18px 20px; overflow-y: auto; flex:1; max-height: calc(90vh - 130px); }
+.modal-footer { 
+  padding: 14px 20px; 
+  padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px)); 
+  background: var(--bg); 
+  border-top: 1px solid var(--bd); 
+  display: flex; 
+  gap: 10px; 
+  flex-shrink: 0; 
+}
+.modal-footer .capsule-btn { 
+  padding: 12px 16px; 
+  font-size: 14px; 
+  border-radius: 12px; 
+  font-weight: 700; 
+  transition: transform .15s var(--ease-out); 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+}
+.modal-footer .capsule-btn:active:not(:disabled) { transform: scale(.96); }
 
 .media-uploader-box { border: 2px dashed var(--bd); border-radius: 14px; padding: 14px; background: var(--bg); text-align: center; margin-top: 6px; }
 .media-actions { display: flex; gap: 8px; justify-content: center; margin-bottom: 10px; flex-wrap: wrap; }
@@ -916,96 +936,127 @@ dialog#add[open] { display: flex; flex-direction: column; }
   </div>
 </dialog>
 
+<!-- ✅ اصلاح باگ گرافیکی و بسته شدن تگ هدر -->
 <dialog id="add">
   <div class="modal-header" id="modal-header-bg" style="background: linear-gradient(135deg, var(--ac), var(--ac2));">
     <h2 id="modal-title-text" data-i18n="addTitle">✨ ثبت آگهی پرچون جدید</h2>
     <button class="capsule-btn" id="cancel-top" style="padding:3px 8px;font-size:11px;background:rgba(255,255,255,.2);color:#fff;border:0;"><svg class="icon icon-sm"><use href="#i-x"></use></svg> بستن</button>
-  <div class="step-progress" id="step-progress"><div class="step-dot active" data-step="1"></div><div class="step-dot" data-step="2"></div><div class="step-dot" data-step="3"></div><div class="step-dot" data-step="4"></div></div>
+  </div>
+  
+  <div class="step-progress" id="step-progress">
+    <div class="step-dot active" data-step="1"></div>
+    <div class="step-dot" data-step="2"></div>
+    <div class="step-dot" data-step="3"></div>
+    <div class="step-dot" data-step="4"></div>
+  </div>
+  
   <div class="modal-body">
     <input type="hidden" id="edit-ad-id" value="">
     <input type="hidden" id="form-is-wholesale-hidden" value="false">
+    
+    <!-- مرحله ۱: دسته‌بندی -->
     <div class="form-step active" data-step="1">
       <h3 class="step-title" data-i18n="stepChooseCategory">دسته‌بندی آگهی</h3>
       <p class="step-hint" data-i18n="stepChooseHint">دسته‌ای که آگهی شما در آن قرار می‌گیرد انتخاب کنید.</p>
       <div class="step-cat-tiles" id="step-cat-tiles"></div>
       <select id="f-c" style="display:none" aria-hidden="true"></select>
     </div>
+
+    <!-- مرحله ۲: عنوان و عکس -->
     <div class="form-step" data-step="2">
       <h3 class="step-title" data-i18n="stepContentTitle">عنوان و تصاویر</h3>
-    <label for="f-t" data-i18n="adTitlePh">عنوان آگهی *</label>
-    <input id="f-t" maxlength="60" data-i18n-ph="adTitlePh" placeholder="مثلاً: موتر کرولا مدل ۲۰۱۲ پاک و سفید">
-    <div id="title-counter" class="mu" style="font-size:10px;text-align:left;margin-top:2px;">۰ / ۶۰</div>
-    <div class="err" id="err-t"></div>
-    <label for="f-d" style="margin-top:12px;" data-i18n="adDesc">توضیحات تکمیلی</label>
-    <textarea id="f-d" rows="3" data-i18n-ph="adDescPh" placeholder="جزئیات کامل کالا..."></textarea>
-    <label style="margin-top:10px;" data-i18n="adImages">تصاویر کالا...</label>
-    <div class="media-uploader-box">
-      <div class="media-actions">
-        <label class="media-btn" for="gallery-file-input"><span data-i18n="adGallery">📁 انتخاب از گالری</span></label>
-        <input id="gallery-file-input" type="file" accept="image/*" multiple style="display:none">
-        <label class="media-btn" for="camera-file-input"><span data-i18n="adCamera">📷 عکس با دوربین</span></label>
-        <input id="camera-file-input" type="file" accept="image/*" capture="environment" style="display:none">
+      <label for="f-t" data-i18n="adTitlePh">عنوان آگهی *</label>
+      <input id="f-t" maxlength="60" data-i18n-ph="adTitlePh" placeholder="مثلاً: موتر کرولا مدل ۲۰۱۲ پاک و سفید">
+      <div id="title-counter" class="mu" style="font-size:10px;text-align:left;margin-top:2px;">۰ / ۶۰</div>
+      <div class="err" id="err-t"></div>
+      
+      <label for="f-d" style="margin-top:12px;" data-i18n="adDesc">توضیحات تکمیلی</label>
+      <textarea id="f-d" rows="3" data-i18n-ph="adDescPh" placeholder="جزئیات کامل کالا..."></textarea>
+      
+      <label style="margin-top:10px;" data-i18n="adImages">تصاویر کالا...</label>
+      <div class="media-uploader-box">
+        <div class="media-actions">
+          <label class="media-btn" for="gallery-file-input"><span data-i18n="adGallery">📁 انتخاب از گالری</span></label>
+          <input id="gallery-file-input" type="file" accept="image/*" multiple style="display:none">
+          <label class="media-btn" for="camera-file-input"><span data-i18n="adCamera">📷 عکس با دوربین</span></label>
+          <input id="camera-file-input" type="file" accept="image/*" capture="environment" style="display:none">
+        </div>
+        <div id="img-status" class="mu" style="font-size:11px;margin-bottom:4px;" data-i18n="adImgStatus">تصویری انتخاب نشده است</div>
+        <div class="preview-grid" id="preview-grid"></div>
       </div>
-      <div id="img-status" class="mu" style="font-size:11px;margin-bottom:4px;" data-i18n="adImgStatus">تصویری انتخاب نشده است</div>
-      <div class="preview-grid" id="preview-grid"></div>
+      <label for="f-ph" data-i18n="adPhonePh">شماره تماس برای خریداران *</label>
+      <input id="f-ph" inputmode="tel" data-i18n-ph="adPhoneDesc" placeholder="07…" autocomplete="tel">
     </div>
-    <label for="f-ph" data-i18n="adPhonePh">شماره تماس برای خریداران *</label>
-    <input id="f-ph" inputmode="tel" data-i18n-ph="adPhoneDesc" placeholder="07…" autocomplete="tel">
-    </div>
+
+    <!-- مرحله ۳: مشخصات -->
     <div class="form-step" data-step="3">
       <h3 class="step-title" data-i18n="stepSpecsTitle">مشخصات</h3>
       <div style="display:grid;grid-template-columns:1fr;gap:8px;margin-top:10px;" id="retail-cond-row">
-      <div>
-        <label for="form-cond" data-i18n="adCond">وضعیت کالا</label>
-        <select id="form-cond">
-          <option value="new" data-i18n="condNew">نو و آکبند</option>
-          <option value="used" selected data-i18n="condUsed">دست دوم / کارکرده</option>
-        </select>
+        <div>
+          <label for="form-cond" data-i18n="adCond">وضعیت کالا</label>
+          <select id="form-cond">
+            <option value="new" data-i18n="condNew">نو و آکبند</option>
+            <option value="used" selected data-i18n="condUsed">دست دوم / کارکرده</option>
+          </select>
+        </div>
       </div>
+      
+      <div id="retail-spec-row" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
+        <div><label for="form-brand" data-i18n="adBrand">مدل / برند</label><input id="form-brand" maxlength="40" placeholder="مثلاً: تویوتا کرولا"></div>
+        <div><label for="form-spec" data-i18n="adSpec">مشخصات کلیدی</label><input id="form-spec" maxlength="60" placeholder="مثلاً: ۱۲۸ گیگ / ۸۰ هزار کیلومتر"></div>
       </div>
-    <div id="retail-spec-row" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
-      <div><label for="form-brand" data-i18n="adBrand">مدل / برند</label><input id="form-brand" maxlength="40" placeholder="مثلاً: تویوتا کرولا"></div>
-      <div><label for="form-spec" data-i18n="adSpec">مشخصات کلیدی</label><input id="form-spec" maxlength="60" placeholder="مثلاً: ۱۲۸ گیگ / ۸۰ هزار کیلومتر"></div>
+      <div id="category-fields"></div>
+      
+      <div id="wholesale-row" style="display:none;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
+        <div><label for="f-moq" data-i18n="adMoq">حداقل سفارش</label><input id="f-moq" type="number" min="0" inputmode="numeric" placeholder="مثلاً: ۱۰"></div>
+        <div><label for="f-unit" data-i18n="adUnit">واحد فروش</label><select id="f-unit"><option>کارتن</option><option>کیسه</option><option>تن</option><option>کیلوگرم</option><option>عدد</option></select></div>
+      </div>
+      
+      <div id="multi-provinces-box" style="margin-top:10px; display:none;">
+        <label data-i18n="adMultiProv">انتشار در چندین ولایت...</label>
+        <div class="multi-province-grid" id="multi-provinces-grid"></div>
+      </div>
     </div>
-    <div id="category-fields"></div>
-    <div id="wholesale-row" style="display:none;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
-      <div><label for="f-moq" data-i18n="adMoq">حداقل سفارش</label><input id="f-moq" type="number" min="0" inputmode="numeric" placeholder="مثلاً: ۱۰"></div>
-      <div><label for="f-unit" data-i18n="adUnit">واحد فروش</label><select id="f-unit"><option>کارتن</option><option>کیسه</option><option>تن</option><option>کیلوگرم</option><option>عدد</option></select></div>
-    </div>
-    <div id="multi-provinces-box" style="margin-top:10px; display:none;">
-      <label data-i18n="adMultiProv">انتشار در چندین ولایت...</label>
-      <div class="multi-province-grid" id="multi-provinces-grid"></div>
-    </div>
-    </div>
+
+    <!-- مرحله ۴: قیمت و نقشه -->
     <div class="form-step" data-step="4">
       <h3 class="step-title" data-i18n="stepPriceTitle">قیمت و موقعیت</h3>
       <div id="single-ci-box">
         <label for="f-ci" data-i18n="adProv">ولایت اصلی</label>
         <select id="f-ci"></select>
       </div>
-    <label for="f-p" style="margin-top:10px;" id="price-label-text" data-i18n="adPrice">قیمت (افغانی، ۰ = توافقی)</label>
-    <input id="f-p" type="number" min="0" inputmode="numeric" placeholder="مثلاً: ۸۵۰۰۰۰">
-    <div style="display:flex;gap:8px;align-items:center;margin-top:6px;"><select id="f-cur" style="flex:1"><option value="AFN" data-i18n="adCurAFN">افغانی</option><option value="USD" data-i18n="adCurUSD">دلار</option></select><label class="chk" style="margin:0;flex:1"><input type="checkbox" id="f-neg" style="width:auto"> <span data-i18n="adNeg">قابل مذاکره</span></label></div>
-    <div style="margin-top:12px; background:var(--bg); border:1px solid var(--bd); padding:10px; border-radius:10px;" id="shop-box-container">
-      <h4 style="margin:0 0 6px; font-size:13px; color:var(--ac);" id="shop-box-title" data-i18n="adShopTools">🚀 ابزارهای تجاری...</h4>
-      <label class="chk"><input type="checkbox" id="form-is-shop"> <span data-i18n="adIsShop">ثبت به عنوان فروشگاه رسمی...</span></label>
-      <input id="form-shop-name" data-i18n-ph="adShopName" placeholder="نام فروشگاه یا شرکت" style="margin-top:6px; display:none;" />
-      <label class="chk" style="margin-top:8px;"><input type="checkbox" id="form-urg"> <span data-i18n="adUrgent">آگهی فوری و ویژه...</span></label>
-    </div>
+      
+      <label for="f-p" style="margin-top:10px;" id="price-label-text" data-i18n="adPrice">قیمت (افغانی، ۰ = توافقی)</label>
+      <input id="f-p" type="number" min="0" inputmode="numeric" placeholder="مثلاً: ۸۵۰۰۰۰">
+      <div style="display:flex;gap:8px;align-items:center;margin-top:6px;">
+        <select id="f-cur" style="flex:1"><option value="AFN" data-i18n="adCurAFN">افغانی</option><option value="USD" data-i18n="adCurUSD">دلار</option></select>
+        <label class="chk" style="margin:0;flex:1"><input type="checkbox" id="f-neg" style="width:auto"> <span data-i18n="adNeg">قابل مذاکره</span></label>
+      </div>
+      
+      <div style="margin-top:12px; background:var(--bg); border:1px solid var(--bd); padding:10px; border-radius:10px;" id="shop-box-container">
+        <h4 style="margin:0 0 6px; font-size:13px; color:var(--ac);" id="shop-box-title" data-i18n="adShopTools">🚀 ابزارهای تجاری...</h4>
+        <label class="chk"><input type="checkbox" id="form-is-shop"> <span data-i18n="adIsShop">ثبت به عنوان فروشگاه رسمی...</span></label>
+        <input id="form-shop-name" data-i18n-ph="adShopName" placeholder="نام فروشگاه یا شرکت" style="margin-top:6px; display:none;" />
+        <label class="chk" style="margin-top:8px;"><input type="checkbox" id="form-urg"> <span data-i18n="adUrgent">آگهی فوری و ویژه...</span></label>
+      </div>
+      
       <div style="margin-top:10px;">
         <label for="form-map" data-i18n="adMapLoc">منطقه دقیق در ولایت</label>
         <input id="form-map" placeholder="مثلاً: شهرکوهی، جاده مزار">
       </div>
-    <label style="margin-top:10px;" id="map-label-text" data-i18n="adMapPick">موقعیت دقیق روی نقشه...</label>
-    <div id="map-picker-container"></div>
-    <div class="mu" style="font-size:11px; margin-top:3px;" data-i18n="adMapDesc">با تغییر ولایت در فرم بالا...</div>
-    <input type="hidden" id="form-lat" value="34.5553">
-    <input type="hidden" id="form-lng" value="69.2075">
+      
+      <label style="margin-top:10px;" id="map-label-text" data-i18n="adMapPick">موقعیت دقیق روی نقشه...</label>
+      <div id="map-picker-container"></div>
+      <div class="mu" style="font-size:11px; margin-top:3px;" data-i18n="adMapDesc">با تغییر ولایت در فرم بالا...</div>
+      <input type="hidden" id="form-lat" value="34.5553">
+      <input type="hidden" id="form-lng" value="69.2075">
     </div>
   </div>
+
+  <!-- ✅ فوتر مودال (دکمه‌ها) با استایل بهینه‌شده و استاندارد -->
   <div class="modal-footer">
     <button class="capsule-btn primary" id="save" style="flex:2;">بعدی</button>
-    <button class="capsule-btn" id="cancel" style="flex:1;">انصراف</button>
+    <button class="capsule-btn" id="cancel" style="flex:1; border:1px solid var(--bd);">انصراف</button>
   </div>
 </dialog>
 
@@ -1031,6 +1082,6 @@ dialog#add[open] { display: flex; flex-direction: column; }
 <!-- اسکریپت‌های بوت‌استرپ در head -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.js" defer></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
-<script src="app.js?v=34" defer></script>
+<script src="app_patched.js?v=34" defer></script>
 </body>
 </html>
