@@ -1372,15 +1372,7 @@ const provinceCoords = [
 ];
 const cities = provinceCoords.map(p => p.name);
 
-const seed=[
-  {id:"s0", t:"خانه دو منزله در شهرک ۱۵", c:1, ci:0, p:6500000, d:"چهار اتاق، حویلی و چاه آب. سند شرعی دارد.", age:1, u:1, ph:"0770011223", imgs:[], views:142, calls:12, cond:"used", sellerName:"احمد عزیزی", verified:true, isShop:true, shopName:"املاک تخصصی کابل مرکزی", isWholesale:false, lat:34.5553, lng:69.2075},
-  {id:"s1", t:"تویوتا کرولا، مدل ۲۰۱۲", c:2, ci:1, p:850000, d:"موتر پاک و سالم، گمرک‌شده، کارکرد کم.", age:2, u:0, ph:"0791122334", imgs:[], views:98, calls:7, cond:"used", sellerName:"محمدرضا ناصری", verified:true, isShop:true, shopName:"نمایشگاه موتر باستان مزار", isWholesale:false, lat:36.7062, lng:67.1106},
-  {id:"s2", t:"سامسونگ گلکسی A54", c:3, ci:0, p:14500, d:"۱۲۸ گیگ، یک ماه کارکرده، همراه جعبه.", age:3, u:0, ph:"0782233445", imgs:[], views:210, calls:25, cond:"new", sellerName:"فروشگاه مرکزی موبایل", verified:true, isShop:true, shopName:"موبایل‌فروشی دیجیتال کابل", isWholesale:false, lat:34.5323, lng:69.1658},
-  {id:"s3", t:"لپ‌تاپ HP، رم ۸", c:4, ci:2, p:32000, d:"حافظه ۲۵۶ گیگ SSD، کارتن دارد.", age:9, u:0, ph:"0703344556", imgs:[], views:75, calls:4, cond:"used", sellerName:"وحید احمدی", verified:false, isShop:false, isWholesale:false, lat:36.7123, lng:67.1245},
-  {id:"w1", t:"کارتن عمده گوشی‌های شیائومی (تعداد ۵۰ عددی)", c:3, ci:0, p:650000, d:"فروش عمده و مستقیم کارتن گوشی شیائومی ردمی ۱۲ با قیمت همکاری تجار.", age:4, u:1, ph:"0701122334", imgs:[], views:310, calls:42, cond:"new", sellerName:"عمده‌فروشی دیجیتال کابل", verified:true, isShop:true, shopName:"پخش عمده موبایل افغانستان", isWholesale:true, wholesaleCat:3, lat:34.5220, lng:69.1750},
-  {id:"w2", t:"برنج اعلای پاکستانی تناژ بالا (کیسه ۵۰ کیلویی)", c:9, ci:1, p:3800, d:"فروش تناژ بالا برای فروشگاه‌ها و مارکت‌های بزرگ هرات و کابل.", age:12, u:0, ph:"0792233445", imgs:[], views:180, calls:19, cond:"new", sellerName:"شرکت تجاری صوفی‌زاده", verified:true, isShop:true, shopName:"بازرگانی مواد غذایی هرات", isWholesale:true, wholesaleCat:1, lat:34.3529, lng:62.2040}
-].map(a => ({...a, views: a.views || 45, calls: a.calls || 3, cond: a.cond || 'used', sellerName: a.sellerName || 'کاربر بازار', verified: a.verified !== undefined ? a.verified : true, isWholesale: a.isWholesale || false, wholesaleCat: a.wholesaleCat || 1}));
-
+const seed = [];
 const $=s=>document.querySelector(s),nf=n=>n.toLocaleString("fa-IR"),fmt=n=>n?nf(n)+" افغانی":"توافقی";
 const esc=s=>{const d=document.createElement("div");d.textContent=(s==null)?"":String(s);return d.innerHTML.replace(/"/g,"&quot;").replace(/'/g,"&#39;")};
 const ago=h=>h<2?"چند دقیقه پیش":h<24?nf(Math.floor(h))+" ساعت پیش":h<48?"دیروز":nf(Math.floor(h/24))+" روز پیش";
