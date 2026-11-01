@@ -9,7 +9,8 @@
 <meta property="og:title" content="افغان‌بازار | آگهی‌های عمده و پرچون"><meta property="og:description" content="خرید و فروش در ۳۴ ولایت افغانستان"><meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🛒%3C/text%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.5/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<link rel="preconnect" href="https://tile.openstreetmap.org" crossorigin>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 <style>
 :root{--bg:#f2f6f3;--card:#fff;--tx:#12211a;--mu:#62736a;--bd:#dfe8e2;--chip:#e6efe9;--ac:#0e7a4b;--ac2:#08432c;--gd:#f4b73f;--on:#fff;--hl:#0e7a4b;--sh:0 8px 24px rgba(10,60,40,.09)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b110e;--card:#151d18;--tx:#eaf2ed;--mu:#93a39a;--bd:#25322b;--chip:#1d2923;--ac:#37b676;--ac2:#0a3322;--on:#06130c;--hl:#37b676;--sh:none}}
@@ -564,6 +565,44 @@ dialog#add[open] { display: flex; flex-direction: column; }
 }
 .icon-lg { width: 1.5em; height: 1.5em; }
 .icon-sm { width: 1em; height: 1em; }
+.leaflet-container{direction:ltr;font-family:inherit}.leaflet-popup-content{direction:rtl;text-align:right}
+@media (prefers-reduced-motion: no-preference) {
+  .js-reveal .sec[data-rv]{opacity:0;transform:translateY(18px);transition:opacity .55s var(--ease-out),transform .55s var(--ease-out)}
+  .js-reveal .sec[data-rv].in-view{opacity:1;transform:none}
+  @keyframes chipIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+  button[data-chip-idx]{animation:chipIn .25s var(--ease-spring)}
+  body{animation:pageIn .4s var(--ease-out)}
+  @keyframes pageIn{from{opacity:0}to{opacity:1}}
+}
+@media (hover:hover) and (prefers-reduced-motion: no-preference) {
+  .ad .ph img{transition:transform .5s var(--ease-out)}
+  .ad:hover .ph img{transform:scale(1.05)}
+}
+#scroll-progress{position:fixed;top:0;right:0;height:3px;width:0;background:linear-gradient(270deg,var(--ac),var(--gd));z-index:999;pointer-events:none;transition:width .08s linear;border-radius:2px 0 0 2px}
+.step-progress{display:flex;gap:6px;padding:10px 20px;background:var(--card);border-bottom:1px solid var(--bd)}
+.step-progress .step-dot{flex:1;height:4px;border-radius:2px;background:var(--bd);transition:background .35s}
+.step-progress .step-dot.done{background:var(--ac2)}
+.step-progress .step-dot.active{background:var(--ac);box-shadow:0 0 8px color-mix(in srgb,var(--ac) 50%,transparent)}
+.form-step{display:none}
+.form-step.active{display:block}
+.step-title{margin:0 0 4px;font-size:15px;font-weight:700}
+.step-hint{font-size:12px;color:var(--mu);margin:0 0 12px;line-height:1.6}
+.step-cat-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:8px}
+.step-cat-tile{border:2px solid var(--bd);background:var(--bg);border-radius:14px;padding:10px 6px;cursor:pointer;text-align:center;font-size:11.5px;font-weight:600;color:var(--tx);transition:border-color .2s,background .2s,transform .15s;-webkit-tap-highlight-color:transparent}
+.step-cat-tile .tile-icon{display:block;font-size:24px;line-height:1.4}
+.step-cat-tile:active{transform:scale(.95)}
+.step-cat-tile.on{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 12%,var(--card));color:var(--ac);box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 18%,transparent)}
+@media (prefers-reduced-motion: no-preference){
+  .form-step.active{animation:stepIn .32s var(--ease-out)}
+  @keyframes stepIn{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+  .step-cat-tile{animation:tileIn .35s var(--ease-out) both}
+  @keyframes tileIn{from{opacity:0;transform:translateY(10px) scale(.94)}to{opacity:1;transform:none}}
+  .step-cat-tile:nth-child(2){animation-delay:30ms}.step-cat-tile:nth-child(3){animation-delay:60ms}.step-cat-tile:nth-child(4){animation-delay:90ms}.step-cat-tile:nth-child(5){animation-delay:120ms}.step-cat-tile:nth-child(n+6){animation-delay:150ms}
+  .preview-item{animation:previewPop .3s var(--ease-spring)}
+  @keyframes previewPop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:none}}
+  dialog input,dialog select,dialog textarea{transition:box-shadow .2s,border-color .2s}
+  dialog input:focus,dialog select:focus,dialog textarea:focus{border-color:var(--ac);box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 18%,transparent)}
+}
 </style>
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -573,6 +612,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
+<div id="scroll-progress" aria-hidden="true"></div>
   <div id="pwa-install-banner" role="dialog" aria-label="نصب افغان‌بازار">
     <span style="font-size:26px">📲</span>
     <div class="pib-txt"><b>افغان‌بازار را نصب کنید</b><br><span class="mu">دسترسی سریع‌تر، مثل یک اپلیکیشن</span></div>
@@ -711,6 +751,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
             </select>
           </div>
         </div>
+        <div id="active-filters" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;align-items:center;"></div>
         <div class="grid" id="list"></div>
         <div class="pagination" id="pagination"></div>
       </section>
@@ -750,6 +791,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
         <option value="hi" data-i18n="wholeSortHi">بیشترین قیمت عمده</option>
       </select>
     </div>
+    <div id="active-filters-wholesale" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;align-items:center;"></div>
     <div class="grid" id="wholesale-list"></div>
     <div class="pagination" id="wholesale-pagination"></div>
   </div>
@@ -766,7 +808,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
   <button class="capsule-btn" id="clear-compare-btn" style="padding:4px 6px;font-size:11px;color:#d6324a;">پاک‌کردن</button>
 </div>
 
-<footer><b>افغان‌بازار</b> — بازار آگهی‌های رایگان افغانستان (نقشه شعاعی و مقایسه کالاها)<br>نسخه ۳۳<br><button class="link" id="theme-btn" type="button">🌓 تغییر تم روشن/تیره</button> · <a href="#" class="link" id="terms-link">قوانین و حریم خصوصی</a></footer>
+<footer><b>افغان‌بازار</b> — بازار آگهی‌های رایگان افغانستان (نقشه شعاعی و مقایسه کالاها)<br>نسخه ۳۴<br><button class="link" id="theme-btn" type="button">🌓 تغییر تم روشن/تیره</button> · <a href="#" class="link" id="terms-link">قوانین و حریم خصوصی</a></footer>
 
 <nav class="bottom-nav">
   <button class="bnav-item active" data-target="retail">
@@ -878,73 +920,24 @@ dialog#add[open] { display: flex; flex-direction: column; }
   <div class="modal-header" id="modal-header-bg" style="background: linear-gradient(135deg, var(--ac), var(--ac2));">
     <h2 id="modal-title-text" data-i18n="addTitle">✨ ثبت آگهی پرچون جدید</h2>
     <button class="capsule-btn" id="cancel-top" style="padding:3px 8px;font-size:11px;background:rgba(255,255,255,.2);color:#fff;border:0;"><svg class="icon icon-sm"><use href="#i-x"></use></svg> بستن</button>
-  </div>
+  <div class="step-progress" id="step-progress"><div class="step-dot active" data-step="1"></div><div class="step-dot" data-step="2"></div><div class="step-dot" data-step="3"></div><div class="step-dot" data-step="4"></div></div>
   <div class="modal-body">
     <input type="hidden" id="edit-ad-id" value="">
     <input type="hidden" id="form-is-wholesale-hidden" value="false">
-    
+    <div class="form-step active" data-step="1">
+      <h3 class="step-title" data-i18n="stepChooseCategory">دسته‌بندی آگهی</h3>
+      <p class="step-hint" data-i18n="stepChooseHint">دسته‌ای که آگهی شما در آن قرار می‌گیرد انتخاب کنید.</p>
+      <div class="step-cat-tiles" id="step-cat-tiles"></div>
+      <select id="f-c" style="display:none" aria-hidden="true"></select>
+    </div>
+    <div class="form-step" data-step="2">
+      <h3 class="step-title" data-i18n="stepContentTitle">عنوان و تصاویر</h3>
     <label for="f-t" data-i18n="adTitlePh">عنوان آگهی *</label>
     <input id="f-t" maxlength="60" data-i18n-ph="adTitlePh" placeholder="مثلاً: موتر کرولا مدل ۲۰۱۲ پاک و سفید">
     <div id="title-counter" class="mu" style="font-size:10px;text-align:left;margin-top:2px;">۰ / ۶۰</div>
     <div class="err" id="err-t"></div>
-    <label for="f-ph" data-i18n="adPhonePh">شماره تماس برای خریداران *</label>
-    <input id="f-ph" inputmode="tel" data-i18n-ph="adPhoneDesc" placeholder="07…" autocomplete="tel">
-    
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-      <div>
-        <label for="f-c" data-i18n="adCat">دسته بندی</label>
-        <select id="f-c"></select>
-      </div>
-      <div id="single-ci-box">
-        <label for="f-ci" data-i18n="adProv">ولایت اصلی</label>
-        <select id="f-ci"></select>
-      </div>
-    </div>
-
-    <div id="multi-provinces-box" style="margin-top:10px; display:none;">
-      <label data-i18n="adMultiProv">انتشار در چندین ولایت...</label>
-      <div class="multi-province-grid" id="multi-provinces-grid"></div>
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;" id="retail-cond-row">
-      <div>
-        <label for="form-cond" data-i18n="adCond">وضعیت کالا</label>
-        <select id="form-cond">
-          <option value="new" data-i18n="condNew">نو و آکبند</option>
-          <option value="used" selected data-i18n="condUsed">دست دوم / کارکرده</option>
-        </select>
-      </div>
-      <div>
-        <label for="form-map" data-i18n="adMapLoc">منطقه دقیق در ولایت</label>
-        <input id="form-map" placeholder="مثلاً: شهرکوهی، جاده مزار">
-      </div>
-    </div>
-
-    <div id="retail-spec-row" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
-      <div><label for="form-brand" data-i18n="adBrand">مدل / برند</label><input id="form-brand" maxlength="40" placeholder="مثلاً: تویوتا کرولا"></div>
-      <div><label for="form-spec" data-i18n="adSpec">مشخصات کلیدی</label><input id="form-spec" maxlength="60" placeholder="مثلاً: ۱۲۸ گیگ / ۸۰ هزار کیلومتر"></div>
-    </div>
-    <div id="wholesale-row" style="display:none;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
-      <div><label for="f-moq" data-i18n="adMoq">حداقل سفارش</label><input id="f-moq" type="number" min="0" inputmode="numeric" placeholder="مثلاً: ۱۰"></div>
-      <div><label for="f-unit" data-i18n="adUnit">واحد فروش</label><select id="f-unit"><option>کارتن</option><option>کیسه</option><option>تن</option><option>کیلوگرم</option><option>عدد</option></select></div>
-    </div>
-    <label style="margin-top:10px;" id="map-label-text" data-i18n="adMapPick">موقعیت دقیق روی نقشه...</label>
-    <div id="map-picker-container"></div>
-    <div class="mu" style="font-size:11px; margin-top:3px;" data-i18n="adMapDesc">با تغییر ولایت در فرم بالا...</div>
-    <input type="hidden" id="form-lat" value="34.5553">
-    <input type="hidden" id="form-lng" value="69.2075">
-
-    <label for="f-p" style="margin-top:10px;" id="price-label-text" data-i18n="adPrice">قیمت (افغانی، ۰ = توافقی)</label>
-    <input id="f-p" type="number" min="0" inputmode="numeric" placeholder="مثلاً: ۸۵۰۰۰۰">
-    <div style="display:flex;gap:8px;align-items:center;margin-top:6px;"><select id="f-cur" style="flex:1"><option value="AFN" data-i18n="adCurAFN">افغانی</option><option value="USD" data-i18n="adCurUSD">دلار</option></select><label class="chk" style="margin:0;flex:1"><input type="checkbox" id="f-neg" style="width:auto"> <span data-i18n="adNeg">قابل مذاکره</span></label></div>
-
-    <div style="margin-top:12px; background:var(--bg); border:1px solid var(--bd); padding:10px; border-radius:10px;" id="shop-box-container">
-      <h4 style="margin:0 0 6px; font-size:13px; color:var(--ac);" id="shop-box-title" data-i18n="adShopTools">🚀 ابزارهای تجاری...</h4>
-      <label class="chk"><input type="checkbox" id="form-is-shop"> <span data-i18n="adIsShop">ثبت به عنوان فروشگاه رسمی...</span></label>
-      <input id="form-shop-name" data-i18n-ph="adShopName" placeholder="نام فروشگاه یا شرکت" style="margin-top:6px; display:none;" />
-      <label class="chk" style="margin-top:8px;"><input type="checkbox" id="form-urg"> <span data-i18n="adUrgent">آگهی فوری و ویژه...</span></label>
-    </div>
-
+    <label for="f-d" style="margin-top:12px;" data-i18n="adDesc">توضیحات تکمیلی</label>
+    <textarea id="f-d" rows="3" data-i18n-ph="adDescPh" placeholder="جزئیات کامل کالا..."></textarea>
     <label style="margin-top:10px;" data-i18n="adImages">تصاویر کالا...</label>
     <div class="media-uploader-box">
       <div class="media-actions">
@@ -956,13 +949,63 @@ dialog#add[open] { display: flex; flex-direction: column; }
       <div id="img-status" class="mu" style="font-size:11px;margin-bottom:4px;" data-i18n="adImgStatus">تصویری انتخاب نشده است</div>
       <div class="preview-grid" id="preview-grid"></div>
     </div>
-
-    <label for="f-d" style="margin-top:12px;" data-i18n="adDesc">توضیحات تکمیلی</label>
-    <textarea id="f-d" rows="3" data-i18n-ph="adDescPh" placeholder="جزئیات کامل کالا..."></textarea>
+    <label for="f-ph" data-i18n="adPhonePh">شماره تماس برای خریداران *</label>
+    <input id="f-ph" inputmode="tel" data-i18n-ph="adPhoneDesc" placeholder="07…" autocomplete="tel">
+    </div>
+    <div class="form-step" data-step="3">
+      <h3 class="step-title" data-i18n="stepSpecsTitle">مشخصات</h3>
+      <div style="display:grid;grid-template-columns:1fr;gap:8px;margin-top:10px;" id="retail-cond-row">
+      <div>
+        <label for="form-cond" data-i18n="adCond">وضعیت کالا</label>
+        <select id="form-cond">
+          <option value="new" data-i18n="condNew">نو و آکبند</option>
+          <option value="used" selected data-i18n="condUsed">دست دوم / کارکرده</option>
+        </select>
+      </div>
+      </div>
+    <div id="retail-spec-row" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
+      <div><label for="form-brand" data-i18n="adBrand">مدل / برند</label><input id="form-brand" maxlength="40" placeholder="مثلاً: تویوتا کرولا"></div>
+      <div><label for="form-spec" data-i18n="adSpec">مشخصات کلیدی</label><input id="form-spec" maxlength="60" placeholder="مثلاً: ۱۲۸ گیگ / ۸۰ هزار کیلومتر"></div>
+    </div>
+    <div id="category-fields"></div>
+    <div id="wholesale-row" style="display:none;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;">
+      <div><label for="f-moq" data-i18n="adMoq">حداقل سفارش</label><input id="f-moq" type="number" min="0" inputmode="numeric" placeholder="مثلاً: ۱۰"></div>
+      <div><label for="f-unit" data-i18n="adUnit">واحد فروش</label><select id="f-unit"><option>کارتن</option><option>کیسه</option><option>تن</option><option>کیلوگرم</option><option>عدد</option></select></div>
+    </div>
+    <div id="multi-provinces-box" style="margin-top:10px; display:none;">
+      <label data-i18n="adMultiProv">انتشار در چندین ولایت...</label>
+      <div class="multi-province-grid" id="multi-provinces-grid"></div>
+    </div>
+    </div>
+    <div class="form-step" data-step="4">
+      <h3 class="step-title" data-i18n="stepPriceTitle">قیمت و موقعیت</h3>
+      <div id="single-ci-box">
+        <label for="f-ci" data-i18n="adProv">ولایت اصلی</label>
+        <select id="f-ci"></select>
+      </div>
+    <label for="f-p" style="margin-top:10px;" id="price-label-text" data-i18n="adPrice">قیمت (افغانی، ۰ = توافقی)</label>
+    <input id="f-p" type="number" min="0" inputmode="numeric" placeholder="مثلاً: ۸۵۰۰۰۰">
+    <div style="display:flex;gap:8px;align-items:center;margin-top:6px;"><select id="f-cur" style="flex:1"><option value="AFN" data-i18n="adCurAFN">افغانی</option><option value="USD" data-i18n="adCurUSD">دلار</option></select><label class="chk" style="margin:0;flex:1"><input type="checkbox" id="f-neg" style="width:auto"> <span data-i18n="adNeg">قابل مذاکره</span></label></div>
+    <div style="margin-top:12px; background:var(--bg); border:1px solid var(--bd); padding:10px; border-radius:10px;" id="shop-box-container">
+      <h4 style="margin:0 0 6px; font-size:13px; color:var(--ac);" id="shop-box-title" data-i18n="adShopTools">🚀 ابزارهای تجاری...</h4>
+      <label class="chk"><input type="checkbox" id="form-is-shop"> <span data-i18n="adIsShop">ثبت به عنوان فروشگاه رسمی...</span></label>
+      <input id="form-shop-name" data-i18n-ph="adShopName" placeholder="نام فروشگاه یا شرکت" style="margin-top:6px; display:none;" />
+      <label class="chk" style="margin-top:8px;"><input type="checkbox" id="form-urg"> <span data-i18n="adUrgent">آگهی فوری و ویژه...</span></label>
+    </div>
+      <div style="margin-top:10px;">
+        <label for="form-map" data-i18n="adMapLoc">منطقه دقیق در ولایت</label>
+        <input id="form-map" placeholder="مثلاً: شهرکوهی، جاده مزار">
+      </div>
+    <label style="margin-top:10px;" id="map-label-text" data-i18n="adMapPick">موقعیت دقیق روی نقشه...</label>
+    <div id="map-picker-container"></div>
+    <div class="mu" style="font-size:11px; margin-top:3px;" data-i18n="adMapDesc">با تغییر ولایت در فرم بالا...</div>
+    <input type="hidden" id="form-lat" value="34.5553">
+    <input type="hidden" id="form-lng" value="69.2075">
+    </div>
   </div>
   <div class="modal-footer">
-    <button class="capsule-btn primary" id="save" style="flex:2;" data-i18n="adSave">انتشار نهایی آگهی</button>
-    <button class="capsule-btn" id="cancel" style="flex:1;" data-i18n="adCancel">انصراف</button>
+    <button class="capsule-btn primary" id="save" style="flex:2;">بعدی</button>
+    <button class="capsule-btn" id="cancel" style="flex:1;">انصراف</button>
   </div>
 </dialog>
 
@@ -987,7 +1030,7 @@ dialog#add[open] { display: flex; flex-direction: column; }
 
 <!-- اسکریپت‌های بوت‌استرپ در head -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.js" defer></script>
-<script src="https://unpkg.com/leaflet@1.9.5/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
-<script src="app.js?v=33" defer></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
+<script src="app.js?v=34" defer></script>
 </body>
 </html>
