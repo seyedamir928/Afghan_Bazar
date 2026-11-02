@@ -587,9 +587,9 @@ let _leafletP=null;
 window.__mapDiag=window.__mapDiag||[];
 document.addEventListener('securitypolicyviolation',e=>{ try{ window.__mapDiag.push('CSP-blocked: '+String(e.blockedURI).replace(/^https?:\/\//,'').split('/')[0]+' ('+e.violatedDirective+')'); }catch(_){} });
 const TILE_SOURCES=[
-  {u:'/tiles/{z}/{x}/{y}{r}.png',s:'abc',a:'© OpenStreetMap © CARTO'},   // پروکسی خود سایت (برای شبکه‌های فیلترشده مثل افغانستان)
-  {u:'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',s:'abcd',a:'© OpenStreetMap © CARTO'},
+  {u:'/tiles/v2/{z}/{x}/{y}.png',s:'abc',a:'© OpenStreetMap'},   // پروکسی خود سایت (برای شبکه‌های فیلترشده مثل افغانستان)
   {u:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',s:'abc',a:'© OpenStreetMap'},
+  {u:'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',s:'abc',a:'© OpenStreetMap, HOT'},
   {u:'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',s:'abc',a:'Tiles © Esri'},
   {u:'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',s:'abc',a:'© OpenTopoMap'}
 ];
@@ -694,7 +694,7 @@ function mapFail(el, retry){
 }
 function baseTiles(){
   const s=TILE_SOURCES[0];
-  return L.tileLayer(s.u,{maxZoom:19,subdomains:s.s.split(''),attribution:s.a,detectRetina:true,_osm:true,_srcIdx:0});
+  return L.tileLayer(s.u,{maxZoom:19,subdomains:s.s.split(''),attribution:s.a,detectRetina:/\{r\}/.test(s.u),_osm:true,_srcIdx:0});
 }
 try{ hookLeaflet(); }catch(_){}
 
