@@ -3,7 +3,7 @@
    - بقیه فایل‌های ثابت همین سایت: کش + به‌روزرسانی پس‌زمینه
    - هیچ درخواستی به Supabase یا CDN کش نمی‌شود
    - پشتیبانی از اعلان پوش */
-const VERSION = 'v40';
+const VERSION = 'v41';
 const CACHE = 'ab-shell-' + VERSION;
 const ASSETS = [
   './',
@@ -38,9 +38,13 @@ self.addEventListener('fetch', (e) => {
     e.respondWith(
       fetch(req)
         .then((res) => {
-          const copy = res.clone();
-          const key = req.mode === 'navigate' ? './index.html' : req;
-          caches.open(CACHE).then((c) => c.put(key, copy));
+          /* فقط صفحهٔ اصلی در کش shell ذخیره شود؛ مثلاً /ad/<id> نباید index.html کش‌شده را بازنویسی کند */
+          const isHome = url.pathname === '/' || url.pathname === '/index.html';
+          if (res && res.ok && (req.mode !== 'navigate' || isHome)) {
+            const copy = res.clone();
+            const key = req.mode === 'navigate' ? './index.html' : req;
+            caches.open(CACHE).then((c) => c.put(key, copy));
+          }
           return res;
         })
         .catch(() => caches.match(req.mode === 'navigate' ? './index.html' : req))

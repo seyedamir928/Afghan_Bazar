@@ -10,8 +10,11 @@
   "dir": "rtl",
   "lang": "fa",
   "orientation": "portrait",
-  "categories": ["shopping", "business", "marketplace"],
-  
+  "categories": [
+    "shopping",
+    "business",
+    "marketplace"
+  ],
   "icons": [
     {
       "src": "./icon-192.png",
@@ -26,37 +29,36 @@
       "purpose": "any"
     },
     {
-      "src": "./icon-512.png",
+      "src": "./icon-maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
   ],
-  
-  "screenshots": [
-    {
-      "src": "./screenshot-mobile.png",
-      "sizes": "1080x1920",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "صفحه اصلی افغان‌بازار"
-    }
-  ],
-  
   "shortcuts": [
     {
       "name": "ثبت آگهی جدید",
       "short_name": "آگهی جدید",
       "description": "ثبت سریع آگهی پرچون یا عمده",
       "url": "./?action=post",
-      "icons": [{ "src": "./icon-192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "./icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     },
     {
       "name": "پروفایل من",
       "short_name": "پروفایل",
       "description": "مشاهده آگهی‌های من و پیام‌ها",
       "url": "./?action=profile",
-      "icons": [{ "src": "./icon-192.png", "sizes": "192x192" }]
+      "icons": [
+        {
+          "src": "./icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ]
 }

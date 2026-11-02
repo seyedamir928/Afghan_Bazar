@@ -354,7 +354,7 @@ const EXPIRE_H=24*60;
 const afn=a=>a.cur==="USD"?a.p*USD_AFN:a.p;
 const pcmp=(a,b)=>{const x=a.p>0?afn(a):Infinity,y=b.p>0?afn(b):Infinity;return x===y?0:x<y?-1:1};
 const fmtAd=a=>a.p?nf(a.p)+(a.cur==="USD"?" دلار":" افغانی")+(a.isWholesale&&a.unit?" / "+esc(a.unit):"")+(a.neg?" (قابل مذاکره)":""):"توافقی";
-const adUrl=id=>location.href.split("#")[0]+"#ad-"+encodeURIComponent(id);
+const adUrl=id=>location.origin+"/ad/"+encodeURIComponent(id);
 
 let users=get("ab_users",{})||{};
 let mine=Array.isArray(get("ab_ads",[]))?get("ab_ads",[]):[];
@@ -879,7 +879,7 @@ function renderCard(a){
   }
   return `<div class="ad" data-id="${a.id}" tabindex="0" role="button">
     <div class="ph" style="--h:${(a.c||1)*23}">
-      ${mainImg ? `<img src="${mainImg}" alt="${esc(a.t)}" loading="lazy">` : `<span>${a.isWholesale ? '📦' : (cats[a.c]?.[1] || '📦')}</span>`}
+      ${mainImg ? `<img src="${esc(mainImg)}" alt="${esc(a.t)}" loading="lazy">` : `<span>${a.isWholesale ? '📦' : (cats[a.c]?.[1] || '📦')}</span>`}
     </div>
     ${a.u?'<span class="badge">فوری</span>':''}
     ${(() => {
@@ -1001,7 +1001,7 @@ function draw(){
         </div>
         <div style="width:100%;background:rgba(255,255,255,0.1);padding:10px;border-radius:10px;font-size:12px;">
           <b>آخرین نظرات مشتریان:</b>
-          ${myRevs.length ? myRevs.map(rv=>`<div style="margin-top:5px;border-top:1px solid rgba(255,255,255,0.2);padding-top:3px;">⭐ ${rv.rating}/5 — <b>${esc(rv.buyer||'کاربر')}:</b> ${esc(rv.comment||'')}</div>`).join("") : '<div style="margin-top:4px;opacity:0.8;">هنوز نظری ثبت نشده است.</div>'}
+          ${myRevs.length ? myRevs.map(rv=>`<div style="margin-top:5px;border-top:1px solid rgba(255,255,255,0.2);padding-top:3px;">⭐ ${nf(Number(rv.rating)||0)}/۵ — <b>${esc(rv.buyer||'کاربر')}:</b> ${esc(rv.comment||'')}</div>`).join("") : '<div style="margin-top:4px;opacity:0.8;">هنوز نظری ثبت نشده است.</div>'}
         </div>
       </div>
     `;
@@ -1444,7 +1444,7 @@ document.getElementById("show-compare-modal-btn").onclick = () => {
     </tr>
     <tr style="border-bottom:1px solid var(--bd);">
       <td style="padding:8px;font-weight:bold;color:var(--mu);">تصویر</td>
-      ${adsToCompare.map(a => `<td style="padding:8px;text-align:center;"><img src="${(Array.isArray(a.imgs)&&a.imgs[0])||a.img||''}" style="width:50px;height:50px;object-fit:cover;border-radius:6px;"></td>`).join("")}
+      ${adsToCompare.map(a => `<td style="padding:8px;text-align:center;"><img src="${esc((Array.isArray(a.imgs)&&a.imgs[0])||a.img||'')}" style="width:50px;height:50px;object-fit:cover;border-radius:6px;"></td>`).join("")}
     </tr>
     <tr style="border-bottom:1px solid var(--bd);">
       <td style="padding:8px;font-weight:bold;color:var(--mu);">قیمت</td>
@@ -1466,7 +1466,7 @@ document.getElementById("show-compare-modal-btn").onclick = () => {
     </tr>
     <tr>
       <td style="padding:8px;font-weight:bold;color:var(--mu);">عملیات</td>
-      ${adsToCompare.map(a => `<td style="padding:8px;text-align:center;"><button class="capsule-btn primary" onclick="document.getElementById('compare-dlg').close(); openAd('${a.id}')" style="font-size:10px;padding:3px 6px;">مشاهده</button></td>`).join("")}
+      ${adsToCompare.map(a => `<td style="padding:8px;text-align:center;"><button class="capsule-btn primary" onclick="document.getElementById('compare-dlg').close(); openAd('${esc(a.id)}')" style="font-size:10px;padding:3px 6px;">مشاهده</button></td>`).join("")}
     </tr>
   </table>`;
   document.getElementById("compare-table-container").innerHTML = html;
@@ -1523,9 +1523,9 @@ function openAd(id){
 
   document.getElementById("det").innerHTML=`
     <div class="ph" id="main-photo-box" style="aspect-ratio:16/9;--h:${(a.c||1)*23}">
-      ${initialImg ? `<img id="active-modal-img" src="${initialImg}" alt="${esc(a.t)}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0">` : `<span>${a.isWholesale ? '📦' : (cats[a.c]?.[1] || '📦')}</span>`}
+      ${initialImg ? `<img id="active-modal-img" src="${esc(initialImg)}" alt="${esc(a.t)}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0">` : `<span>${a.isWholesale ? '📦' : (cats[a.c]?.[1] || '📦')}</span>`}
     </div>
-    ${imgList.length > 1 ? `<div class="thumbs-row" id="modal-thumbs">${imgList.map((im, idx)=>`<img src="${im}" class="${idx===0?'active':''}" data-idx="${idx}">`).join("")}</div>` : ''}
+    ${imgList.length > 1 ? `<div class="thumbs-row" id="modal-thumbs">${imgList.map((im, idx)=>`<img src="${esc(im)}" class="${idx===0?'active':''}" data-idx="${idx}">`).join("")}</div>` : ''}
     
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px;flex-wrap:wrap;">
       <h2 style="margin:0;font-size:17px">${esc(a.t)}</h2>
@@ -2820,7 +2820,7 @@ async function renderReports(){
   const box = (currentAppTab === 'wholesale') ? document.getElementById("wholesale-list") : document.getElementById("list");
   
   const {data:_rep,error}=await sb().from("reports").select("id,ad_id,created_at").eq("status","open").order("created_at",{ascending:false}).limit(50);
-  const data=(_rep||[]).filter(r=>SAFE_ID.test(String(r.ad_id)));
+  const data=(_rep||[]).filter(r=>SAFE_ID.test(String(r.ad_id))&&SAFE_ID.test(String(r.id)));
   
   if(error||!_rep){ box.innerHTML = '<div class="empty">خطا در دریافت گزارش‌ها.</div>'; return; }
   
@@ -2857,10 +2857,24 @@ const MY_STORAGE_URL = "https://snhyzmwgazifdqyvqsnu.supabase.co/storage/v1/obje
 const SAFE_IMG = new RegExp("^(" + MY_STORAGE_URL.replace(/[\x5b\x5d\x7b\x7d\x28\x29\x2a\x2b\x3f\x2e\x5e\x24\x7c\x5c]/g, '\\$&') + "[A-Za-z0-9_./-]+)$");
 function cleanAd(r){
   if(!r||!SAFE_ID.test(String(r.id))) return null;
-  const a={...(r.data&&typeof r.data==="object"?r.data:{}),id:String(r.id),status: r.status || "approved"};
-  ["p","moq","c","ci","views","calls","ts","lat","lng","u"].forEach(k=>{ if(k in a) a[k]=Number(a[k])||0; });
+  const a={...(r.data&&typeof r.data==="object"&&!Array.isArray(r.data)?r.data:{}),id:String(r.id),status: r.status || "approved"};
+  // اعداد: فقط مقدار متناهی و در بازهٔ منطقی (مثلاً ts بزرگ باعث خطای toISOString و خراب‌شدن کل لیست می‌شد)
+  const num=(v,min,max)=>{ v=Number(v); return Number.isFinite(v)?Math.min(max,Math.max(min,v)):0; };
+  if("p" in a) a.p=num(a.p,0,1e12);
+  if("moq" in a) a.moq=num(a.moq,0,1e12);
+  if("c" in a) a.c=Math.trunc(num(a.c,0,500));
+  if("wholesaleCat" in a) a.wholesaleCat=Math.trunc(num(a.wholesaleCat,0,500));
+  if("ci" in a) a.ci=Math.trunc(num(a.ci,0,500));
+  ["views","calls","u"].forEach(k=>{ if(k in a) a[k]=num(a[k],0,1e9); });
+  if("ts" in a){ const ts=Number(a.ts); a.ts=(Number.isFinite(ts)&&ts>1.5e12&&ts<Date.now()+864e5)?ts:0; }
+  ["lat","lng"].forEach(k=>{ if(k in a) a[k]=num(a[k],-180,180); });
   ["isWholesale","isShop","neg"].forEach(k=>{ if(k in a) a[k]=!!a[k]; });
-  
+  // متن‌ها همیشه رشته و با طول محدود
+  ["t","d","ph","cur","unit","brand","spec","sellerName","shopName","mapLoc","cond"].forEach(k=>{
+    if(k in a){ a[k]=(a[k]==null||typeof a[k]==="object")?"":String(a[k]).slice(0,k==="d"?3000:200); }
+  });
+  if("provinces" in a) a.provinces=(Array.isArray(a.provinces)?a.provinces:[]).filter(x=>x!==null&&x!==""&&typeof x!=="object").map(Number).filter(n=>Number.isInteger(n)&&n>=0&&n<500).slice(0,40);
+  if("extras" in a && (typeof a.extras!=="object"||a.extras===null||Array.isArray(a.extras))) a.extras={};
   a.imgs=(Array.isArray(a.imgs)?a.imgs:[]).filter(x=>typeof x==="string"&&SAFE_IMG.test(x)).slice(0,8);
   if(a.img&&!(typeof a.img==="string"&&SAFE_IMG.test(a.img))) a.img="";
   return a;
@@ -3025,6 +3039,13 @@ document.body.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&
   document.getElementById("close-ios-install").onclick=()=>document.getElementById("ios-install-dlg").close();
   const fromHash=()=>{if(location.hash==="#terms"){const d=document.getElementById("terms-dlg"); if(!d.open) d.showModal(); return;} const m=location.hash.match(/^#ad-(.+)$/); if(m) openAd(decodeURIComponent(m[1]));};
   window.__fromHash=fromHash; window.addEventListener("hashchange",fromHash); fromHash();
+  try{
+    const act=new URLSearchParams(location.search).get("action");
+    if(act==="post"||act==="profile"){
+      history.replaceState(null,"",location.pathname+location.hash);
+      setTimeout(()=>{ const b=document.getElementById(act==="post"?"header-post-btn":"acc"); if(b) b.click(); },600);
+    }
+  }catch(_){}
 })();
 
 document.body.addEventListener("click", e => {
