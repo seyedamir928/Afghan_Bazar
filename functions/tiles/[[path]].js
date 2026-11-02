@@ -6,6 +6,8 @@ const UA = 'AfghanBazar/1.0 (+https://afghan-bazar.pages.dev)';
 
 export async function onRequestGet(context) {
   const { request, params } = context;
+  // جلوگیری از استفاده‌ی سایت‌های دیگر از پروکسی (سهمیه‌ی شما را مصرف می‌کنند)
+  if (request.headers.get('Sec-Fetch-Site') === 'cross-site') return new Response('forbidden', { status: 403 });
   const parts = Array.isArray(params.path) ? params.path : [params.path];
   if (parts.length !== 4 || parts[0] !== 'v2') return new Response('bad request', { status: 400 });
 
