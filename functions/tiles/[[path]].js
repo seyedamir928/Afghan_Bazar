@@ -50,6 +50,7 @@ export async function onRequestGet(context) {
           headers: {
             'Content-Type': type,
             'Cache-Control': 'public, max-age=86400, s-maxage=604800',
+            'X-Content-Type-Options': 'nosniff',
             'X-Tile-Source': new URL(u).hostname,
           },
         });
