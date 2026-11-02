@@ -2501,6 +2501,7 @@ document.getElementById("save").onclick=async()=>{
         targetAd.lng = lngVal;
         targetAd.extras = collectExtras();
         targetAd.imgs = imgUrls;
+        if(!adminFlag) targetAd.status = adVerdict(targetAd);
         put("ab_ads", mine);
         syncAd(targetAd).then(st=>{ if(st) toast(adMsg(st,"ویرایش")); put("ab_ads", mine); draw(); }).catch(()=>{ put("ab_ads", mine); draw(); });
         addNotification(`آگهی ویرایش شد.`);
@@ -2528,9 +2529,10 @@ document.getElementById("save").onclick=async()=>{
         isShop: isShopChecked, shopName: shopNameVal,
         isWholesale: isWholesaleVal,
         lat: latVal, lng: lngVal, extras: collectExtras(),
-        status: adminFlag ? "approved" : "pending",
+        status: "pending",
         views: 1, calls: 0
       });
+      mine[0].status = adminFlag ? "approved" : adVerdict(mine[0]);
       if(!put("ab_ads",mine)){ mine.shift(); toast("حافظه پر است؛ تعداد یا حجم عکس‌ها را کم کنید."); return; }
       syncAd(mine[0]).then(st=>{ if(st) toast(adMsg(st,"ثبت")); put("ab_ads", mine); draw(); }).catch(()=>{ put("ab_ads", mine); draw(); });
       addNotification(`آگهی جدید ثبت شد.`);
@@ -2647,7 +2649,10 @@ async function syncAd(ad){
   }
   try{
     const {id,owner,ownerId,age,status,...rest}=ad;
-    const {data,error}=await sb().from("ads").upsert({id:String(id),owner_id:myId,status: adminFlag ? "approved" : "pending",data:rest}).select("status").single();
+    const wanted = adminFlag ? "approved" : adVerdict(rest);
+    const put1 = st => sb().from("ads").upsert({id:String(id),owner_id:myId,status:st,data:rest}).select("status").single();
+    let {data,error} = await put1(wanted);
+    if(error && wanted!=="pending"){ console.warn("status="+wanted+" refused, retry pending:",error); ({data,error} = await put1("pending")); }
     if(error){console.warn(error);toast("ذخیره روی سرور انجام نشد؛ فقط در این دستگاه ذخیره شد.");return null;}
     ad.status=data.status; return data.status;
   }catch(e){
@@ -2668,8 +2673,16 @@ async function adminSetStatus(id, status){
   if(!adminFlag){ toast("فقط ادمین می‌تواند تایید/رد کند"); return; }
   if(seed.some(x=>String(x.id)===String(id))){ toast("این آگهی نمونه است و قابل تغییر نیست."); return; }
   if(sb() && myId){
-    const {error} = await sb().from("ads").update({status}).eq("id", String(id));
-    if(error){ console.warn(error); toast("ذخیره نشد روی سرور"); return; }
+    // ۱) تابع سمت سرور (SECURITY DEFINER) ۲) در صورت نبودن، update مستقیم با بررسی اینکه ردیفی واقعاً تغییر کرد
+    let ok=false;
+    const rp=await sb().rpc("admin_set_status",{p_id:String(id),p_status:status});
+    if(!rp.error && rp.data!==false) ok=true;
+    else {
+      const up=await sb().from("ads").update({status}).eq("id", String(id)).select("id,status");
+      if(!up.error && Array.isArray(up.data) && up.data.length) ok=true;
+      else console.warn("admin_set_status:",rp.error,"update:",up.error);
+    }
+    if(!ok){ toast("تغییر روی سرور ذخیره نشد؛ فایل supabase_moderation.sql را در Supabase اجرا کنید."); return; }
   }
   const ad = mine.find(x=>String(x.id)===String(id));
   if(ad) ad.status = status;
@@ -2677,7 +2690,12 @@ async function adminSetStatus(id, status){
   toast(status==="approved"?"✅ آگهی تایید شد":"❌ آگهی رد شد");
   draw();
 }
-function bumpStat(id,field){ if(sb() && !seed.some(x=>String(x.id)===String(id))) sb().rpc("bump_stat",{p_ad:String(id),p_field:field}).then(()=>{},()=>{}); }
+function bumpStat(id,field){
+  if(!sb() || seed.some(x=>String(x.id)===String(id))) return;
+  const args={p_ad:String(id),p_field:field};
+  // تابع امن (با محدودیت روزانه)؛ اگر هنوز SQL اجرا نشده بود، به تابع قدیمی برمی‌گردیم
+  sb().rpc("bump_stat_safe",args).then(r=>{ if(r&&r.error&&/bump_stat_safe|PGRST202|42883/.test((r.error.code||"")+(r.error.message||""))) sb().rpc("bump_stat",args).then(()=>{},()=>{}); },()=>{});
+}
 async function remoteReview(a,rating,comment){
   if(!sb()||!myId||!a.ownerId) return;
   const {error}=await sb().from("reviews").upsert({shop_phone:a.ph,shop_owner_id:a.ownerId,buyer_id:myId,buyer_name:users[me].name,rating,comment},{onConflict:"shop_phone,buyer_id"});
@@ -2852,6 +2870,16 @@ window.closeReport = async (reportId) => {
     renderReports(); 
 };
 
+// ===== فیلتر خودکار آگهی‌های ممنوعه =====
+// آگهی‌های معمولی خودکار منتشر می‌شوند؛ اگر متن آگهی شامل کالای ممنوعه باشد رد می‌شود.
+// همین فهرست در supabase_moderation.sql هم هست (جدول banned_terms) تا سرور هم اعمالش کند.
+const BANNED_TERMS=["مواد مخدر","هروئین","هیروئین","تریاک","حشیش","چرس","کوکائین","کوکایین","کریستال میت","متامفتامین","ماری جوانا","گرد سفید","قاچاق","کلاشینکوف","کلاشنکوف","سلاح گرم","فروش سلاح","اسلحه","تفنگ","پستول","مهمات","فشنگ","نارنجک","خمپاره","دینامیت","مواد منفجره","ساخت بمب","بمب دست‌ساز","بمب ساعتی","ماین زمینی","فروش کلیه","فروش اعضای بدن","فروش انسان","فروش کودک","قاچاق انسان","فروش برده","پول تقلبی","اسکناس جعلی","اسناد جعلی","تذکره جعلی","تذکره تقلبی","پاسپورت جعلی","گذرنامه جعلی","ویزا جعلی","مدرک جعلی","مهر جعلی","سکس","پورن","پورنو","فیلم سوپر","تن‌فروشی","خدمات جنسی","دختر فروشی","مشروب","شراب","ویسکی","ودکا","آبجو","قمار","شرط‌بندی","کازینو","مال دزدی","کالای دزدی","مسروقه","heroin","cocaine","opium","hashish","cannabis","marijuana","crystal meth","kalashnikov","ak-47","ak47","ammunition","grenade","explosives","porn","escort"];
+const modNorm=s=>String(s==null?"":s).normalize("NFKC").toLowerCase().replace(/ي/g,"ی").replace(/ك/g,"ک").replace(/[\u200c\u200b\u200d\u064B-\u065F\u0670\u0640]/g,"").replace(/\s+/g," ");
+function adVerdict(a){
+  const txt=modNorm([a&&a.t,a&&a.d,a&&a.brand,a&&a.spec,a&&a.mapLoc,a&&a.shopName].join(" "));
+  for(const w of BANNED_TERMS){ const n=modNorm(w); if(n&&txt.includes(n)) return "rejected"; }
+  return "approved";
+}
 const SAFE_ID=/^[A-Za-z0-9_-]{1,60}$/;
 const MY_STORAGE_URL = "https://snhyzmwgazifdqyvqsnu.supabase.co/storage/v1/object/public/ad-images/";
 const SAFE_IMG = new RegExp("^(" + MY_STORAGE_URL.replace(/[\x5b\x5d\x7b\x7d\x28\x29\x2a\x2b\x3f\x2e\x5e\x24\x7c\x5c]/g, '\\$&') + "[A-Za-z0-9_./-]+)$");
