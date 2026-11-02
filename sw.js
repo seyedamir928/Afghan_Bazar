@@ -1,9 +1,9 @@
-/* افغان‌بازار — Service Worker (نسخه 37)
+/* افغان‌بازار — Service Worker (نسخه 39)
    - صفحه اصلی و app.js: اول شبکه، اگر آفلاین بود از حافظه
    - بقیه فایل‌های ثابت همین سایت: کش + به‌روزرسانی پس‌زمینه
    - هیچ درخواستی به Supabase یا CDN کش نمی‌شود
    - پشتیبانی از اعلان پوش */
-const VERSION = 'v38';
+const VERSION = 'v39';
 const CACHE = 'ab-shell-' + VERSION;
 const ASSETS = [
   './',
@@ -31,6 +31,7 @@ self.addEventListener('fetch', (e) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;   /* CDN و Supabase کش نمی‌شوند */
+  if (url.pathname.startsWith('/tiles/')) return;     /* تایل‌های نقشه: کش را مرورگر/Cloudflare مدیریت می‌کند */
 
   /* ناوبری + app.js: اول شبکه (نسخه جدید همیشه می‌رسد) */
   if (req.mode === 'navigate' || url.pathname.endsWith('/app.js')) {
