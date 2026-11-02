@@ -39,7 +39,7 @@ export async function onRequestGet(context) {
       if (body.length < 5000) continue; // پاسخ خراب/خالی
       const res = new Response(body, {
         status: 200,
-        headers: { 'Content-Type': file.type, 'Cache-Control': 'public, max-age=86400, s-maxage=2592000' },
+        headers: { 'Content-Type': file.type, 'Cache-Control': 'public, max-age=86400, s-maxage=2592000', 'X-Content-Type-Options': 'nosniff' },
       });
       context.waitUntil(cache.put(key, res.clone()));
       return res;
