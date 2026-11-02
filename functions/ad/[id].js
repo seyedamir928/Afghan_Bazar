@@ -61,6 +61,11 @@ export async function onRequestGet({ params, request, env }) {
 <script>location.replace(${JSON.stringify(spa).replace(/</g, "\\u003c")});</script></body></html>`;
 
   return new Response(html, {
-    headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "public, max-age=300", "X-Content-Type-Options": "nosniff" }
+    headers: {
+      "Content-Type": "text/html; charset=utf-8", "Cache-Control": "public, max-age=300",
+      "X-Content-Type-Options": "nosniff", "Referrer-Policy": "strict-origin-when-cross-origin",
+      // _headers روی پاسخ Functionها اعمال نمی‌شود؛ پس این‌جا (فقط همان اسکریپت درون‌خطی مجاز است)
+      "Content-Security-Policy": "default-src 'none'; script-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+    }
   });
 }
