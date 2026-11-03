@@ -13,6 +13,9 @@ if ('serviceWorker' in navigator) {
 // پیشنهاد نصب اپلیکیشن (PWA)
 // ==========================================
 (function(){
+  // نسخهٔ یکپارچه: قبلاً beforeinstallprompt/DOMContentLoaded/appinstalled هرکدام دو بار
+  // ثبت می‌شدند (یکی برای #install-fab، یکی برای #pwa-install-banner) و deferredPrompt
+  // را روی هم می‌نوشتند. حالا یک‌جا مدیریت می‌شود؛ هر دو عنصر رابط کاربری همچنان کار می‌کنند.
   var SNOOZE_DAYS = 14, deferredPrompt = null;
   function snoozed(){
     try { var t = +localStorage.getItem('ab_pwa_snooze'); return t && (Date.now() - t) < SNOOZE_DAYS*864e5; }
@@ -21,49 +24,31 @@ if ('serviceWorker' in navigator) {
   function isStandalone(){
     return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
   }
-  
-  window.addEventListener("beforeinstallprompt", (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    window.__pwaDeferredPrompt = function(){ return deferredPrompt; };
-    if (isStandalone() || snoozed()) return;
-    const fab = document.getElementById("install-fab");
-    if (fab) { fab.style.display = "block"; fab.onclick = () => { 
-      fab.style.display = "none"; 
-      deferredPrompt.prompt(); 
-      deferredPrompt.userChoice.finally(()=>{ deferredPrompt = null; });
-    }; }
-  });
-  window.addEventListener("appinstalled", () => {
-    const fab = document.getElementById("install-fab");
-    if (fab) fab.style.display = "none";
-  });
+  function doPrompt(){
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.finally(function(){ deferredPrompt = null; });
+  }
+  function hideAll(){
+    var fab = document.getElementById('install-fab');
+    if (fab) fab.style.display = 'none';
+    var banner = document.getElementById('pwa-install-banner');
+    if (banner) banner.classList.remove('show');
+  }
 
   window.addEventListener('beforeinstallprompt', function(e){
     e.preventDefault();
     deferredPrompt = e;
+    window.__pwaDeferredPrompt = function(){ return deferredPrompt; };
     if (isStandalone() || snoozed()) return;
-    var b = document.getElementById('pwa-install-banner');
-    if (b) setTimeout(function(){ b.classList.add('show'); }, 2500);
-  });
-  document.addEventListener('DOMContentLoaded', function(){
+    var fab = document.getElementById('install-fab');
+    if (fab) fab.style.display = 'block';
     var banner = document.getElementById('pwa-install-banner');
-    var installBtn = document.getElementById('pwa-install-btn');
-    var dismissBtn = document.getElementById('pwa-dismiss-btn');
-    if (installBtn) installBtn.onclick = function(){
-      if (banner) banner.classList.remove('show');
-      if (!deferredPrompt) return;
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.finally(function(){ deferredPrompt = null; });
-    };
-    if (dismissBtn) dismissBtn.onclick = function(){
-      if (banner) banner.classList.remove('show');
-      try { localStorage.setItem('ab_pwa_snooze', String(Date.now())); } catch(e){}
-    };
+    if (banner) setTimeout(function(){ banner.classList.add('show'); }, 2500);
   });
+
   window.addEventListener('appinstalled', function(){
-    var b = document.getElementById('pwa-install-banner');
-    if (b) b.classList.remove('show');
+    hideAll();
     deferredPrompt = null;
     try { localStorage.setItem('ab_pwa_hint_stop', '1'); } catch(e){}
   });
@@ -86,7 +71,17 @@ if ('serviceWorker' in navigator) {
       scheduleInstallHint();
     }, delay);
   }
+
   document.addEventListener('DOMContentLoaded', function(){
+    var fab = document.getElementById('install-fab-btn') || document.getElementById('install-fab');
+    if (fab) fab.onclick = function(){ hideAll(); doPrompt(); };
+    var installBtn = document.getElementById('pwa-install-btn');
+    if (installBtn) installBtn.onclick = function(){ hideAll(); doPrompt(); };
+    var dismissBtn = document.getElementById('pwa-dismiss-btn');
+    if (dismissBtn) dismissBtn.onclick = function(){
+      hideAll();
+      try { localStorage.setItem('ab_pwa_snooze', String(Date.now())); } catch(e){}
+    };
     setTimeout(scheduleInstallHint, 6000 + Math.random() * 6000);
   });
 })();
@@ -382,18 +377,19 @@ let radiusMaxKm = 50;
 if(me&&!users[me])me=null;
 const loadFavs=()=>{const f=me?get("ab_fav_"+me,[]):[];favs=Array.isArray(f)?f:[];notes=get(UK("ab_notes"),{})||{};messages=get(UK("ab_msgs"),{})||{};const nn=get(UK("ab_notifs"),[]);notifications=Array.isArray(nn)?nn:[];};loadFavs();
 let _allCache = null, _allCacheKey = "", _trustArr = null, _trustMap = null;
+const thumbOf=(a,u)=>(a&&a.th&&typeof a.th==="object"&&a.th[u])||u;
 function all(){
   const m = Array.isArray(mine) ? mine : [];
   const key = m.length + "|" + m.map(a => a.id + ":" + a.ts + ":" + (a.views||0)).join(",") + "|" + Math.floor(Date.now() / 6e4);
   if (key === _allCacheKey && _allCache) return _allCache;
   _allCacheKey = key;
   _allCache = m
-    .map(a => ({ ...a, age: (Date.now() - a.ts) / 36e5 }))
+    .map(a => ({ ...a, age: (Date.now() - a.ts) / 36e5, _hay: normFa((a.t||"")+" "+(a.d||"")+" "+(a.brand||"")+" "+(a.spec||"")) }))
     .filter(a => a.age < EXPIRE_H || a.owner === me)
-    .concat(seed);
+    .concat(seed.map(a => a._hay ? a : ({ ...a, _hay: normFa((a.t||"")+" "+(a.d||"")+" "+(a.brand||"")+" "+(a.spec||"")) })));
   return _allCache;
 }
-function invalidateAllCache(){ _allCacheKey = ''; _allCache = null; _trustArr = null; _trustMap = null; }
+function invalidateAllCache(){ _allCacheKey = ''; _allCache = null; _trustArr = null; _trustMap = null; _priceIdx = null; _priceIdxKey = ''; }
 async function sha(s){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
 
 const cityOptionsHTML = '<option value="-1">🌐 ولایت</option>' + provinceCoords.map((x,i)=>`<option value="${i}">${x.name}</option>`).join("");
@@ -546,15 +542,33 @@ function getShopAverageRating(ownerPhone) {
   return { avg: (sum / revs.length).toFixed(1), count: revs.length };
 }
 
+// ایندکس میانگین قیمت به ازای هر (دسته|شهر)، یک‌بار ساخته می‌شود نه به ازای هر کارت.
+// priceInsight قبلاً هر بار all() را کامل فیلتر می‌کرد (هزینهٔ درجهٔ دوم با رشد آگهی‌ها).
+let _priceIdx = null, _priceIdxKey = "";
+function priceIndex(){
+  const arr = all(), key = arr.length + "|" + _allCacheKey;
+  if (_priceIdx && _priceIdxKey === key) return _priceIdx;
+  const m = new Map();
+  for (const x of arr) {
+    if (x.isWholesale || !(x.p > 0) || (x.status && x.status !== "approved")) continue;
+    const k = x.c + "|" + x.ci;
+    const e = m.get(k) || { sum: 0, n: 0 };
+    e.sum += afn(x); e.n++;
+    m.set(k, e);
+  }
+  _priceIdx = m; _priceIdxKey = key;
+  return m;
+}
 function priceInsight(ad) {
   if (!ad.p || ad.p <= 0 || ad.isWholesale) return null;
-  const sameCat = all().filter(x =>
-    !x.isWholesale && x.c === ad.c && x.ci === ad.ci &&
-    x.p > 0 && x.id !== ad.id &&
-    (!x.status || x.status === "approved")
-  );
-  if (sameCat.length < 3) return null;
-  const avg = sameCat.reduce((s, x) => s + afn(x), 0) / sameCat.length;
+  const e = priceIndex().get(ad.c + "|" + ad.ci);
+  if (!e) return null;
+  // اگر خودِ ad در ایندکس حساب شده (چون status==='approved' و قیمت دارد)، از میانگین کم می‌کنیم.
+  const included = (!ad.status || ad.status === "approved");
+  const n = included ? e.n - 1 : e.n;
+  if (n < 3) return null;
+  const sum = included ? e.sum - afn(ad) : e.sum;
+  const avg = sum / n;
   const myPrice = afn(ad);
   const diff = ((myPrice - avg) / avg) * 100;
   const isPs = currentLang === 'ps';
@@ -564,7 +578,7 @@ function priceInsight(ad) {
   else if (diff <= 5) { verdict = isPs ? "منصفانه بیه" : "قیمت منصفانه"; color = "#62736a"; icon = "⚪"; }
   else if (diff <= 15) { verdict = isPs ? "لږ ګرانه" : "کمی گران‌تر از میانگین"; color = "#e08c00"; icon = "🟡"; }
   else { verdict = isPs ? "له منځني څخه ډیر ګرانه" : "گران‌تر از میانگین"; color = "#d6324a"; icon = "🔴"; }
-  return { avg: Math.round(avg), diff: diff.toFixed(0), count: sameCat.length, verdict, color, icon };
+  return { avg: Math.round(avg), diff: diff.toFixed(0), count: n, verdict, color, icon };
 }
 
 function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
@@ -882,7 +896,7 @@ function renderCard(a){
   }
   return `<div class="ad" data-id="${a.id}" tabindex="0" role="button">
     <div class="ph" style="--h:${(a.c||1)*23}">
-      ${mainImg ? `<img src="${esc(mainImg)}" alt="${esc(a.t)}" loading="lazy">` : `<span>${a.isWholesale ? '📦' : (cats[a.c]?.[1] || '📦')}</span>`}
+      ${mainImg ? `<img src="${esc(thumbOf(a,mainImg))}" alt="${esc(a.t)}" loading="lazy" decoding="async">` : `<span>${a.isWholesale ? '📦' : (cats[a.c]?.[1] || '📦')}</span>`}
     </div>
     ${a.u?'<span class="badge">فوری</span>':''}
     ${(() => {
@@ -929,11 +943,13 @@ function draw(){
   let allAds = all();
   let retailAds = allAds.filter(a => !a.isWholesale);
   let wholesaleAds = allAds.filter(a => a.isWholesale);
+  // متن نرمال‌شدهٔ هر آگهی یک‌بار در all() ساخته می‌شود (a._hay)؛ اینجا فقط q نرمال می‌شود، نه کل مجموعه در هر تایپ.
+  const qNorm = q ? normFa(q) : "";
 
   let r = retailAds.filter(a=>{
     if(cat && a.c != cat) return false;
     if(city >= 0 && a.ci != city) return false;
-    if(q && !normFa((a.t||"")+" "+(a.d||"")+" "+(a.brand||"")+" "+(a.spec||"")).includes(normFa(q))) return false;
+    if(q && !(a._hay || normFa((a.t||"")+" "+(a.d||"")+" "+(a.brand||"")+" "+(a.spec||""))).includes(qNorm)) return false;
     if(pf && (afn(a) < mn || afn(a) > mx)) return false;
     if(u && !a.u) return false;
     if(condFilter && a.cond != condFilter) return false;
@@ -1162,7 +1178,7 @@ function draw(){
       const matchMulti = (Array.isArray(a.provinces) && a.provinces.includes(city));
       if(!matchSingle && !matchMulti) return false;
     }
-    if(qWholesale && !normFa((a.t||"")+" "+(a.d||"")+" "+(a.brand||"")+" "+(a.spec||"")).includes(normFa(qWholesale))) return false;
+    if(qWholesale && !(a._hay || normFa((a.t||"")+" "+(a.d||"")+" "+(a.brand||"")+" "+(a.spec||""))).includes(normFa(qWholesale))) return false;
     const wminV = document.getElementById("wmin").value, wmaxV = document.getElementById("wmax").value;
     const wmn = wminV === "" ? 0 : (+wminV || 0);
     const wmx = wmaxV === "" ? Infinity : (+wmaxV || 0);
@@ -1464,7 +1480,7 @@ document.getElementById("show-compare-modal-btn").onclick = () => {
     </tr>
     <tr style="border-bottom:1px solid var(--bd);">
       <td style="padding:8px;font-weight:bold;color:var(--mu);">تصویر</td>
-      ${adsToCompare.map(a => `<td style="padding:8px;text-align:center;"><img src="${esc((Array.isArray(a.imgs)&&a.imgs[0])||a.img||'')}" style="width:50px;height:50px;object-fit:cover;border-radius:6px;"></td>`).join("")}
+      ${adsToCompare.map(a => `<td style="padding:8px;text-align:center;"><img src="${esc(thumbOf(a,(Array.isArray(a.imgs)&&a.imgs[0])||a.img||''))}" style="width:50px;height:50px;object-fit:cover;border-radius:6px;"></td>`).join("")}
     </tr>
     <tr style="border-bottom:1px solid var(--bd);">
       <td style="padding:8px;font-weight:bold;color:var(--mu);">قیمت</td>
@@ -1510,7 +1526,7 @@ function renderSimilarAds(a){
   const list=pool.sort((p,q)=>score(q)-score(p)||(q.ts||0)-(p.ts||0)).slice(0,4);
   if(!list.length){ box.innerHTML=""; return; }
   box.innerHTML='<h3 style="font-size:14px;margin-top:14px;">آگهی‌های مشابه</h3><div class="sim-grid">'+list.map(x=>{
-    const im=(x.imgs&&x.imgs[0])||x.img||"";
+    const im=thumbOf(x,(x.imgs&&x.imgs[0])||x.img||"");
     return '<button type="button" class="sim-card" data-sim="'+esc(x.id)+'">'+(im?'<img src="'+esc(im)+'" alt="" loading="lazy">':'<div class="sim-ph">🛍️</div>')+'<b>'+esc(x.t)+'</b><span class="price">'+fmtAd(x)+'</span><small class="mu">'+esc(cities[x.ci]||"")+'</small></button>';
   }).join("")+'</div>';
   box.onclick=e=>{
@@ -1521,6 +1537,34 @@ function renderSimilarAds(a){
     try{ document.getElementById("dlg").scrollTop=0; }catch(_){}
   };
 }
+function openLightbox(list,start){
+  if(!Array.isArray(list)||!list.length) return;
+  let i=Math.min(Math.max(start|0,0),list.length-1), zoom=false;
+  const d=document.createElement("dialog"); d.className="lb";
+  d.innerHTML=`<button type="button" class="lb-x" aria-label="بستن">✕</button>
+    <button type="button" class="lb-n lb-prev" aria-label="قبلی">›</button>
+    <img class="lb-img" alt="">
+    <button type="button" class="lb-n lb-next" aria-label="بعدی">‹</button>
+    <div class="lb-c"></div>`;
+  document.body.appendChild(d);
+  const im=d.querySelector(".lb-img"), cnt=d.querySelector(".lb-c");
+  const show=n=>{ i=(n+list.length)%list.length; zoom=false; im.classList.remove("z"); im.src=list[i]; cnt.textContent=(list.length>1)?(nf(i+1)+" / "+nf(list.length)):""; d.querySelectorAll(".lb-n").forEach(b=>b.style.display=list.length>1?"":"none"); window._adImgIdx=i;
+    const mi=document.getElementById("active-modal-img"); if(mi) mi.src=list[i];
+    document.querySelectorAll("#modal-thumbs img").forEach((t,k)=>t.classList.toggle("active",k===i)); };
+  const close=()=>{ try{d.close();}catch(_){} d.remove(); };
+  d.querySelector(".lb-x").onclick=close;
+  d.querySelector(".lb-prev").onclick=()=>show(i-1);
+  d.querySelector(".lb-next").onclick=()=>show(i+1);
+  im.onclick=e=>{ e.stopPropagation(); zoom=!zoom; im.classList.toggle("z",zoom); };
+  d.onclick=e=>{ if(e.target===d) close(); };
+  d.addEventListener("keydown",e=>{ if(e.key==="ArrowLeft") show(i+1); else if(e.key==="ArrowRight") show(i-1); });
+  d.addEventListener("cancel",e=>{ e.preventDefault(); close(); });
+  let sx=null;
+  d.addEventListener("touchstart",e=>{ sx=(e.touches.length===1&&!zoom)?e.touches[0].clientX:null; },{passive:true});
+  d.addEventListener("touchend",e=>{ if(sx==null) return; const dx=e.changedTouches[0].clientX-sx; sx=null; if(Math.abs(dx)>50) show(dx<0?i+1:i-1); });
+  show(i); d.showModal();
+}
+
 function openAd(id){
   (function trackRecentView(){
     try {
@@ -1562,10 +1606,11 @@ function openAd(id){
   }
 
   document.getElementById("det").innerHTML=`
-    <div class="ph" id="main-photo-box" style="aspect-ratio:16/9;--h:${(a.c||1)*23}">
-      ${initialImg ? `<img id="active-modal-img" src="${esc(initialImg)}" alt="${esc(a.t)}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0">` : `<span>${a.isWholesale ? '📦' : (cats[a.c]?.[1] || '📦')}</span>`}
+    <div class="ph" id="main-photo-box" style="aspect-ratio:4/3;max-height:62vh;--h:${(a.c||1)*23};cursor:${initialImg?'zoom-in':'default'}">
+      ${initialImg ? `<img id="active-modal-img" src="${esc(initialImg)}" alt="${esc(a.t)}" style="width:100%;height:100%;object-fit:contain;position:absolute;inset:0;background:var(--bg)">
+      <span class="zoom-hint" aria-hidden="true">⛶ تمام‌صفحه</span>` : `<span>${a.isWholesale ? '📦' : (cats[a.c]?.[1] || '📦')}</span>`}
     </div>
-    ${imgList.length > 1 ? `<div class="thumbs-row" id="modal-thumbs">${imgList.map((im, idx)=>`<img src="${esc(im)}" class="${idx===0?'active':''}" data-idx="${idx}">`).join("")}</div>` : ''}
+    ${imgList.length > 1 ? `<div class="thumbs-row" id="modal-thumbs">${imgList.map((im, idx)=>`<img src="${esc(thumbOf(a,im))}" data-full="${esc(im)}" class="${idx===0?'active':''}" data-idx="${idx}" loading="lazy" alt="">`).join("")}</div>` : ''}
     
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px;flex-wrap:wrap;">
       <h2 style="margin:0;font-size:17px">${esc(a.t)}</h2>
@@ -1624,6 +1669,7 @@ function openAd(id){
       </div>
     ` : ''}
 
+    <div class="safety-tip">⚠️ شمارهٔ فروشنده توسط سایت تأیید نشده است. معامله را حضوری و در مکان عمومی انجام دهید و هرگز پیش‌پرداخت نکنید.</div>
     <div class="seller-card">
       <div>
         <b style="font-size:13px;display:block;cursor:pointer;" data-seller-key="${esc(String(a.owner || a.ph))}" onclick="openSellerProfile(this.dataset.sellerKey)">
@@ -1661,10 +1707,10 @@ function openAd(id){
     <div id="similar-ads"></div>
     <h3 style="font-size:14px;margin-top:14px;"><svg class="icon icon-sm"><use href="#i-chat"></use></svg> ${t('chatTitle')}</h3>
     <div class="chat-box" id="chat-messages"></div>
-    <div style="display:flex;gap:6px;margin-top:6px;">
+    ${(me && users[me]) ? `<div style="display:flex;gap:6px;margin-top:6px;">
       <input id="chat-input" placeholder="${t('chatPh')}" style="flex:1;border:1px solid var(--bd);background:var(--bg);border-radius:8px;padding:6px 10px;font-size:12px;">
       <button class="capsule-btn primary" id="send-chat" style="padding:6px 12px;font-size:12px;">${t('send')}</button>
-    </div>
+    </div>` : `<div style="margin-top:6px;"><button class="capsule-btn primary" id="send-chat" type="button" style="width:100%;padding:8px 12px;font-size:12px;">🔐 برای ارسال پیام، وارد شوید یا ثبت‌نام کنید</button></div>`}
 
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:11px;">
       <button type="button" class="capsule-btn" id="wake-toggle-btn" style="margin-top:8px;width:100%;border:1px solid var(--bd);font-size:12px;"><svg class="icon icon-sm"><use href="#i-lightbulb"></use></svg> ${t('wakeLock')}</button>
@@ -1826,8 +1872,14 @@ function openAd(id){
       if(!thumb) return;
       document.querySelectorAll("#modal-thumbs img").forEach(im=>im.classList.remove("active"));
       thumb.classList.add("active");
-      document.getElementById("active-modal-img").src = thumb.src;
+      window._adImgIdx = +thumb.dataset.idx || 0;
+      document.getElementById("active-modal-img").src = thumb.dataset.full || thumb.src;
     };
+  }
+  window._adImgIdx = 0;
+  const mainBox = document.getElementById("main-photo-box");
+  if(mainBox && imgList.length){
+    mainBox.onclick = () => openLightbox(imgList, window._adImgIdx || 0);
   }
   
   const renderChat = () => {
@@ -1837,7 +1889,7 @@ function openAd(id){
     chatBox.innerHTML = list.length ? list.map(m=>{
       const mine = m.sender == me;
       const tick = mine ? (m.readAt ? ' <span title="خوانده شد" style="opacity:.8;">✔✔</span>' : ' <span title="ارسال شد" style="opacity:.6;">✔</span>') : '';
-      return `<div class="chat-msg ${mine?'me':'other'}"><b>${esc(m.name || 'کاربر')}:</b> ${esc(m.text)}${tick}</div>`;
+      return `<div class="chat-msg ${mine?'me':'other'}"><b>${esc(m.name || 'کاربر')}:</b> ${esc(m.text)}${tick}${chatRisk(m.text)}</div>`;
     }).join("") : `<div class="mu" style="text-align:center;font-size:12px;">${t('chatEmpty')}</div>`;
     if(isAtBottom || chatBox.scrollTop === 0) {
         chatBox.scrollTop = chatBox.scrollHeight;
@@ -2385,6 +2437,20 @@ async function compressImage(file){
     if(url) URL.revokeObjectURL(url);
   }
 }
+function makeThumb(src){
+  return new Promise(res=>{
+    const im=new Image();
+    im.onload=()=>{ try{
+      const k=Math.min(1,400/Math.max(im.width,im.height));
+      const c=document.createElement("canvas");
+      c.width=Math.max(1,Math.round(im.width*k)); c.height=Math.max(1,Math.round(im.height*k));
+      const x=c.getContext("2d"); x.fillStyle="#fff"; x.fillRect(0,0,c.width,c.height); x.drawImage(im,0,0,c.width,c.height);
+      const o=c.toDataURL("image/jpeg",.7); c.width=c.height=0;
+      res(o&&o.length>500?o:null);
+    }catch(e){ res(null); } };
+    im.onerror=()=>res(null); im.src=src;
+  });
+}
 let combinedImagesList = [];
 let imgEpoch = 0;
 let pendingImgJobs = [];
@@ -2473,19 +2539,24 @@ document.getElementById("save").onclick=async()=>{
   put("ab_last_ph_"+me,phv);
   const saveBtn = document.getElementById("save");
   const _origSaveText = saveBtn.textContent;
-  let imgUrls;
+  let imgUrls; let thMap = {};
   try {
     saveBtn.disabled = true;
     if(pendingImgJobs.length){ saveBtn.textContent="در حال آماده‌سازی عکس‌ها..."; await Promise.allSettled(pendingImgJobs.slice()); }
     await ensureSession();
     imgUrls = [];
+    thMap = {};
     if (combinedImagesList.length > 0) {
       let done = 0, failedUploads = 0;
       for(const i of combinedImagesList) {
         try {
           const u = await uploadImg(i.src);
-          if(u) imgUrls.push(u);
-          else failedUploads++;
+          if(u){
+            imgUrls.push(u);
+            if(String(i.src).startsWith("data:")){
+              try{ const tsrc=await makeThumb(i.src); if(tsrc){ const tu=await uploadImg(tsrc,"-t"); if(tu) thMap[u]=tu; } }catch(_){}
+            }
+          } else failedUploads++;
         } catch(err) {
           console.warn("آپلود تصویر ناموفق بود:", err);
           failedUploads++;
@@ -2550,6 +2621,7 @@ document.getElementById("save").onclick=async()=>{
         targetAd.lng = lngVal;
         targetAd.extras = collectExtras();
         targetAd.imgs = imgUrls;
+        { const oldTh = (targetAd.th && typeof targetAd.th==="object") ? targetAd.th : {}; const nt={}; imgUrls.forEach(u=>{ const t=thMap[u]||oldTh[u]; if(t) nt[u]=t; }); targetAd.th = nt; }
         if(!adminFlag) targetAd.status = adVerdict(targetAd);
         put("ab_ads", mine);
         syncAd(targetAd).then(st=>{ if(st) toast(adMsg(st,"ویرایش")); put("ab_ads", mine); draw(); }).catch(()=>{ put("ab_ads", mine); draw(); });
@@ -2569,7 +2641,7 @@ document.getElementById("save").onclick=async()=>{
         p:+document.getElementById("f-p").value||0,
         d:document.getElementById("f-d").value.trim(),
         ph:phv, u: isUrg, owner:me, ownerId: myId,
-        imgs: imgUrls,
+        imgs: imgUrls, th: thMap,
         cond: document.getElementById("form-cond").value,
         mapLoc: document.getElementById("form-map").value.trim(),
         brand:document.getElementById("form-brand").value.trim(), spec:document.getElementById("form-spec").value.trim(), cur:document.getElementById("f-cur").value, neg:document.getElementById("f-neg").checked, moq:+document.getElementById("f-moq").value||0, unit:document.getElementById("f-unit").value,
@@ -2670,12 +2742,12 @@ function dataUrlToBlob(src){
   return new Blob([u8],{type:mime});
 }
 const withTimeout=(p,ms)=>Promise.race([p,new Promise((_,rej)=>setTimeout(()=>rej(new Error("timeout")),ms))]);
-async function uploadImg(src){
+async function uploadImg(src,suffix){
   if(!src||!src.startsWith("data:")) return src;
   if(!sb()) throw new Error("اتصال به سرور برقرار نیست؛ عکس آپلود نشد.");
   if(!myId) throw new Error("نشست معتبر نیست؛ عکس آپلود نشد (دوباره وارد حساب شوید).");
   const blob=dataUrlToBlob(src);
-  const path=`${myId}/${Date.now()}-${Math.random().toString(36).slice(2,8)}.jpg`;
+  const path=`${myId}/${Date.now()}-${Math.random().toString(36).slice(2,8)}${suffix||""}.jpg`;
   let lastErr=null;
   for(let attempt=0;attempt<3;attempt++){
     try{
@@ -2702,7 +2774,8 @@ async function syncAd(ad){
     const wanted = adminFlag ? "approved" : adVerdict(rest);
     const put1 = st => sb().from("ads").upsert({id:String(id),owner_id:myId,status:st,data:rest}).select("status").single();
     let {data,error} = await put1(wanted);
-    if(error && wanted!=="pending"){ console.warn("status="+wanted+" refused, retry pending:",error); ({data,error} = await put1("pending")); }
+    if(error && wanted!=="pending" && !/RATE_LIMIT/.test(error.message||"")){ console.warn("status="+wanted+" refused, retry pending:",error); ({data,error} = await put1("pending")); }
+    if(error && /RATE_LIMIT/.test(error.message||"")){ toast("⛔ به سقف تعداد آگهی مجاز در ۲۴ ساعت رسیده‌اید (حساب‌های تازه حداکثر ۲ آگهی). بعداً دوباره تلاش کنید."); return null; }
     if(error){console.warn(error);toast("ذخیره روی سرور انجام نشد؛ فقط در این دستگاه ذخیره شد.");return null;}
     ad.status=data.status; return data.status;
   }catch(e){
@@ -2845,7 +2918,7 @@ async function loadChat(a) {
         chatBox.innerHTML = list.map(m=>{
           const mine = m.sender === me;
           const tick = mine ? (m.readAt ? ' <span title="خوانده شد" style="opacity:.8;">✔✔</span>' : ' <span title="ارسال شد" style="opacity:.6;">✔</span>') : '';
-          return `<div class="chat-msg ${mine?'me':'other'}"><b>${esc(m.name || 'کاربر')}:</b> ${esc(m.text)}${tick}</div>`;
+          return `<div class="chat-msg ${mine?'me':'other'}"><b>${esc(m.name || 'کاربر')}:</b> ${esc(m.text)}${tick}${chatRisk(m.text)}</div>`;
         }).join("");
         if (isAtBottom || chatBox.scrollTop === 0) chatBox.scrollTop = chatBox.scrollHeight;
       })
@@ -2925,11 +2998,39 @@ window.closeReport = async (reportId) => {
 // همین فهرست در supabase_moderation.sql هم هست (جدول banned_terms) تا سرور هم اعمالش کند.
 const BANNED_TERMS=["مواد مخدر","هروئین","هیروئین","تریاک","حشیش","چرس","کوکائین","کوکایین","کریستال میت","متامفتامین","ماری جوانا","گرد سفید","قاچاق","کلاشینکوف","کلاشنکوف","سلاح گرم","فروش سلاح","اسلحه","تفنگ","پستول","مهمات","فشنگ","نارنجک","خمپاره","دینامیت","مواد منفجره","ساخت بمب","بمب دست‌ساز","بمب ساعتی","ماین زمینی","فروش کلیه","فروش اعضای بدن","فروش انسان","فروش کودک","قاچاق انسان","فروش برده","پول تقلبی","اسکناس جعلی","اسناد جعلی","تذکره جعلی","تذکره تقلبی","پاسپورت جعلی","گذرنامه جعلی","ویزا جعلی","مدرک جعلی","مهر جعلی","سکس","پورن","پورنو","فیلم سوپر","تن‌فروشی","خدمات جنسی","دختر فروشی","مشروب","شراب","ویسکی","ودکا","آبجو","قمار","شرط‌بندی","کازینو","مال دزدی","کالای دزدی","مسروقه","heroin","cocaine","opium","hashish","cannabis","marijuana","crystal meth","kalashnikov","ak-47","ak47","ammunition","grenade","explosives","porn","escort"];
 const modNorm=s=>String(s==null?"":s).normalize("NFKC").toLowerCase().replace(/ي/g,"ی").replace(/ك/g,"ک").replace(/[\u200c\u200b\u200d\u064B-\u065F\u0670\u0640]/g,"").replace(/\s+/g," ");
+// تشخیص دور زدن: «س.ک.س»، «س ک س»، «h.e.r.o.i.n»، «h3ro1n» — با مرز کلمه تا «ماسک سبز» اشتباهاً رد نشود
+let _banRe=null;
+function _banRegexes(){
+  if(_banRe) return _banRe;
+  const SEP="[\\s.\\-_*,/|·•~+]*";
+  _banRe=[];
+  BANNED_TERMS.forEach(w=>{
+    const n=modNorm(w).replace(/\s/g,""); const ch=[...n];
+    if(ch.length<3) return;
+    try{ _banRe.push(new RegExp("(?:^|[^\\p{L}\\p{N}])"+ch.map(c=>c.replace(/[.*+?^${}()|[\]\\\/-]/g,"\\$&")).join(SEP)+"(?![\\p{L}\\p{N}])","u")); }catch(_){}
+  });
+  return _banRe;
+}
+const _vc=w=>w.replace(/[aeiou]/g,"v");
+const _LEET={"0":"o","1":"i","3":"e","4":"a","5":"s","7":"t","@":"a","$":"s"};
+function _leetHit(txt){
+  const lat=BANNED_TERMS.map(modNorm).filter(w=>/^[a-z]{4,}$/.test(w)).map(w=>[w,_vc(w)]);
+  for(const tk of (txt.match(/[a-z0-9@$]+/g)||[])){
+    if(!/[a-z]/.test(tk)) continue;
+    const m=tk.replace(/[013457@$]/g,c=>_LEET[c]||c), vm=_vc(m);
+    for(const [w,v] of lat) if(m===w||vm===v) return true;
+  }
+  return false;
+}
 function adVerdict(a){
   const txt=modNorm([a&&a.t,a&&a.d,a&&a.brand,a&&a.spec,a&&a.mapLoc,a&&a.shopName].join(" "));
   for(const w of BANNED_TERMS){ const n=modNorm(w); if(n&&txt.includes(n)) return "rejected"; }
+  try{ if(_banRegexes().some(re=>re.test(txt)) || _leetHit(txt)) return "rejected"; }catch(_){}
   return "approved";
 }
+// هشدار خودکار در چت (فقط هشدار؛ پیام مسدود نمی‌شود)
+const _RISKY_CHAT=/پیش.?پرداخت|بیعانه|حواله|واریز|کارت.?به.?کارت|کد\s*(تایید|تأیید|پیامک)|usdt|bitcoin|بیت.?کوین|western\s*union/i;
+const chatRisk=t=>_RISKY_CHAT.test(String(t||""))?'<div style="color:#d6324a;font-size:10px;margin-top:2px;">⚠️ هشدار: هرگز پیش‌پرداخت یا کد پیامکی ندهید؛ معامله را حضوری انجام دهید.</div>':"";
 const SAFE_ID=/^[A-Za-z0-9_-]{1,60}$/;
 const MY_STORAGE_URL = "https://snhyzmwgazifdqyvqsnu.supabase.co/storage/v1/object/public/ad-images/";
 const SAFE_IMG = new RegExp("^(" + MY_STORAGE_URL.replace(/[\x5b\x5d\x7b\x7d\x28\x29\x2a\x2b\x3f\x2e\x5e\x24\x7c\x5c]/g, '\\$&') + "[A-Za-z0-9_./-]+)$");
@@ -2955,10 +3056,26 @@ function cleanAd(r){
   if("extras" in a && (typeof a.extras!=="object"||a.extras===null||Array.isArray(a.extras))) a.extras={};
   a.imgs=(Array.isArray(a.imgs)?a.imgs:[]).filter(x=>typeof x==="string"&&SAFE_IMG.test(x)).slice(0,8);
   if(a.img&&!(typeof a.img==="string"&&SAFE_IMG.test(a.img))) a.img="";
+  if(a.th&&typeof a.th==="object"&&!Array.isArray(a.th)){
+    const o={}; Object.keys(a.th).slice(0,8).forEach(k=>{ const v=a.th[k]; if(SAFE_IMG.test(k)&&typeof v==="string"&&SAFE_IMG.test(v)) o[k]=v; }); a.th=o;
+  } else a.th={};
   return a;
 }
+let _firstPaintDone=false;
 async function loadRemote(){
   if(!sb()) return;
+  if(!_firstPaintDone){
+    _firstPaintDone=true;
+    try{
+      const fp=await sb().from("ads").select("id,owner_id,status,data").order("created_at",{ascending:false}).range(0,59);
+      if(!fp.error && Array.isArray(fp.data) && fp.data.length){
+        const first=fp.data.map(r=>{const a=cleanAd(r); if(a){ a.owner=(myId&&r.owner_id===myId)?me:r.owner_id; a.ownerId=r.owner_id; a.status=r.status||"approved"; } return a;}).filter(Boolean);
+        const ids=new Set(first.map(x=>x.id));
+        mine=first.concat((Array.isArray(mine)?mine:[]).filter(x=>!ids.has(x.id)));
+        invalidateAllCache(); draw();
+      }
+    }catch(_){}
+  }
   const {data,error}=await sb().from("ads").select("id,owner_id,status,data").order("created_at",{ascending:false}).limit(500);
   if(error){ console.warn("Supabase ads:",error.message); return; }
   const remote=data.map(r=>{const a=cleanAd(r); if(a){ a.owner=(myId&&r.owner_id===myId)?me:r.owner_id; a.ownerId=r.owner_id; a.status=r.status||"approved"; } return a;}).filter(Boolean);
@@ -2967,7 +3084,7 @@ async function loadRemote(){
   mine=remote;
   await Promise.all(localOwn.map(async a => {
     try {
-      a.imgs = await Promise.all((a.imgs || []).map(uploadImg));
+      a.imgs = await Promise.all((a.imgs || []).map(x=>uploadImg(x)));
       a.ownerId = myId;
       await syncAd(a);
     } catch(e) { console.warn(e); }
