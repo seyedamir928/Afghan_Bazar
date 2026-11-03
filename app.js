@@ -266,37 +266,37 @@ let wholesaleCats = wholesaleCatsLocalized[currentLang];
 const provinceCoords = [
   {name: "کابل", lat: 34.5553, lng: 69.2075},
   {name: "هرات", lat: 34.3529, lng: 62.2040},
-  {name: "مزارشریف", lat: 36.7062, lng: 67.1106},
+  {name: "بلخ (مزارشریف)", lat: 36.7062, lng: 67.1106},
   {name: "قندهار", lat: 31.6289, lng: 65.7371},
-  {name: "جلال‌آباد", lat: 34.4265, lng: 70.4515},
+  {name: "ننگرهار (جلال‌آباد)", lat: 34.4265, lng: 70.4515},
   {name: "کندز", lat: 36.6667, lng: 68.8500},
   {name: "غزنی", lat: 33.5539, lng: 68.4175},
   {name: "بامیان", lat: 34.8345, lng: 67.8273},
-  {name: "چاریکار", lat: 35.0117, lng: 69.2714},
-  {name: "فیض‌آباد", lat: 37.1167, lng: 70.5833},
-  {name: "تالقان", lat: 36.7369, lng: 69.5345},
-  {name: "پل‌خمری", lat: 35.9436, lng: 68.7153},
-  {name: "ایبک", lat: 36.2642, lng: 68.0153},
-  {name: "شبرغان", lat: 36.6598, lng: 65.7483},
-  {name: "میمنه", lat: 35.9214, lng: 64.7525},
+  {name: "پروان (چاریکار)", lat: 35.0117, lng: 69.2714},
+  {name: "بدخشان (فیض‌آباد)", lat: 37.1167, lng: 70.5833},
+  {name: "تخار (تالقان)", lat: 36.7369, lng: 69.5345},
+  {name: "بغلان (پل‌خمری)", lat: 35.9436, lng: 68.7153},
+  {name: "سمنگان (ایبک)", lat: 36.2642, lng: 68.0153},
+  {name: "جوزجان (شبرغان)", lat: 36.6598, lng: 65.7483},
+  {name: "فاریاب (میمنه)", lat: 35.9214, lng: 64.7525},
   {name: "سرپل", lat: 36.2304, lng: 65.9298},
-  {name: "قلعه‌نو", lat: 34.9856, lng: 63.1292},
-  {name: "فیروزکوه", lat: 34.5215, lng: 64.6531},
-  {name: "زرنج", lat: 31.0960, lng: 61.8534},
-  {name: "لشکرگاه", lat: 31.5902, lng: 64.3650},
-  {name: "ترین‌کوت", lat: 32.6282, lng: 66.5861},
-  {name: "قلات", lat: 32.1062, lng: 66.9105},
-  {name: "گردیز", lat: 33.5975, lng: 69.2259},
-  {name: "شرنه", lat: 32.8800, lng: 68.8778},
+  {name: "بادغیس (قلعه‌نو)", lat: 34.9856, lng: 63.1292},
+  {name: "غور (فیروزکوه)", lat: 34.5215, lng: 64.6531},
+  {name: "نیمروز (زرنج)", lat: 31.0960, lng: 61.8534},
+  {name: "هلمند (لشکرگاه)", lat: 31.5902, lng: 64.3650},
+  {name: "ارزگان (ترین‌کوت)", lat: 32.6282, lng: 66.5861},
+  {name: "زابل (قلات)", lat: 32.1062, lng: 66.9105},
+  {name: "پکتیا (گردیز)", lat: 33.5975, lng: 69.2259},
+  {name: "پکتیکا (شرنه)", lat: 32.8800, lng: 68.8778},
   {name: "خوست", lat: 33.3333, lng: 69.9167},
-  {name: "اسد‌آباد", lat: 34.8878, lng: 71.1453},
-  {name: "مهترلام", lat: 34.6461, lng: 70.2092},
-  {name: "پارون", lat: 35.1394, lng: 70.9231},
-  {name: "بازارک", lat: 35.3181, lng: 69.5194},
-  {name: "نیلی", lat: 33.7231, lng: 66.1389},
-  {name: "میدان‌شهر", lat: 34.3917, lng: 68.7247},
-  {name: "پل‌علم", lat: 33.9975, lng: 69.0233},
-  {name: "محمود‌راقی", lat: 35.0039, lng: 69.3242},
+  {name: "کنر (اسد‌آباد)", lat: 34.8878, lng: 71.1453},
+  {name: "لغمان (مهترلام)", lat: 34.6461, lng: 70.2092},
+  {name: "نورستان (پارون)", lat: 35.1394, lng: 70.9231},
+  {name: "پنجشیر (بازارک)", lat: 35.3181, lng: 69.5194},
+  {name: "دایکندی (نیلی)", lat: 33.7231, lng: 66.1389},
+  {name: "میدان وردک (میدان‌شهر)", lat: 34.3917, lng: 68.7247},
+  {name: "لوگر (پل‌علم)", lat: 33.9975, lng: 69.0233},
+  {name: "کاپیسا (محمود‌راقی)", lat: 35.0039, lng: 69.3242},
   {name: "فراه", lat: 32.3742, lng: 62.1136}
 ];
 const cities = provinceCoords.map(p => p.name);
@@ -315,6 +315,7 @@ const normalizePhone = (v) => {
   if (s.startsWith("+93")) s = "0" + s.slice(3);
   else if (s.startsWith("0093")) s = "0" + s.slice(4);
   else if (s.startsWith("93") && s.length === 11) s = "0" + s.slice(2);
+  else if (/^7\d{8}$/.test(s)) s = "0" + s;
   return s;
 };
 const normDigits=s=>String(s??"").replace(/[۰-۹]/g,d=>"۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d));
@@ -349,9 +350,11 @@ function renderSearchHistory(){
 document.addEventListener("DOMContentLoaded", renderSearchHistory);
 
 const normFa=s=>normDigits(s).replace(/ي/g,"ی").replace(/ك/g,"ک").replace(/[\u064B-\u065F\u200c]/g,"").toLowerCase();
-const USD_AFN = (() => { try { const r = +localStorage.getItem("ab_usd_rate"); return Number.isFinite(r) && r > 0 ? r : 70; } catch(e) { return 70; } })();
+let USD_AFN = (() => { try { const r = +localStorage.getItem("ab_usd_rate"); return Number.isFinite(r) && r > 0 ? r : 70; } catch(e) { return 70; } })();
 const EXPIRE_H=24*60;
 const afn=a=>a.cur==="USD"?a.p*USD_AFN:a.p;
+// نرخ دلار: از /api/rate (سمت سرور، کش ۶ ساعته)؛ اگر در دسترس نبود نرخ ذخیره‌شده/۷۰
+try{ fetch("/api/rate",{cache:"no-cache"}).then(r=>r.ok?r.json():null).then(d=>{ if(d&&Number.isFinite(d.rate)&&d.rate>30&&d.rate<300){ USD_AFN=d.rate; try{ localStorage.setItem("ab_usd_rate",String(d.rate)); }catch(_){} try{ invalidateAllCache(); }catch(_){} } }).catch(()=>{}); }catch(_){}
 const pcmp=(a,b)=>{const x=a.p>0?afn(a):Infinity,y=b.p>0?afn(b):Infinity;return x===y?0:x<y?-1:1};
 const fmtAd=a=>a.p?nf(a.p)+(a.cur==="USD"?" دلار":" افغانی")+(a.isWholesale&&a.unit?" / "+esc(a.unit):"")+(a.neg?" (قابل مذاکره)":""):"توافقی";
 const adUrl=id=>location.origin+"/ad/"+encodeURIComponent(id);
@@ -895,7 +898,23 @@ function renderCard(a){
 }
 
 let adminTab="all";
+// ===== حالت نمایش آگهی‌ها: کارت / نوار / آیکن =====
+const VIEW_MODES=["grid","bar","icon"];
+function getViewMode(){ try{ const m=localStorage.getItem("ab_vm"); return VIEW_MODES.includes(m)?m:"grid"; }catch(_){ return "grid"; } }
+function applyViewMode(){
+  const m=getViewMode();
+  // در پنل مدیریت دکمه‌های تایید/رد داخل کارت‌اند؛ همیشه حالت کارت
+  const eff=(typeof view!=="undefined"&&view==="admin")?"grid":m;
+  document.querySelectorAll("#list,#wholesale-list").forEach(el=>{ el.dataset.vm=eff; });
+  document.querySelectorAll(".vm-toggle button").forEach(b=>b.classList.toggle("on",b.dataset.vm===m));
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest(".vm-toggle button"); if(!b) return;
+  try{ localStorage.setItem("ab_vm",b.dataset.vm); }catch(_){}
+  applyViewMode();
+});
 function draw(){
+  try{ applyViewMode(); }catch(_){}
   if(view==="admin" && !adminFlag){ view="all"; adminTab="all"; }
   const q=document.getElementById("q").value.trim(),city=+document.getElementById("header-city-select").value,s=document.getElementById("sort").value;
   const pminV = document.getElementById("pmin").value, pmaxV = document.getElementById("pmax").value;
@@ -1107,6 +1126,7 @@ function draw(){
       <div style="font-size:56px;margin-bottom:8px;">${em.icon}</div>
       <div style="font-weight:700;font-size:15px;margin-bottom:6px;color:var(--tx);">${em.title}</div>
       <div class="mu" style="margin-bottom:14px;">${em.sub}</div>
+      ${(view==="all"||view==="mine"||view==="shop") ? `<button type="button" class="capsule-btn primary" onclick="document.getElementById('header-post-btn').click()">+ ثبت اولین آگهی</button>` : ""}
     </div>`;
   }
   
@@ -1481,6 +1501,26 @@ function closeDetailDialog() {
   document.getElementById("dlg").close();
 }
 
+// آگهی‌های مشابه: همان دسته (و ترجیحاً همان ولایت / همان فروشنده)
+function renderSimilarAds(a){
+  const box=document.getElementById("similar-ads"); if(!box) return;
+  const isW=!!a.isWholesale, key=isW?a.wholesaleCat:a.c;
+  const pool=all().filter(x=>String(x.id)!==String(a.id) && (x.status||"approved")==="approved" && !!x.isWholesale===isW && (isW?x.wholesaleCat:x.c)===key);
+  const score=x=>(x.ci===a.ci?2:0)+(x.owner&&a.owner&&x.owner===a.owner?1:0)+((x.imgs&&x.imgs.length)?0.5:0);
+  const list=pool.sort((p,q)=>score(q)-score(p)||(q.ts||0)-(p.ts||0)).slice(0,4);
+  if(!list.length){ box.innerHTML=""; return; }
+  box.innerHTML='<h3 style="font-size:14px;margin-top:14px;">آگهی‌های مشابه</h3><div class="sim-grid">'+list.map(x=>{
+    const im=(x.imgs&&x.imgs[0])||x.img||"";
+    return '<button type="button" class="sim-card" data-sim="'+esc(x.id)+'">'+(im?'<img src="'+esc(im)+'" alt="" loading="lazy">':'<div class="sim-ph">🛍️</div>')+'<b>'+esc(x.t)+'</b><span class="price">'+fmtAd(x)+'</span><small class="mu">'+esc(cities[x.ci]||"")+'</small></button>';
+  }).join("")+'</div>';
+  box.onclick=e=>{
+    const b=e.target.closest("[data-sim]"); if(!b) return;
+    const d=document.getElementById("dlg"); const id=b.dataset.sim;
+    if(d.open) d.close();
+    openAd(id);
+    try{ document.getElementById("dlg").scrollTop=0; }catch(_){}
+  };
+}
 function openAd(id){
   (function trackRecentView(){
     try {
@@ -1594,7 +1634,7 @@ function openAd(id){
         <span class="mu" style="font-size:11px;">${t('member')}</span>${trustBadgeHTML(a)}
       </div>
       <div>
-        ${a.verified !== false ? '<span class="badge-verified"><svg class="icon icon-sm"><use href="#i-check"></use></svg> شماره تاییدشده</span>' : ''}
+        ${a.verified === true ? '<span class="badge-verified"><svg class="icon icon-sm"><use href="#i-check"></use></svg> شماره تاییدشده</span>' : ''}
       </div>
     </div>
 
@@ -1618,6 +1658,7 @@ function openAd(id){
       </div>
     ` : ''}
 
+    <div id="similar-ads"></div>
     <h3 style="font-size:14px;margin-top:14px;"><svg class="icon icon-sm"><use href="#i-chat"></use></svg> ${t('chatTitle')}</h3>
     <div class="chat-box" id="chat-messages"></div>
     <div style="display:flex;gap:6px;margin-top:6px;">
@@ -1643,6 +1684,7 @@ function openAd(id){
   `;
 
   document.getElementById("dlg").showModal();
+  try{ renderSimilarAds(a); }catch(_){}
   updateOGTags(a);
   const drawAdMap = () => {
     const container = document.getElementById('ad-view-map');
@@ -2121,10 +2163,13 @@ if(S.getItem("ab_cam_pending")){
 
 // ===== Multi-step form =====
 let currentFormStep = 1;
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 2;                       // دو صفحه: ۱) دسته + عنوان/عکس   ۲) مشخصات + قیمت/موقعیت
+const PAGE_OF = {1:1, 2:1, 3:2, 4:2};          // بخش‌های داخلی فرم → شمارهٔ صفحه
+const PAGE_STEPS = {1:[1,2], 2:[3,4]};
 function goToStep(n){
+  try{ window.__updPriceHint && window.__updPriceHint(); }catch(_){}
   n=Math.max(1,Math.min(TOTAL_STEPS,n)); currentFormStep=n;
-  document.querySelectorAll("#add .form-step").forEach(el=>el.classList.toggle("active",+el.dataset.step===n));
+  document.querySelectorAll("#add .form-step").forEach(el=>el.classList.toggle("active",PAGE_OF[+el.dataset.step]===n));
   document.querySelectorAll("#step-progress .step-dot").forEach(el=>{ const k=+el.dataset.step; el.classList.toggle("active",k===n); el.classList.toggle("done",k<n); });
   document.getElementById("cancel").textContent = n===1 ? t("adCancel") : t("prevBtn");
   document.getElementById("save").textContent = n<TOTAL_STEPS ? t("nextBtn") : t("adSave");
@@ -2142,7 +2187,11 @@ function buildCategoryTiles(){
     const sel=document.getElementById("f-c"); sel.value=b.dataset.val; sel.dispatchEvent(new Event("change",{bubbles:true}));
   };
 }
-function validateStep(n){
+function validateStep(page){
+  for(const s of (PAGE_STEPS[page]||[page])){ if(!validateInner(s)) return false; }
+  return true;
+}
+function validateInner(n){
   if(n===1&&!document.getElementById("f-c").value){ toast("لطفاً یک دسته‌بندی انتخاب کنید"); return false; }
   if(n===4){
     const pv=document.getElementById("f-p").value;
@@ -2304,7 +2353,7 @@ function openEditModal(ad) {
   updatePreviewGrid();
   document.getElementById("add").showModal();
   buildCategoryTiles();
-  goToStep(2);
+  goToStep(1);
 }
 
 const MAX_IMGS=6;
@@ -2404,7 +2453,7 @@ document.getElementById("camera-file-input").onchange = function(e) {
 document.getElementById("save").onclick=async()=>{
   if(currentFormStep<TOTAL_STEPS){ if(validateStep(currentFormStep)) goToStep(currentFormStep+1); return; }
   // پیش از انتشار همهٔ مرحله‌ها دوباره بررسی می‌شوند و اگر خطایی بود کاربر به همان مرحله برمی‌گردد
-  for(const s of [1,2,3,4]){
+  for(const s of [1,2]){
     if(!validateStep(s)){ if(s!==currentFormStep){ goToStep(s); validateStep(s); } return; }
   }
   const titleField = document.getElementById("f-t");
@@ -2566,6 +2615,7 @@ function extras(){
     rail.innerHTML = ads.map(card).join("");
   })();
   const A=all().filter(a => !a.isWholesale);
+  document.getElementById("stats").style.display = A.length>=20 ? "flex" : "none";
   document.getElementById("stats").innerHTML=[[A.length,t('statAds')],[provinceCoords.length,t('statProv')],[cats.length-1,t('statCats')]].map(x=>`<div><b data-count="${x[0]}">${nf(x[0])}</b><span>${x[1]}</span></div>`).join("");
   if(!window._statsAnimated && A.length){ window._statsAnimated=true; document.querySelectorAll("#stats b[data-count]").forEach(b=>animateNumber(b,+b.dataset.count)); }
   document.getElementById("feat").innerHTML=A.filter(a=>a.u).sort((a,b)=>a.age-b.age).map(card).join("")||'<div class="mu">فعلاً آگهی ویژه‌ای نیست.</div>';
@@ -3092,7 +3142,8 @@ async function loadInbox() {
   const { data, error } = await sb().from('messages')
     .select('*')
     .or(`sender_id.eq.${myId},recipient_id.eq.${myId}`)
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false })
+    .limit(300);
     
   if(error || !data) {
     box.innerHTML = '<div class="mu" style="text-align:center;padding:20px;">خطا در دریافت پیام‌ها.</div>';
@@ -3881,4 +3932,12 @@ function renderActiveFilters(containerId, isWholesale) {
   } finally {
     draw();
   }
+})();
+
+// نمایش خوانا (با جداکننده هزارگان) زیر فیلد قیمت
+(function(){
+  const p=document.getElementById("f-p"), c=document.getElementById("f-cur"), hint=document.getElementById("f-p-hint");
+  if(!p||!hint) return;
+  const upd=()=>{ const v=Number(p.value); hint.textContent=(p.value!==""&&Number.isFinite(v)&&v>0)?(nf(v)+" "+(c&&c.value==="USD"?"دلار":"افغانی")):""; };
+  p.addEventListener("input",upd); if(c) c.addEventListener("change",upd); window.__updPriceHint=upd;
 })();

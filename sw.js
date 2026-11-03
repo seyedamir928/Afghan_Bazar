@@ -3,7 +3,7 @@
    - بقیه فایل‌های ثابت همین سایت: کش + به‌روزرسانی پس‌زمینه
    - هیچ درخواستی به Supabase یا CDN کش نمی‌شود
    - پشتیبانی از اعلان پوش */
-const VERSION = 'v43';
+const VERSION = 'v46';
 const CACHE = 'ab-shell-' + VERSION;
 const ASSETS = [
   './',
@@ -31,7 +31,7 @@ self.addEventListener('fetch', (e) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;   /* CDN و Supabase کش نمی‌شوند */
-  if (url.pathname.startsWith('/tiles/')) return;     /* تایل‌های نقشه: کش را مرورگر/Cloudflare مدیریت می‌کند */
+  if (url.pathname.startsWith('/tiles/') || url.pathname.startsWith('/api/')) return;     /* تایل‌های نقشه: کش را مرورگر/Cloudflare مدیریت می‌کند */
 
   /* ناوبری + app.js: اول شبکه (نسخه جدید همیشه می‌رسد) */
   if (req.mode === 'navigate' || url.pathname.endsWith('/app.js')) {
