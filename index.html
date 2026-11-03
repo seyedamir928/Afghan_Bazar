@@ -784,6 +784,29 @@ dialog.lb::backdrop{background:#000}
 .lb-c:empty{display:none}
 
 .safety-tip{background:color-mix(in srgb,#e08c00 12%,transparent);border:1px solid #e08c00;border-radius:10px;padding:7px 10px;margin:10px 0;font-size:11px;line-height:1.7}
+
+/* ===== v51: دکمهٔ شناور ثبت آگهی، آموزش، و گوشهٔ منحنی برای همهٔ دکمه‌ها ===== */
+:where(button,select,textarea,input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file])){border-radius:14px}
+.capsule-btn,.admin-action-btn,.link-btn{border-radius:999px}
+.split-capsule .capsule-btn{border-radius:999px}
+.leaflet-bar,.leaflet-bar a:first-child,.leaflet-bar a:last-child{border-radius:12px!important}
+.preview-item,.preview-item img,.thumbs-row img,.skeleton-card .sk-img{border-radius:12px}
+.preview-item .badge-type{border-radius:8px}
+#post-fab{position:fixed;right:16px;left:auto;bottom:calc(96px + env(safe-area-inset-bottom,0px));z-index:130;display:flex;align-items:center;gap:8px;background:var(--ac);color:#fff;border:0;border-radius:999px;padding:14px 20px;font-weight:800;font-size:14px;box-shadow:0 8px 24px rgba(14,122,75,.45);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .15s,box-shadow .15s}
+#post-fab:active{transform:scale(.94)}
+#post-fab .plus{font-size:22px;line-height:1;font-weight:400}
+@media (max-width:360px){#post-fab .lbl{display:none}#post-fab{padding:14px 16px}}
+#tour-dlg{width:min(420px,94vw)}
+#tour-dlg .tour-body{padding:22px 20px 14px;text-align:center}
+#tour-dlg .tour-ic{font-size:54px;line-height:1.2;margin-bottom:6px}
+#tour-dlg h2{font-size:18px;margin:6px 0}
+#tour-dlg p{font-size:13.5px;line-height:2;color:var(--mu);margin:6px 0 0}
+#tour-dlg .tour-dots{display:flex;justify-content:center;gap:6px;margin:14px 0 4px}
+#tour-dlg .tour-dots i{width:8px;height:8px;border-radius:99px;background:var(--bd);transition:all .2s}
+#tour-dlg .tour-dots i.on{width:22px;background:var(--ac)}
+#tour-dlg .tour-actions{display:flex;gap:8px;padding:10px 16px 16px}
+#tour-dlg .tour-actions button{flex:1;padding:11px 12px;font-weight:700;font-size:14px;border-radius:999px;border:1px solid var(--bd);background:var(--bg);cursor:pointer}
+#tour-dlg .tour-actions .go{background:var(--ac);color:#fff;border-color:var(--ac);flex:1.6}
 </style>
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -999,7 +1022,7 @@ dialog.lb::backdrop{background:#000}
   <button class="capsule-btn" id="clear-compare-btn" style="padding:4px 6px;font-size:11px;color:#d6324a;">پاک‌کردن</button>
 </div>
 
-<footer><b>افغان‌بازار</b> — بازار آگهی‌های رایگان افغانستان (نقشه شعاعی و مقایسه کالاها)<br>نسخه ۳۴<br><button class="link" id="theme-btn" type="button">🌓 تغییر تم روشن/تیره</button> · <a href="#" class="link" id="terms-link">قوانین و حریم خصوصی</a></footer>
+<footer><b>افغان‌بازار</b> — بازار آگهی‌های رایگان افغانستان (نقشه شعاعی و مقایسه کالاها)<br>نسخه ۳۴<br><button class="link" id="tour-link" type="button">📖 آموزش ثبت آگهی</button> · <button class="link" id="theme-btn" type="button">🌓 تغییر تم روشن/تیره</button> · <a href="#" class="link" id="terms-link">قوانین و حریم خصوصی</a></footer>
 
 <nav class="bottom-nav">
   <button class="bnav-item active" data-target="retail">
@@ -1011,6 +1034,21 @@ dialog.lb::backdrop{background:#000}
     <span data-i18n="navWholesale">عمده (تجار)</span>
   </button>
 </nav>
+
+<button type="button" id="post-fab" aria-label="ثبت آگهی جدید"><span class="plus" aria-hidden="true">＋</span><span class="lbl" id="post-fab-lbl">ثبت آگهی</span></button>
+
+<dialog id="tour-dlg" aria-label="آموزش ثبت آگهی">
+  <div class="tour-body">
+    <div class="tour-ic" id="tour-ic"></div>
+    <h2 id="tour-h"></h2>
+    <p id="tour-p"></p>
+    <div class="tour-dots" id="tour-dots"></div>
+  </div>
+  <div class="tour-actions">
+    <button type="button" id="tour-skip"></button>
+    <button type="button" class="go" id="tour-next"></button>
+  </div>
+</dialog>
 
 <dialog id="dlg"><div id="det" class="dialog-content-pad"></div></dialog>
 
@@ -1236,6 +1274,6 @@ dialog.lb::backdrop{background:#000}
 <!-- اسکریپت‌های بوت‌استرپ در head -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.js" defer></script>
 <script src="./vendor/leaflet/leaflet.js" defer></script>
-<script src="app.js?v=49" defer></script>
+<script src="app.js?v=50" defer></script>
 </body>
 </html>

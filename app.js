@@ -790,7 +790,7 @@ function initVoiceSearch(inputId){
     mic.textContent='⏺️';
     recog.onresult=ev=>{ input.value=ev.results[0][0].transcript; input.dispatchEvent(new Event('input',{bubbles:true})); };
     recog.onerror=ev=>{
-      if(ev.error==='not-allowed') toast('اجازهٔ میکروفون داده نشد.');
+      if(ev.error==='not-allowed'||ev.error==='service-not-allowed') toast('اجازهٔ میکروفون داده نشد. در تنظیمات مرورگر (قفل کنار آدرس سایت ← مجوزها) میکروفون را «اجازه» بدهید.');
       else if(ev.error==='language-not-supported'&&lang!=='fa-IR'){ recog=null; start('fa-IR'); return; }
       else if(ev.error!=='aborted') toast('صدا شنیده نشد، دوباره تلاش کن.');
     };
@@ -2774,7 +2774,8 @@ async function syncAd(ad){
     const wanted = adminFlag ? "approved" : adVerdict(rest);
     const put1 = st => sb().from("ads").upsert({id:String(id),owner_id:myId,status:st,data:rest}).select("status").single();
     let {data,error} = await put1(wanted);
-    if(error && wanted!=="pending" && !/RATE_LIMIT/.test(error.message||"")){ console.warn("status="+wanted+" refused, retry pending:",error); ({data,error} = await put1("pending")); }
+    if(error && wanted!=="pending" && !/RATE_LIMIT|USER_BLOCKED/.test(error.message||"")){ console.warn("status="+wanted+" refused, retry pending:",error); ({data,error} = await put1("pending")); }
+    if(error && /USER_BLOCKED/.test(error.message||"")){ toast("⛔ ثبت آگهی برای حساب شما موقتاً متوقف شده است (ارسال مکرر آگهی ممنوعه). چند روز بعد دوباره تلاش کنید."); return null; }
     if(error && /RATE_LIMIT/.test(error.message||"")){ toast("⛔ به سقف تعداد آگهی مجاز در ۲۴ ساعت رسیده‌اید (حساب‌های تازه حداکثر ۲ آگهی). بعداً دوباره تلاش کنید."); return null; }
     if(error){console.warn(error);toast("ذخیره روی سرور انجام نشد؛ فقط در این دستگاه ذخیره شد.");return null;}
     ad.status=data.status; return data.status;
@@ -3292,7 +3293,7 @@ async function loadInbox() {
       <div onclick="openAdFromInbox('${adId}')" style="background:var(--card);padding:12px;border-radius:12px;border:1px solid var(--bd);cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
         <div>
           <b style="font-size:13px;display:block;margin-bottom:4px;">${esc(adTitle)}</b>
-          <div class="mu" style="font-size:11px;">${esc(otherName)}: ${esc(lastMsg.text).substring(0,30)}...</div>
+          <div class="mu" style="font-size:11px;">${esc(otherName)}: ${esc(String(lastMsg.text||'').substring(0,30))}...</div>
         </div>
         <div style="font-size:10px;color:var(--mu);">${ago((Date.now() - Date.parse(lastMsg.created_at))/36e5)}</div>
       </div>
@@ -4057,4 +4058,51 @@ function renderActiveFilters(containerId, isWholesale) {
   if(!p||!hint) return;
   const upd=()=>{ const v=Number(p.value); hint.textContent=(p.value!==""&&Number.isFinite(v)&&v>0)?(nf(v)+" "+(c&&c.value==="USD"?"دلار":"افغانی")):""; };
   p.addEventListener("input",upd); if(c) c.addEventListener("change",upd); window.__updPriceHint=upd;
+})();
+
+/* ===== v51: دکمهٔ شناور ثبت آگهی + صفحهٔ آموزش ===== */
+(function(){
+  const $=id=>document.getElementById(id);
+  const fab=$('post-fab'), dlg=$('tour-dlg');
+  if(!fab||!dlg) return;
+  const T={
+    fa:{skip:'بعداً',next:'بعدی',go:'شروع ثبت آگهی',fab:'ثبت آگهی',steps:[
+      ['👋','به افغان‌بازار خوش آمدید','ثبت آگهی رایگان است و فقط چند دقیقه طول می‌کشد. این آموزش را در چهار قدم ببینید.'],
+      ['🔐','۱) ورود به حساب','روی دکمهٔ سبز «＋ ثبت آگهی» پایین صفحه بزنید. اگر وارد نشده‌اید، ایمیل خود را بنویسید و کد تأییدی که می‌رسد را وارد کنید.'],
+      ['📝','۲) اطلاعات و عکس','عنوان، دسته‌بندی، قیمت و توضیح را بنویسید و تا ۸ عکس واضح اضافه کنید. آگهی با عکس خوب بیشتر دیده می‌شود.'],
+      ['📍','۳) موقعیت و تماس','ولایت و موقعیت را روی نقشه مشخص کنید و شمارهٔ تماس/واتساپ را بنویسید تا خریداران بتوانند با شما ارتباط بگیرند.'],
+      ['✅','۴) بررسی و انتشار','آگهی به‌صورت خودکار بررسی می‌شود. آگهی‌های مجاز فوری منتشر می‌شوند؛ کالای ممنوع یا مشکوک رد یا در انتظار بررسی می‌ماند.']]},
+    ps:{skip:'وروسته',next:'بل',go:'اعلان ثبت کړئ',fab:'اعلان ثبت کړئ',steps:[
+      ['👋','افغان‌بازار ته ښه راغلاست','اعلان ثبتول وړیا دي او یوازې څو دقیقې نیسي. دا لارښود په څلورو ګامونو وګورئ.'],
+      ['🔐','۱) حساب ته ننوتل','د پاڼې لاندې شنه «＋ اعلان ثبت کړئ» تڼۍ کېکاږئ. که نه یاست ننوتلي، خپل ایمیل ولیکئ او ترلاسه شوی کوډ دننه کړئ.'],
+      ['📝','۲) معلومات او انځورونه','سرلیک، کټه‌ګورۍ، بیه او توضیحات ولیکئ او تر ۸ پورې واضح انځورونه اضافه کړئ.'],
+      ['📍','۳) موقعیت او اړیکه','ولایت او موقعیت په نقشه کې وټاکئ او د اړیکې/واټساپ شمېره ولیکئ.'],
+      ['✅','۴) کتنه او خپرېدل','اعلان په اتوماتیک ډول کتل کېږي. روا اعلانونه سمدستي خپرېږي؛ منع شوي یا مشکوک توکي رد یا د کتنې په انتظار پاتې کېږي.']]}
+  };
+  const L=()=>T[currentLang]||T.fa;
+  let i=0;
+  const render=()=>{
+    const l=L(), st=l.steps[i], last=i===l.steps.length-1;
+    $('tour-ic').textContent=st[0]; $('tour-h').textContent=st[1]; $('tour-p').textContent=st[2];
+    $('tour-dots').innerHTML=l.steps.map((_,k)=>'<i class="'+(k===i?'on':'')+'"></i>').join('');
+    $('tour-skip').textContent=l.skip; $('tour-next').textContent=last?l.go:l.next;
+  };
+  const seen=()=>{ try{ localStorage.setItem('ab_tour_seen','1'); }catch(_){} };
+  const open=()=>{ i=0; render(); if(!dlg.open) dlg.showModal(); };
+  const close=()=>{ seen(); if(dlg.open) dlg.close(); };
+  $('tour-skip').onclick=close;
+  $('tour-next').onclick=()=>{
+    if(i<L().steps.length-1){ i++; render(); return; }
+    close(); const b=$('header-post-btn'); if(b) b.click();
+  };
+  dlg.addEventListener('cancel',seen);
+  dlg.addEventListener('click',e=>{ if(e.target===dlg) close(); });
+  fab.onclick=()=>{ const b=$('header-post-btn'); if(b) b.click(); };
+  const tl=$('tour-link'); if(tl) tl.onclick=open;
+  const syncFab=()=>{ const l=$('post-fab-lbl'); if(l) l.textContent=L().fab; };
+  syncFab(); setInterval(syncFab,1500);
+  // نمایش خودکار فقط بار اول (و نه وقتی لینک مستقیم آگهی/عمل باز شده)
+  let first=true; try{ first=!localStorage.getItem('ab_tour_seen'); }catch(_){}
+  const direct=/^#(ad-|terms)/.test(location.hash)||/[?&]action=/.test(location.search);
+  if(first&&!direct) setTimeout(()=>{ if(!document.querySelector('dialog[open]')) open(); },900);
 })();

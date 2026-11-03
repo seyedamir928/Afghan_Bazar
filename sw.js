@@ -1,9 +1,9 @@
-/* افغان‌بازار — Service Worker (نسخه 40)
+/* افغان‌بازار — Service Worker (نسخه 51)
    - صفحه اصلی و app.js: اول شبکه، اگر آفلاین بود از حافظه
    - بقیه فایل‌های ثابت همین سایت: کش + به‌روزرسانی پس‌زمینه
    - هیچ درخواستی به Supabase یا CDN کش نمی‌شود
    - پشتیبانی از اعلان پوش */
-const VERSION = 'v49';
+const VERSION = 'v51';
 const CACHE = 'ab-shell-' + VERSION;
 const ASSETS = [
   './',
