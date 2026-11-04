@@ -573,10 +573,10 @@ function priceInsight(ad) {
   const diff = ((myPrice - avg) / avg) * 100;
   const isPs = currentLang === 'ps';
   let verdict, color, icon;
-  if (diff < -15) { verdict = isPs ? "له منځني څخه ډیر ارزانه" : "خیلی ارزان‌تر از میانگین"; color = "#0e7a4b"; icon = "🟢"; }
-  else if (diff < -5) { verdict = isPs ? "لږ ارزانه" : "کمی ارزان‌تر از میانگین"; color = "#37b676"; icon = "🟢"; }
-  else if (diff <= 5) { verdict = isPs ? "منصفانه بیه" : "قیمت منصفانه"; color = "#62736a"; icon = "⚪"; }
-  else if (diff <= 15) { verdict = isPs ? "لږ ګرانه" : "کمی گران‌تر از میانگین"; color = "#e08c00"; icon = "🟡"; }
+  if (diff < -15) { verdict = isPs ? "له منځني څخه ډیر ارزانه" : "خیلی ارزان‌تر از میانگین"; color = "var(--ac)"; icon = "🟢"; }
+  else if (diff < -5) { verdict = isPs ? "لږ ارزانه" : "کمی ارزان‌تر از میانگین"; color = "var(--ac)"; icon = "🟢"; }
+  else if (diff <= 5) { verdict = isPs ? "منصفانه بیه" : "قیمت منصفانه"; color = "var(--mu)"; icon = "⚪"; }
+  else if (diff <= 15) { verdict = isPs ? "لږ ګرانه" : "کمی گران‌تر از میانگین"; color = "#c27800"; icon = "🟡"; }
   else { verdict = isPs ? "له منځني څخه ډیر ګرانه" : "گران‌تر از میانگین"; color = "var(--dg)"; icon = "🔴"; }
   return { avg: Math.round(avg), diff: diff.toFixed(0), count: n, verdict, color, icon };
 }
@@ -732,7 +732,7 @@ function calculateTrustScore(ad){
   if(sc>=75) return {label:t("trustReliable"),color:"#0e7a4b"};
   if(sc>=50) return {label:t("trustGood"),color:"#e08c00"};
   if(sc>=25) return {label:t("trustNew"),color:"#d97706"};
-  return {label:t("trustLow"),color:"#62736a"};
+  return {label:t("trustLow"),color:"var(--mu)"};
 }
 function trustBadgeHTML(a){ const r=calculateTrustScore(a); return `<div style="font-size:12px;font-weight:600;color:${r.color};margin-top:2px;">${r.label}</div>`; }
 
@@ -3608,14 +3608,14 @@ async function renderAdCardAsImage(ad) {
     ctx.font = 'bold 52px Vazirmatn, Tahoma, sans-serif';
     ctx.fillText(fmtAd(ad), W - 120, 815);
 
-    ctx.fillStyle = '#62736a';
+    ctx.fillStyle = '#55665d';
     ctx.font = '30px Vazirmatn, Tahoma, sans-serif';
     ctx.fillText(`📍 ${cities[ad.ci] || ''}  ·  ${ago(ad.age)}`, W - 120, 875);
 
     ctx.fillStyle = '#0e7a4b';
     ctx.font = 'bold 40px Vazirmatn, Tahoma, sans-serif';
     ctx.fillText('◆ افغان‌بازار', W - 120, H - 95);
-    ctx.fillStyle = '#62736a';
+    ctx.fillStyle = '#55665d';
     ctx.font = '24px Vazirmatn, Tahoma, sans-serif';
     ctx.fillText(location.host || 'afghanbazar', W - 120, H - 55);
 

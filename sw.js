@@ -1,9 +1,9 @@
-/* افغان‌بازار — Service Worker (نسخه 53)
+/* افغان‌بازار — Service Worker (نسخه 54)
    - صفحه اصلی و app.js: اول شبکه، اگر آفلاین بود از حافظه
    - بقیه فایل‌های ثابت همین سایت: کش + به‌روزرسانی پس‌زمینه
    - هیچ درخواستی به Supabase یا CDN کش نمی‌شود
    - پشتیبانی از اعلان پوش */
-const VERSION = 'v53';
+const VERSION = 'v54';
 const CACHE = 'ab-shell-' + VERSION;
 const ASSETS = [
   './',
@@ -11,8 +11,7 @@ const ASSETS = [
   './app.js',
   './emoji-icons.js',              /* ← اضافه شد */
   './manifest.json',
-  './icon-192.png',
-  './icon-512.png'
+  './icon-maskable-512.png'
 ];
 
 self.addEventListener('install', (e) => {
@@ -69,8 +68,8 @@ self.addEventListener('push', (e) => {
   try { d = e.data ? e.data.json() : {}; } catch (_) { d = { body: e.data ? e.data.text() : '' }; }
   e.waitUntil(self.registration.showNotification(d.title || 'افغان‌بازار', {
     body: d.body || '',
-    icon: './icon-192.png',
-    badge: './icon-192.png',
+    icon: './icon-maskable-512.png',
+    badge: './icon-maskable-512.png',
     data: { url: d.url || './' }
   }));
 });

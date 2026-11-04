@@ -23,7 +23,7 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card)
 .header-right{display:flex;align-items:center;flex-shrink:0;gap:4px}
 .header-province-selector{display:flex;align-items:center;background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:2px 4px;gap:2px}
 .header-province-selector span{font-size:12px;color:var(--mu);white-space:nowrap}
-.header-province-selector select{border:0;background:none;font-weight:600;font-size:12px;color:var(--tx);outline:none;cursor:pointer;padding:2px;max-width:92px;text-overflow:ellipsis}
+.header-province-selector select{border:0;background:none;font-weight:600;font-size:12px;color:var(--tx);outline:none;cursor:pointer;padding:2px;max-width:120px;text-overflow:ellipsis}
 .notif-bell-btn{background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:4px 6px;cursor:pointer;position:relative;font-size:13px;flex-shrink:0;}
 .notif-badge{position:absolute;top:-4px;right:-4px;background:var(--dg);color:#fff;font-size:12px;padding:1px 4px;border-radius:99px;font-weight:bold;}
 .header-center{display:flex;align-items:center;justify-content:center;flex:0 0 auto;text-align:center}
@@ -42,7 +42,7 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card)
 .capsule-btn.primary:hover{background:color-mix(in srgb,var(--ac) 82%,#000)}
 
 .bottom-nav{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom, 0px));left:16px;right:16px;height:65px;background:color-mix(in srgb,var(--card) 85%,transparent);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:24px;display:flex;gap:6px;padding:6px;box-sizing:border-box;z-index:120;box-shadow:0 10px 40px rgba(0,0,0,.15);}
-.bnav-item{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:transparent;border:0;border-radius:18px;cursor:pointer;color:var(--mu);font-size:12px;font-weight:600;gap:2px;line-height:1.3;padding:0 4px;-webkit-tap-highlight-color:transparent;transition:color .15s, background .15s}
+.bnav-item{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:transparent;border:0;border-radius:18px;cursor:pointer;color:var(--mu);font-size:13px;font-weight:600;gap:2px;line-height:1.3;padding:0 4px;-webkit-tap-highlight-color:transparent;transition:color .15s, background .15s}
 .bnav-item span:not(.icon){max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .bnav-item span.icon{font-size:17px;line-height:1}
 .bnav-item.active{color:var(--ac);background:var(--chip)}
@@ -121,7 +121,7 @@ header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card)
 .i{padding:10px 12px 14px}
 .i b{font-weight:600;font-size:14px;line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .price{font-weight:800;color:var(--ac);margin-top:2px;font-size:14px}
-.mu{color:var(--mu);font-size:12px}
+.mu{color:var(--mu);font-size:13px}
 .empty{padding:60px 10px;text-align:center;color:var(--mu);grid-column:1/-1;font-size:14px}
 
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
@@ -237,9 +237,9 @@ dialog input[type="checkbox"], dialog input[type="radio"] { width: auto; flex: n
   header{padding:6px 8px;gap:4px}
   .brand-title{font-size:12px}
   .logo-box{width:26px;height:26px;font-size:12px}
-  .header-province-selector select{max-width:80px;font-size:12px}
+  .header-province-selector select{max-width:110px;font-size:13px}
   .header-province-selector span { font-size: 12px; }
-  .capsule-btn{padding:5px 8px;font-size:12px}
+  .capsule-btn{padding:5px 8px;font-size:13px}
   .notif-bell-btn { padding: 4px 5px; font-size: 12px; }
   .hero, .wholesale-hero{padding:28px 14px 58px}
   .wrap{padding:0 12px}
@@ -694,14 +694,13 @@ dialog .chk input[type="checkbox"]:focus-visible{outline:2px solid var(--ac);out
 .grid{grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:10px}
 .ph{aspect-ratio:5/4;font-size:36px}
 .i{padding:7px 9px 9px}
-.i b{font-size:12.5px;line-height:1.45}
+.i b{font-size:14px;line-height:1.45}
 .price{font-size:13px}
 .i .mu{font-size:12px}
 .badge{font-size:12px;padding:1px 7px;top:7px;right:7px}
 .ad .badge[style]{display:none}
 .fav{width:26px;height:26px;font-size:13px;top:6px;left:6px}
 .compare-checkbox{width:22px;height:22px;top:6px;left:36px;font-size:12px}
-.ad:hover{transform:none}
 /* ===== کلید تغییر نمایش ===== */
 .vm-toggle{display:inline-flex;border:1px solid var(--bd);border-radius:12px;overflow:hidden;background:var(--card)}
 .vm-toggle button{border:0;background:transparent;color:var(--mu);padding:6px 9px;cursor:pointer;display:grid;place-items:center}
@@ -721,7 +720,7 @@ dialog .chk input[type="checkbox"]:focus-visible{outline:2px solid var(--ac);out
 .grid[data-vm="icon"] .ad{border-radius:12px;box-shadow:none}
 .grid[data-vm="icon"] .ph{aspect-ratio:1/1;font-size:30px}
 .grid[data-vm="icon"] .i{padding:5px 6px 6px}
-.grid[data-vm="icon"] .i b{font-size:12px;-webkit-line-clamp:1}
+.grid[data-vm="icon"] .i b{font-size:13px;-webkit-line-clamp:1}
 .grid[data-vm="icon"] .price{font-size:12px;margin-top:0}
 .grid[data-vm="icon"] .i .mu,.grid[data-vm="icon"] .compare-checkbox{display:none}
 .grid[data-vm="icon"] .i>div:not(.price){display:none}
@@ -735,7 +734,7 @@ dialog .chk input[type="checkbox"]:focus-visible{outline:2px solid var(--ac);out
 .rail .ad{flex:0 0 128px;border-radius:12px;box-shadow:none}
 .rail .ph{aspect-ratio:1/1;font-size:30px}
 .rail .i{padding:5px 7px 7px}
-.rail .i b{font-size:12px;-webkit-line-clamp:1}
+.rail .i b{font-size:13px;-webkit-line-clamp:1}
 .rail .price{font-size:12px;margin-top:0}
 .rail .i>div:not(.price){display:none}
 .rail .compare-checkbox{display:none}
@@ -743,7 +742,7 @@ dialog .chk input[type="checkbox"]:focus-visible{outline:2px solid var(--ac);out
 .rail .badge{top:4px;right:4px;font-size:12px;padding:0 6px}
 #recent-rail .ad{flex-basis:104px}
 #recent-rail .ph{aspect-ratio:1/1}
-#recent-rail .i b{font-size:12px}
+#recent-rail .i b{font-size:13px}
 #recent-rail .fav{display:none}
 /* ===== صفحه‌ی اول جمع‌وجورتر ===== */
 .hero,.wholesale-hero{padding:24px 20px 46px}
@@ -752,7 +751,7 @@ dialog .chk input[type="checkbox"]:focus-visible{outline:2px solid var(--ac);out
 .stats{margin-top:12px;gap:18px}
 .stats b{font-size:17px}
 .tiles{grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px}
-.tile{padding:9px 4px;font-size:12px;border-radius:14px}
+.tile{padding:9px 4px;font-size:13px;border-radius:14px}
 .tile span{font-size:22px;line-height:1.3}
 @media (max-width:640px){
   .hero,.wholesale-hero{padding:16px 14px 38px}
@@ -785,6 +784,9 @@ dialog.lb::backdrop{background:#000}
 .safety-tip{background:color-mix(in srgb,#e08c00 12%,transparent);border:1px solid #e08c00;border-radius:10px;padding:7px 10px;margin:10px 0;font-size:12px;line-height:1.7}
 
 @media(max-width:760px){#header-post-btn{display:none}.header-province-selector>span{display:none}.capsule-btn{min-height:34px}.header-province-selector select{min-height:34px}.notif-bell-btn{min-width:34px;min-height:34px}}
+.fav::after,.compare-checkbox::after{content:"";position:absolute;inset:-9px}
+.compare-floating-bar{bottom:calc(96px + env(safe-area-inset-bottom,0px))!important}
+#sw-update-banner{bottom:calc(160px + env(safe-area-inset-bottom,0px))}
 /* ===== v51: دکمهٔ شناور ثبت آگهی، آموزش، و گوشهٔ منحنی برای همهٔ دکمه‌ها ===== */
 :where(button,select,textarea,input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file])){border-radius:14px}
 .capsule-btn,.admin-action-btn,.link-btn{border-radius:999px}
@@ -812,7 +814,7 @@ dialog.lb::backdrop{background:#000}
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="افغان‌بازار">
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-maskable-512.png">
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
