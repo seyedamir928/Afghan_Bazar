@@ -334,8 +334,8 @@ function renderSearchHistory(){
   if (!Array.isArray(h) || h.length === 0) { box.style.display = "none"; return; }
   box.style.display = "block";
   box.innerHTML = '<span style="opacity:.7;">اخیر:</span> ' +
-    h.map(q => `<button type="button" class="capsule-btn" data-hist="${esc(q)}" style="font-size:11px;padding:2px 8px;margin:2px 2px 0 0;border:1px solid var(--bd);">${esc(q)}</button>`).join("") +
-    ` <button type="button" class="link" id="clear-hist" style="font-size:11px;">پاک‌کردن</button>`;
+    h.map(q => `<button type="button" class="capsule-btn" data-hist="${esc(q)}" style="font-size:12px;padding:2px 8px;margin:2px 2px 0 0;border:1px solid var(--bd);">${esc(q)}</button>`).join("") +
+    ` <button type="button" class="link" id="clear-hist" style="font-size:12px;">پاک‌کردن</button>`;
   box.querySelectorAll("[data-hist]").forEach(b => {
     b.onclick = () => { $("#q").value = b.dataset.hist; currentPage = 1; draw(); };
   });
@@ -428,7 +428,7 @@ document.getElementById("notif-bell-btn").onclick = () => {
   container.innerHTML = notifications.length ? notifications.map(n => `
     <div style="background:var(--bg);border:1px solid var(--bd);padding:10px;border-radius:10px;font-size:12px;">
       <div>${esc(n.text)}</div>
-      <div class="mu" style="font-size:10px;margin-top:3px;">${ago((Date.now() - n.time)/36e5)}</div>
+      <div class="mu" style="font-size:12px;margin-top:3px;">${ago((Date.now() - n.time)/36e5)}</div>
     </div>
   `).join("") : '<div class="mu" style="text-align:center;padding:20px;">هیچ اعلانی وجود ندارد.</div>';
   document.getElementById("notif-dlg").showModal();
@@ -447,7 +447,7 @@ function populateModalCategorySelect(isWholesale) {
 function buildMultiProvinceCheckboxes() {
   const grid = document.getElementById("multi-provinces-grid");
   grid.innerHTML = provinceCoords.map((p, i) => `
-    <label class="chk" style="font-size:11px;"><input type="checkbox" class="multi-prov-chk" value="${i}"> ${p.name}</label>
+    <label class="chk" style="font-size:12px;"><input type="checkbox" class="multi-prov-chk" value="${i}"> ${p.name}</label>
   `).join("");
 }
 buildMultiProvinceCheckboxes();
@@ -577,7 +577,7 @@ function priceInsight(ad) {
   else if (diff < -5) { verdict = isPs ? "لږ ارزانه" : "کمی ارزان‌تر از میانگین"; color = "#37b676"; icon = "🟢"; }
   else if (diff <= 5) { verdict = isPs ? "منصفانه بیه" : "قیمت منصفانه"; color = "#62736a"; icon = "⚪"; }
   else if (diff <= 15) { verdict = isPs ? "لږ ګرانه" : "کمی گران‌تر از میانگین"; color = "#e08c00"; icon = "🟡"; }
-  else { verdict = isPs ? "له منځني څخه ډیر ګرانه" : "گران‌تر از میانگین"; color = "#d6324a"; icon = "🔴"; }
+  else { verdict = isPs ? "له منځني څخه ډیر ګرانه" : "گران‌تر از میانگین"; color = "var(--dg)"; icon = "🔴"; }
   return { avg: Math.round(avg), diff: diff.toFixed(0), count: n, verdict, color, icon };
 }
 
@@ -706,7 +706,7 @@ function mapFail(el, retry){
   if(typeof el==='string') el=document.getElementById(el);
   if(!el) return;
   const diag=(window.__mapDiag||[]).slice(-6).join(' | ');
-  el.innerHTML='<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:12px;text-align:center;font-size:12px;color:var(--mu)"><div>🗺️ کتابخانه‌ی نقشه بارگذاری نشد</div><button type="button" class="capsule-btn primary" data-retry>تلاش دوباره</button><small style="direction:ltr;opacity:.65;font-size:10px;word-break:break-all">'+esc(diag||'no-diagnostics')+'</small></div>';
+  el.innerHTML='<div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:12px;text-align:center;font-size:12px;color:var(--mu)"><div>🗺️ کتابخانه‌ی نقشه بارگذاری نشد</div><button type="button" class="capsule-btn primary" data-retry>تلاش دوباره</button><small style="direction:ltr;opacity:.65;font-size:12px;word-break:break-all">'+esc(diag||'no-diagnostics')+'</small></div>';
   const b=el.querySelector('[data-retry]'); if(b) b.onclick=()=>{ _leafletP=null; window.__mapDiag=[]; el.innerHTML='<div style="padding:12px;text-align:center;font-size:12px;color:var(--mu)">در حال بارگذاری…</div>'; ensureLeaflet().then(ok=>{ if(ok){ el.innerHTML=''; retry&&retry(); } else mapFail(el,retry); }); };
 }
 function baseTiles(){
@@ -734,7 +734,7 @@ function calculateTrustScore(ad){
   if(sc>=25) return {label:t("trustNew"),color:"#d97706"};
   return {label:t("trustLow"),color:"#62736a"};
 }
-function trustBadgeHTML(a){ const r=calculateTrustScore(a); return `<div style="font-size:10px;font-weight:600;color:${r.color};margin-top:2px;">${r.label}</div>`; }
+function trustBadgeHTML(a){ const r=calculateTrustScore(a); return `<div style="font-size:12px;font-weight:600;color:${r.color};margin-top:2px;">${r.label}</div>`; }
 
 // ===== OG tags (client-side only; crawlers of WhatsApp/Telegram need a server page) =====
 const _ogDefaults={};
@@ -907,7 +907,7 @@ function renderCard(a){
     ${a.isWholesale?'<span class="badge wholesale-badge" style="top:10px;left:70px;right:auto;">📦 عمده</span>':(a.isShop?`<span class="badge" style="background:var(--ac);color:#fff;top:10px;left:70px;right:auto;">🏪 فروشگاه (${shopRatingInfo?.avg || '—'} ★)</span>`:'')}
     <button class="fav ${favs.includes(a.id)?'on':''}" data-f="${a.id}" aria-label="نشان‌کردن آگهی" aria-pressed="${favs.includes(a.id)}">${favs.includes(a.id)?'♥':'♡'}</button>
     ${!a.isWholesale ? `<button class="compare-checkbox ${isCompared?'checked':''}" data-comp="${a.id}" aria-label="افزودن به مقایسه" aria-pressed="${isCompared}" title="افزودن به مقایسه">⚖️</button>` : ''}
-    <div class="i"><b>${esc(a.t)}</b><div class="price">${fmtAd(a)}</div><div class="mu"><span title="${a.ts ? new Date(a.ts).toISOString() : ''}">${ago(a.age)}</span> · ${locLabel}</div>${trustBadgeHTML(a)}${(view==="mine"||view==="admin")?`<div class="mu" style="margin-top:4px;font-size:11px;">👁️ ${nf(a.views||0)} · 📞 ${nf(a.calls||0)}</div>`:''}${(view==="fav"&&notes[me]&&notes[me][a.id])?`<div style="margin-top:4px;background:var(--chip);padding:3px 6px;border-radius:4px;font-size:11px;">📝 ${esc(notes[me][a.id])}</div>`:''}${view==="admin"?`<div style="margin-top:6px;display:flex;gap:4px;align-items:center;flex-wrap:wrap;"><span style="font-size:10px;padding:2px 6px;border-radius:4px;background:${(a.status||"approved")==="approved"?"var(--chip)":((a.status||"approved")==="pending"?"#fff3cd":"#f8d7da")};color:${(a.status||"approved")==="approved"?"var(--ac)":((a.status||"approved")==="pending"?"#856404":"#721c24")};">${(a.status||"approved")==="approved"?"✓ منتشرشده":((a.status||"approved")==="pending"?"⏳ در انتظار":"✕ رد شده")}</span>${!seed.some(x=>String(x.id)===String(a.id))?`${(a.status||"approved")!=="approved"?`<button class="capsule-btn" data-approve="${a.id}" style="padding:2px 8px;font-size:10px;background:#0e7a4b;color:#fff;">✅ تایید</button>`:''}${(a.status||"approved")!=="rejected"?`<button class="capsule-btn" data-reject="${a.id}" style="padding:2px 8px;font-size:10px;background:#d6324a;color:#fff;">❌ رد</button>`:''}`:`<span style="font-size:9px;color:var(--mu);">نمونه</span>`}</div>`:''}${view==="mine" && (a.status||"approved")!=="approved"?`<div style="margin-top:4px;font-size:10px;padding:2px 6px;border-radius:4px;display:inline-block;background:${(a.status||"approved")==="pending"?"#fff3cd":"#f8d7da"};color:${(a.status||"approved")==="pending"?"#856404":"#721c24"};">${(a.status||"approved")==="pending"? t('statusPending') : t('statusRejected')}</div>`:''}</div>
+    <div class="i"><b>${esc(a.t)}</b><div class="price">${fmtAd(a)}</div><div class="mu"><span title="${a.ts ? new Date(a.ts).toISOString() : ''}">${ago(a.age)}</span> · ${locLabel}</div>${trustBadgeHTML(a)}${(view==="mine"||view==="admin")?`<div class="mu" style="margin-top:4px;font-size:12px;">👁️ ${nf(a.views||0)} · 📞 ${nf(a.calls||0)}</div>`:''}${(view==="fav"&&notes[me]&&notes[me][a.id])?`<div style="margin-top:4px;background:var(--chip);padding:3px 6px;border-radius:4px;font-size:12px;">📝 ${esc(notes[me][a.id])}</div>`:''}${view==="admin"?`<div style="margin-top:6px;display:flex;gap:4px;align-items:center;flex-wrap:wrap;"><span style="font-size:12px;padding:2px 6px;border-radius:4px;background:${(a.status||"approved")==="approved"?"var(--chip)":((a.status||"approved")==="pending"?"#fff3cd":"#f8d7da")};color:${(a.status||"approved")==="approved"?"var(--ac)":((a.status||"approved")==="pending"?"#856404":"#721c24")};">${(a.status||"approved")==="approved"?"✓ منتشرشده":((a.status||"approved")==="pending"?"⏳ در انتظار":"✕ رد شده")}</span>${!seed.some(x=>String(x.id)===String(a.id))?`${(a.status||"approved")!=="approved"?`<button class="capsule-btn" data-approve="${a.id}" style="padding:2px 8px;font-size:12px;background:#0e7a4b;color:#fff;">✅ تایید</button>`:''}${(a.status||"approved")!=="rejected"?`<button class="capsule-btn" data-reject="${a.id}" style="padding:2px 8px;font-size:12px;background:var(--dg);color:#fff;">❌ رد</button>`:''}`:`<span style="font-size:12px;color:var(--mu);">نمونه</span>`}</div>`:''}${view==="mine" && (a.status||"approved")!=="approved"?`<div style="margin-top:4px;font-size:12px;padding:2px 6px;border-radius:4px;display:inline-block;background:${(a.status||"approved")==="pending"?"#fff3cd":"#f8d7da"};color:${(a.status||"approved")==="pending"?"#856404":"#721c24"};">${(a.status||"approved")==="pending"? t('statusPending') : t('statusRejected')}</div>`:''}</div>
   </div>`;
 }
 
@@ -976,9 +976,9 @@ function draw(){
     if(targetBanner) {
       targetBanner.innerHTML = `
         <div class="shop-banner" style="justify-content:space-around; margin-bottom:10px; background:linear-gradient(135deg, #1b3b6f, #152c48);">
-          <div style="text-align:center;"><b id="adm-users" style="font-size:20px;display:block;">...</b><span style="font-size:11px;">کل کاربران</span></div>
-          <div style="text-align:center;"><b id="adm-ads" style="font-size:20px;display:block;">...</b><span style="font-size:11px;">کل آگهی‌ها</span></div>
-          <div style="text-align:center;"><b id="adm-pending" style="font-size:20px;display:block;color:#ffc107;">...</b><span style="font-size:11px;">در انتظار تایید</span></div>
+          <div style="text-align:center;"><b id="adm-users" style="font-size:20px;display:block;">...</b><span style="font-size:12px;">کل کاربران</span></div>
+          <div style="text-align:center;"><b id="adm-ads" style="font-size:20px;display:block;">...</b><span style="font-size:12px;">کل آگهی‌ها</span></div>
+          <div style="text-align:center;"><b id="adm-pending" style="font-size:20px;display:block;color:#ffc107;">...</b><span style="font-size:12px;">در انتظار تایید</span></div>
         </div>
         <div class="mtabs" style="margin:6px 0 10px;">
           <button type="button" data-atab="all" class="${adminTab==='all'?'on':''}">همه آگهی‌ها</button>
@@ -1058,7 +1058,7 @@ function draw(){
     const myAds = mine.filter(x=>x.owner===me);
     const tv = myAds.reduce((s,x)=>s+(Number(x.views)||0),0);
     const tc = myAds.reduce((s,x)=>s+(Number(x.calls)||0),0);
-    document.getElementById("dynamic-shop-banner").innerHTML = `<div class="shop-banner" style="justify-content:space-around;"><div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(myAds.length)}</b><span style="font-size:11px;opacity:0.8;">آگهی</span></div><div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(tv)}</b><span style="font-size:11px;opacity:0.8;">بازدید</span></div><div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(tc)}</b><span style="font-size:11px;opacity:0.8;">تماس</span></div></div>`;
+    document.getElementById("dynamic-shop-banner").innerHTML = `<div class="shop-banner" style="justify-content:space-around;"><div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(myAds.length)}</b><span style="font-size:12px;opacity:0.8;">آگهی</span></div><div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(tv)}</b><span style="font-size:12px;opacity:0.8;">بازدید</span></div><div style="text-align:center;"><b style="font-size:20px;display:block;">${nf(tc)}</b><span style="font-size:12px;opacity:0.8;">تماس</span></div></div>`;
     const expiring = expiringMine();
     if(expiring.length) {
       const btn = document.createElement("button");
@@ -1502,7 +1502,7 @@ document.getElementById("show-compare-modal-btn").onclick = () => {
     </tr>
     <tr>
       <td style="padding:8px;font-weight:bold;color:var(--mu);">عملیات</td>
-      ${adsToCompare.map(a => `<td style="padding:8px;text-align:center;"><button class="capsule-btn primary" onclick="document.getElementById('compare-dlg').close(); openAd('${esc(a.id)}')" style="font-size:10px;padding:3px 6px;">مشاهده</button></td>`).join("")}
+      ${adsToCompare.map(a => `<td style="padding:8px;text-align:center;"><button class="capsule-btn primary" onclick="document.getElementById('compare-dlg').close(); openAd('${esc(a.id)}')" style="font-size:12px;padding:3px 6px;">مشاهده</button></td>`).join("")}
     </tr>
   </table>`;
   document.getElementById("compare-table-container").innerHTML = html;
@@ -1615,9 +1615,9 @@ function openAd(id){
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px;flex-wrap:wrap;">
       <h2 style="margin:0;font-size:17px">${esc(a.t)}</h2>
       <div style="display:flex;gap:5px;">
-        ${a.ph ? `<a href="https://wa.me/${toWhatsAppNumber(a.ph)}?text=${encodeURIComponent('سلام، این آگهی را دیدم: ' + a.t + '\n' + 'قیمت: ' + fmtAd(a) + '\n' + adUrl(a.id))}" target="_blank" class="capsule-btn" style="background:#25d366;color:#fff;padding:3px 8px;font-size:11px;font-weight:bold;">💬 واتساپ به فروشنده</a>` : ''}
-        <a href="https://t.me/share/url?url=${encodeURIComponent(adUrl(a.id))}&text=${encodeURIComponent(a.t)}" target="_blank" class="capsule-btn" style="background:#0088cc;color:#fff;padding:3px 8px;font-size:11px;">تلگرام</a>
-        <button class="capsule-btn" id="share-btn" style="padding:3px 8px;font-size:11px;border:1px solid var(--bd); display:flex; align-items:center; gap:4px;"><svg class="icon icon-sm"><use href="#i-link"></use></svg> کپی</button>
+        ${a.ph ? `<a href="https://wa.me/${toWhatsAppNumber(a.ph)}?text=${encodeURIComponent('سلام، این آگهی را دیدم: ' + a.t + '\n' + 'قیمت: ' + fmtAd(a) + '\n' + adUrl(a.id))}" target="_blank" class="capsule-btn" style="background:#25d366;color:#fff;padding:3px 8px;font-size:12px;font-weight:bold;">💬 واتساپ به فروشنده</a>` : ''}
+        <a href="https://t.me/share/url?url=${encodeURIComponent(adUrl(a.id))}&text=${encodeURIComponent(a.t)}" target="_blank" class="capsule-btn" style="background:#0088cc;color:#fff;padding:3px 8px;font-size:12px;">تلگرام</a>
+        <button class="capsule-btn" id="share-btn" style="padding:3px 8px;font-size:12px;border:1px solid var(--bd); display:flex; align-items:center; gap:4px;"><svg class="icon icon-sm"><use href="#i-link"></use></svg> کپی</button>
       </div>
     </div>
     
@@ -1636,11 +1636,11 @@ function openAd(id){
         <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
           <div>
             <div style="font-size:12px; font-weight:700; color:${pi.color};">${pi.icon} ${pi.verdict}</div>
-            <div class="mu" style="font-size:11px; margin-top:2px;">میانگین ${nf(pi.count)} آگهی مشابه در ${cities[a.ci] || 'این منطقه'}: <b>${nf(pi.avg)} افغانی</b></div>
+            <div class="mu" style="font-size:12px; margin-top:2px;">میانگین ${nf(pi.count)} آگهی مشابه در ${cities[a.ci] || 'این منطقه'}: <b>${nf(pi.avg)} افغانی</b></div>
           </div>
           <div style="text-align:left;">
             <div style="font-size:16px; font-weight:800; color:${pi.color};">${pi.diff > 0 ? '+' : ''}${nf(+pi.diff)}٪</div>
-            <div class="mu" style="font-size:10px;">نسبت به میانگین</div>
+            <div class="mu" style="font-size:12px;">نسبت به میانگین</div>
           </div>
         </div>
       </div>`;
@@ -1661,10 +1661,10 @@ function openAd(id){
     
     ${me && users[me] ? `
       <div style="background:var(--bg);border:1px solid var(--bd);padding:8px 10px;border-radius:10px;margin-top:10px;">
-        <label for="personal-note-input" style="font-size:11px;margin-bottom:3px;display:flex;align-items:center;gap:4px;"><svg class="icon icon-sm"><use href="#i-note"></use></svg> ${t('noteTitle')}</label>
+        <label for="personal-note-input" style="font-size:12px;margin-bottom:3px;display:flex;align-items:center;gap:4px;"><svg class="icon icon-sm"><use href="#i-note"></use></svg> ${t('noteTitle')}</label>
         <div style="display:flex;gap:6px;">
           <input id="personal-note-input" value="${esc(userNote)}" placeholder="${t('notePh')}" style="font-size:12px;padding:4px 8px;">
-          <button class="capsule-btn primary" id="save-note-btn" style="padding:4px 10px;font-size:11px;">${t('save')}</button>
+          <button class="capsule-btn primary" id="save-note-btn" style="padding:4px 10px;font-size:12px;">${t('save')}</button>
         </div>
       </div>
     ` : ''}
@@ -1675,9 +1675,9 @@ function openAd(id){
         <b style="font-size:13px;display:block;cursor:pointer;" data-seller-key="${esc(String(a.owner || a.ph))}" onclick="openSellerProfile(this.dataset.sellerKey)">
           <svg class="icon icon-sm"><use href="#i-user"></use></svg> ${t('seller')}: ${esc(a.sellerName || 'کاربر')}
           ${a.isShop ? '— <span style="color:var(--ac);">['+esc(a.shopName || 'فروشگاه')+'] (⭐ '+(shopRating?.avg || '–')+')</span>' : ''}
-          <small style="color:var(--mu);font-size:10px;">${t('viewProfile')}</small>
+          <small style="color:var(--mu);font-size:12px;">${t('viewProfile')}</small>
         </b>
-        <span class="mu" style="font-size:11px;">${t('member')}</span>${trustBadgeHTML(a)}
+        <span class="mu" style="font-size:12px;">${t('member')}</span>${trustBadgeHTML(a)}
       </div>
       <div>
         ${a.verified === true ? '<span class="badge-verified"><svg class="icon icon-sm"><use href="#i-check"></use></svg> شماره تاییدشده</span>' : ''}
@@ -1687,9 +1687,9 @@ function openAd(id){
     ${a.isShop ? `
       <div style="background:var(--card);border:1px solid var(--bd);padding:10px;border-radius:10px;margin-top:10px;">
         <h4 style="margin:0 0 6px;font-size:13px;color:var(--ac);"><svg class="icon icon-sm"><use href="#i-star"></use></svg> ${t('rateShop')} <span class="mu">(${shopRating.avg} ★ از ${nf(shopRating.count)} نظر)</span></h4>
-        <div style="max-height:110px;overflow-y:auto;font-size:11px;margin-bottom:6px;">${(shopReviews[a.ph]||[]).slice(-5).reverse().map(rv=>`<div style="border-bottom:1px solid var(--bd);padding:3px 0;">⭐ ${nf(rv.rating)}/۵ — <b>${esc(rv.buyer||"کاربر")}</b>: ${esc(rv.comment||"")}</div>`).join("")||`<span class="mu">${t('noReviews')}</span>`}</div>
+        <div style="max-height:110px;overflow-y:auto;font-size:12px;margin-bottom:6px;">${(shopReviews[a.ph]||[]).slice(-5).reverse().map(rv=>`<div style="border-bottom:1px solid var(--bd);padding:3px 0;">⭐ ${nf(rv.rating)}/۵ — <b>${esc(rv.buyer||"کاربر")}</b>: ${esc(rv.comment||"")}</div>`).join("")||`<span class="mu">${t('noReviews')}</span>`}</div>
         <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px;">
-          <select id="review-stars" style="padding:3px;border-radius:6px;border:1px solid var(--bd);font-size:11px;">
+          <select id="review-stars" style="padding:3px;border-radius:6px;border:1px solid var(--bd);font-size:12px;">
             <option value="5">⭐⭐⭐⭐⭐ (۵ ستاره - عالی)</option>
             <option value="4">⭐⭐⭐⭐ (۴ ستاره)</option>
             <option value="3">⭐⭐⭐ (۳ ستاره)</option>
@@ -1698,8 +1698,8 @@ function openAd(id){
           </select>
         </div>
         <div style="display:flex;gap:6px;">
-          <input id="review-comment-input" placeholder="${t('writeReviewPh')}" style="font-size:11px;padding:4px 8px;flex:1;">
-          <button class="capsule-btn primary" id="submit-review-btn" style="padding:4px 10px;font-size:11px;">${t('submit')}</button>
+          <input id="review-comment-input" placeholder="${t('writeReviewPh')}" style="font-size:12px;padding:4px 8px;flex:1;">
+          <button class="capsule-btn primary" id="submit-review-btn" style="padding:4px 10px;font-size:12px;">${t('submit')}</button>
         </div>
       </div>
     ` : ''}
@@ -1712,11 +1712,11 @@ function openAd(id){
       <button class="capsule-btn primary" id="send-chat" style="padding:6px 12px;font-size:12px;">${t('send')}</button>
     </div>` : `<div style="margin-top:6px;"><button class="capsule-btn primary" id="send-chat" type="button" style="width:100%;padding:8px 12px;font-size:12px;">🔐 برای ارسال پیام، وارد شوید یا ثبت‌نام کنید</button></div>`}
 
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:11px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:12px;">
       <button type="button" class="capsule-btn" id="wake-toggle-btn" style="margin-top:8px;width:100%;border:1px solid var(--bd);font-size:12px;"><svg class="icon icon-sm"><use href="#i-lightbulb"></use></svg> ${t('wakeLock')}</button>
     </div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:11px;">
-      <span style="color:#d6324a;cursor:pointer;" id="report-ad-btn"><svg class="icon icon-sm"><use href="#i-warning"></use></svg> ${t('reportAd')}</span>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:12px;">
+      <span style="color:var(--dg);cursor:pointer;" id="report-ad-btn"><svg class="icon icon-sm"><use href="#i-warning"></use></svg> ${t('reportAd')}</span>
       <span class="mu">کد: <bdi dir="ltr">${a.id}</bdi></span>
     </div>
 
@@ -1726,7 +1726,7 @@ function openAd(id){
       <button class="capsule-btn" id="x" style="border:1px solid var(--bd);flex:1 1 100%;">${t('adClose')}</button>
     </div>
     ${a.owner&&a.owner==me?'<div style="display:flex;gap:6px;margin-top:6px;"><button class="capsule-btn" id="edit-ad-btn" style="flex:1;border:1px solid var(--bd);"><svg class="icon icon-sm"><use href="#i-edit"></use></svg> ویرایش</button><button class="capsule-btn" id="renew-ad-btn" style="flex:1;border:1px solid var(--bd);"><svg class="icon icon-sm"><use href="#i-refresh"></use></svg> تمدید</button></div>':''}
-    ${((a.owner&&a.owner==me)||adminFlag) && !seed.some(x=>String(x.id)===String(a.id))?'<button class="link danger" id="del" style="color:#d6324a;display:block;margin:8px auto 0;font-size:12px;"><svg class="icon icon-sm"><use href="#i-trash"></use></svg> حذف این آگهی</button>':''}
+    ${((a.owner&&a.owner==me)||adminFlag) && !seed.some(x=>String(x.id)===String(a.id))?'<button class="link danger" id="del" style="color:var(--dg);display:block;margin:8px auto 0;font-size:12px;"><svg class="icon icon-sm"><use href="#i-trash"></use></svg> حذف این آگهی</button>':''}
   `;
 
   document.getElementById("dlg").showModal();
@@ -1846,7 +1846,7 @@ function openAd(id){
       <label style="margin-top:10px;display:block;">توضیح (اختیاری)</label>
       <textarea id="rep-note" rows="2" placeholder="جزئیات بیشتر..." style="width:100%;"></textarea>
       <div class="row" style="margin-top:12px;">
-        <button class="capsule-btn primary" data-ok style="background:#d6324a;">ثبت گزارش</button>
+        <button class="capsule-btn primary" data-ok style="background:var(--dg);">ثبت گزارش</button>
         <button class="capsule-btn" data-cancel>انصراف</button>
       </div>
     </div>`;
@@ -1920,7 +1920,7 @@ function openAd(id){
         <h2 style="font-size:16px;">حذف آگهی</h2>
         <p style="font-size:13px;">آیا از حذف این آگهی مطمئن هستید؟ این عمل قابل بازگشت نیست.</p>
         <div class="row" style="margin-top:14px;">
-          <button class="capsule-btn primary" data-ok style="background:#d6324a;">بله، حذف کن</button>
+          <button class="capsule-btn primary" data-ok style="background:var(--dg);">بله، حذف کن</button>
           <button class="capsule-btn" data-cancel>انصراف</button>
         </div>
       </div>`;
@@ -2179,7 +2179,7 @@ document.getElementById("f-t").addEventListener("input", function(){
   if (!c) return;
   const n = this.value.length;
   c.textContent = nf(n) + " / " + nf(60);
-  c.style.color = n > 55 ? "#d6324a" : n > 45 ? "#e08c00" : "var(--mu)";
+  c.style.color = n > 55 ? "var(--dg)" : n > 45 ? "#e08c00" : "var(--mu)";
 });
 
 function saveFormDraft() {
@@ -2526,7 +2526,7 @@ document.getElementById("save").onclick=async()=>{
   const adTitle = titleField.value.trim();
   const errT = document.getElementById("err-t");
   if(adTitle.length < 4) {
-    titleField.style.borderColor = "#d6324a";
+    titleField.style.borderColor = "var(--dg)";
     errT.textContent = "عنوان آگهی باید حداقل ۴ حرف باشد.";
     return;
   } else {
@@ -2691,7 +2691,7 @@ function extras(){
   document.getElementById("stats").innerHTML=[[A.length,t('statAds')],[provinceCoords.length,t('statProv')],[cats.length-1,t('statCats')]].map(x=>`<div><b data-count="${x[0]}">${nf(x[0])}</b><span>${x[1]}</span></div>`).join("");
   if(!window._statsAnimated && A.length){ window._statsAnimated=true; document.querySelectorAll("#stats b[data-count]").forEach(b=>animateNumber(b,+b.dataset.count)); }
   document.getElementById("feat").innerHTML=A.filter(a=>a.u).sort((a,b)=>a.age-b.age).map(card).join("")||'<div class="mu">فعلاً آگهی ویژه‌ای نیست.</div>';
-  document.getElementById("tiles").innerHTML=cats.slice(1,13).map((x,i)=>`<button class="tag tile" style="--h:${(i+1)*23}" data-i="${i+1}"><span>${x[1]}</span>${x[0]}</button>`).join("");
+  document.getElementById("tiles").innerHTML=cats.slice(1,13).map((x,i)=>`<button class="tag tile" style="--l:${92-(i%4)*2.5}%;--ld:${16+(i%4)*2}%" data-i="${i+1}"><span>${x[1]}</span>${x[0]}</button>`).join("");
   const cc={};A.forEach(a=>cc[a.ci]=(cc[a.ci]||0)+1);
   document.getElementById("tc").innerHTML=Object.entries(cc).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([i,n])=>`<button class="ccity" data-i="${i}">${cities[i]}<span>${nf(n)}</span></button>`).join("")
 }
@@ -2975,8 +2975,8 @@ async function renderReports(){
     ${data.map(r=>`
       <div style="background:var(--card); border:1px solid var(--bd); padding:12px; border-radius:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
         <div>
-          <b style="color:#d6324a; font-size:13px;">گزارش برای آگهی: ${esc(r.ad_id)}</b>
-          <div class="mu" style="font-size:11px; margin-top:4px;">زمان ثبت گزارش: ${ago((Date.now()-Date.parse(r.created_at))/36e5)}</div>
+          <b style="color:var(--dg); font-size:13px;">گزارش برای آگهی: ${esc(r.ad_id)}</b>
+          <div class="mu" style="font-size:12px; margin-top:4px;">زمان ثبت گزارش: ${ago((Date.now()-Date.parse(r.created_at))/36e5)}</div>
         </div>
         <div style="display:flex; gap:8px;">
           <button class="admin-action-btn approve" onclick="openAd('${esc(r.ad_id)}')" style="display:flex;align-items:center;gap:4px;"><svg class="icon icon-sm"><use href="#i-eye"></use></svg> مشاهده آگهی</button> 
@@ -3031,7 +3031,7 @@ function adVerdict(a){
 }
 // هشدار خودکار در چت (فقط هشدار؛ پیام مسدود نمی‌شود)
 const _RISKY_CHAT=/پیش.?پرداخت|بیعانه|حواله|واریز|کارت.?به.?کارت|کد\s*(تایید|تأیید|پیامک)|usdt|bitcoin|بیت.?کوین|western\s*union/i;
-const chatRisk=t=>_RISKY_CHAT.test(String(t||""))?'<div style="color:#d6324a;font-size:10px;margin-top:2px;">⚠️ هشدار: هرگز پیش‌پرداخت یا کد پیامکی ندهید؛ معامله را حضوری انجام دهید.</div>':"";
+const chatRisk=t=>_RISKY_CHAT.test(String(t||""))?'<div style="color:var(--dg);font-size:12px;margin-top:2px;">⚠️ هشدار: هرگز پیش‌پرداخت یا کد پیامکی ندهید؛ معامله را حضوری انجام دهید.</div>':"";
 const SAFE_ID=/^[A-Za-z0-9_-]{1,60}$/;
 const MY_STORAGE_URL = "https://snhyzmwgazifdqyvqsnu.supabase.co/storage/v1/object/public/ad-images/";
 const SAFE_IMG = new RegExp("^(" + MY_STORAGE_URL.replace(/[\x5b\x5d\x7b\x7d\x28\x29\x2a\x2b\x3f\x2e\x5e\x24\x7c\x5c]/g, '\\$&') + "[A-Za-z0-9_./-]+)$");
@@ -3293,9 +3293,9 @@ async function loadInbox() {
       <div onclick="openAdFromInbox('${adId}')" style="background:var(--card);padding:12px;border-radius:12px;border:1px solid var(--bd);cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
         <div>
           <b style="font-size:13px;display:block;margin-bottom:4px;">${esc(adTitle)}</b>
-          <div class="mu" style="font-size:11px;">${esc(otherName)}: ${esc(String(lastMsg.text||'').substring(0,30))}...</div>
+          <div class="mu" style="font-size:12px;">${esc(otherName)}: ${esc(String(lastMsg.text||'').substring(0,30))}...</div>
         </div>
-        <div style="font-size:10px;color:var(--mu);">${ago((Date.now() - Date.parse(lastMsg.created_at))/36e5)}</div>
+        <div style="font-size:12px;color:var(--mu);">${ago((Date.now() - Date.parse(lastMsg.created_at))/36e5)}</div>
       </div>
     `;
   });
@@ -3942,9 +3942,9 @@ function renderActiveFilters(containerId, isWholesale) {
   if (chips.length === 0) { box.innerHTML = ""; return; }
   
   box.innerHTML = 
-    `<span class="mu" style="font-size:11px;">فیلترهای فعال:</span>` +
-    chips.map((c, i) => `<button class="capsule-btn" data-chip-idx="${i}" style="padding:3px 10px;font-size:11px;background:var(--chip);border:1px solid var(--ac);color:var(--ac);border-radius:99px;">${esc(c.label)} ✕</button>`).join("") +
-    `<button class="link" id="clear-all-chips-${isWholesale?'w':'r'}" style="font-size:11px;margin:0;">پاک‌کردن همه</button>`;
+    `<span class="mu" style="font-size:12px;">فیلترهای فعال:</span>` +
+    chips.map((c, i) => `<button class="capsule-btn" data-chip-idx="${i}" style="padding:3px 10px;font-size:12px;background:var(--chip);border:1px solid var(--ac);color:var(--ac);border-radius:99px;">${esc(c.label)} ✕</button>`).join("") +
+    `<button class="link" id="clear-all-chips-${isWholesale?'w':'r'}" style="font-size:12px;margin:0;">پاک‌کردن همه</button>`;
   
   box.querySelectorAll("[data-chip-idx]").forEach(btn => {
     btn.onclick = () => {

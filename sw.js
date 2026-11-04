@@ -1,14 +1,15 @@
-/* افغان‌بازار — Service Worker (نسخه 51)
+/* افغان‌بازار — Service Worker (نسخه 53)
    - صفحه اصلی و app.js: اول شبکه، اگر آفلاین بود از حافظه
    - بقیه فایل‌های ثابت همین سایت: کش + به‌روزرسانی پس‌زمینه
    - هیچ درخواستی به Supabase یا CDN کش نمی‌شود
    - پشتیبانی از اعلان پوش */
-const VERSION = 'v51';
+const VERSION = 'v53';
 const CACHE = 'ab-shell-' + VERSION;
 const ASSETS = [
   './',
   './index.html',
-  './app.js',              /* ← اضافه شد */
+  './app.js',
+  './emoji-icons.js',              /* ← اضافه شد */
   './manifest.json',
   './icon-192.png',
   './icon-512.png'
