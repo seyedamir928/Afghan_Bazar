@@ -3376,7 +3376,16 @@ document.body.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&
     }
   });
   document.getElementById("close-ios-install").onclick=()=>document.getElementById("ios-install-dlg").close();
-  const fromHash=()=>{if(location.hash==="#terms"){const d=document.getElementById("terms-dlg"); if(!d.open) d.showModal(); return;} const m=location.hash.match(/^#ad-(.+)$/); if(m) openAd(decodeURIComponent(m[1]));};
+  const fromHash=()=>{if(location.hash==="#terms"){const d=document.getElementById("terms-dlg"); if(!d.open) d.showModal(); return;} const m=location.hash.match(/^#ad-(.+)$/); if(m){ openAd(decodeURIComponent(m[1])); return; }
+    const lm=location.hash.match(/^#(?:cat-(\d{1,2}))?(?:-?prov-(\d{1,2}))?$/);   // لینک صفحهٔ فرود: #cat-3 ، #prov-0 ، #cat-3-prov-0
+    if(lm && (lm[1]||lm[2])){
+      const c=lm[1]!=null?+lm[1]:0, p=lm[2]!=null?+lm[2]:-1;
+      if(c>=0 && c<cats.length && p<provinceCoords.length){
+        cat=c; view="all"; currentPage=1;
+        document.getElementById("header-city-select").value=String(p);
+        draw(); go();
+      }
+    }};
   window.__fromHash=fromHash; window.addEventListener("hashchange",fromHash); fromHash();
   try{
     const act=new URLSearchParams(location.search).get("action");
@@ -4246,6 +4255,6 @@ function renderActiveFilters(containerId, isWholesale) {
   syncFab(); setInterval(syncFab,1500);
   // نمایش خودکار فقط بار اول (و نه وقتی لینک مستقیم آگهی/عمل باز شده)
   let first=true; try{ first=!localStorage.getItem('ab_tour_seen'); }catch(_){}
-  const direct=/^#(ad-|terms)/.test(location.hash)||/[?&]action=/.test(location.search);
+  const direct=/^#(ad-|terms|cat-|prov-)/.test(location.hash)||/[?&]action=/.test(location.search);
   if(first&&!direct) setTimeout(()=>{ if(!document.querySelector('dialog[open]')) open(); },900);
 })();

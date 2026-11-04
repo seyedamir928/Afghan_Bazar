@@ -3,7 +3,7 @@
    - بقیه فایل‌های ثابت همین سایت: کش + به‌روزرسانی پس‌زمینه
    - هیچ درخواستی به Supabase یا CDN کش نمی‌شود
    - پشتیبانی از اعلان پوش */
-const VERSION = 'v60';
+const VERSION = 'v62';
 const CACHE = 'ab-shell-' + VERSION;
 const ASSETS = [
   './',
