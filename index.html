@@ -809,6 +809,104 @@ dialog.lb::backdrop{background:#000}
 #tour-dlg .tour-actions{display:flex;gap:8px;padding:10px 16px 16px}
 #tour-dlg .tour-actions button{flex:1;padding:11px 12px;font-weight:700;font-size:14px;border-radius:999px;border:1px solid var(--bd);background:var(--bg);cursor:pointer}
 #tour-dlg .tour-actions .go{background:var(--ac);color:#fff;border-color:var(--ac);flex:1.6}
+
+/* ===== v55: پچ فونت ===== */
+.capsule-btn{font-size:13px}
+.brand-title{font-size:13px}
+.badge{font-size:12.5px;padding:2px 8px;color:var(--badge-tx)}
+.badge.wholesale-badge{color:#fff}
+.i .mu{font-size:12.5px}
+footer{font-size:12.5px}
+/* ===== v55: پچ رنگ ===== */
+:root{--hero-a:#08432c;--hero-b:#0e7a4b;--ws-a:#152c48;--ws-b:#1b3b6f;--badge-tx:#3a2800;--heart:#444;--danger:#b3261e;
+ --t0:#55665d;--t1:#a85a00;--t2:#8a6500;--t3:#0b6b42}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--heart:#e8e8e8;--t0:#93a39a;--t1:#ffa94d;--t2:#f4c542;--t3:#4ade80}}
+:root[data-theme="dark"]{--heart:#e8e8e8;--t0:#93a39a;--t1:#ffa94d;--t2:#f4c542;--t3:#4ade80}
+.hero{background:radial-gradient(circle at 15% 20%,rgba(244,183,63,.28),transparent 40%),linear-gradient(135deg,var(--hero-a),var(--hero-b) 70%)}
+.wholesale-hero{background:radial-gradient(circle at 15% 20%,rgba(244,183,63,.28),transparent 40%),linear-gradient(135deg,var(--ws-a),var(--ws-b) 70%)}
+.fav{color:var(--heart)}
+#net-pill{background:var(--danger)}
+/* ===== v55: نشان‌های اعتماد (خودکار) ===== */
+.trust{display:inline-block;font-size:12.5px;font-weight:700;margin-top:3px;line-height:1.4}
+.trust.t0{color:var(--t0);font-weight:600}
+.trust.t1{color:var(--t1)}
+.trust.t2{color:var(--t2)}
+.trust.t3{color:var(--t3)}
+.trust-chip{font-size:13px;padding:3px 10px}
+.me-badges .trust-chip{color:#fff}
+.me-badges .trust-chip.t3{background:rgba(74,222,128,.28)}
+.me-badges .trust-chip.t2{background:rgba(244,197,66,.3)}
+.me-badges .trust-chip.t1{background:rgba(255,169,77,.3)}
+/* ===== v55: تداخل بنرها ===== */
+body:has(.compare-floating-bar.active) #pwa-install-banner{bottom:calc(160px + env(safe-area-inset-bottom,0px))}
+/* ===== v56: آگهی فوری ===== */
+.urg-all{margin-inline-start:auto;align-self:center;padding:4px 12px;font-weight:700}
+.urg-more{flex:0 0 auto;min-width:104px;align-self:stretch;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:1.5px dashed var(--ac);border-radius:14px;background:var(--chip);color:var(--ac);font:inherit;font-size:13px;cursor:pointer}
+.urg-more b{font-size:20px}
+/* ===== v57: بارگذاری تدریجی ===== */
+.more-sentinel{height:1px}
+.more-btn{display:block;margin:14px auto 0;padding:8px 22px}
+.more-end{text-align:center;margin:14px 0;font-size:12.5px}
+/* ===== v58: Neon Dashboard — سبز + آبی ===== */
+:root{--blue:#1d7fd6;--grad:linear-gradient(135deg,var(--ac),var(--blue));--glow-g:rgba(55,217,139,.55);--glow-b:rgba(74,168,255,.55);--hero-glow:rgba(244,183,63,.28)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a121b;--card:#111d2a;--bd:#1e3144;--chip:#172838;--mu:#9bb0bf;--ac:#37d98b;--ac2:#0b3a4f;--blue:#4aa8ff;--hero-a:#052e26;--hero-b:#0b5b78;--ws-a:#0b2340;--ws-b:#1457a6;--hero-glow:rgba(74,168,255,.32);--sh:0 10px 30px rgba(0,0,0,.35)}}
+:root[data-theme="dark"]{--bg:#0a121b;--card:#111d2a;--bd:#1e3144;--chip:#172838;--mu:#9bb0bf;--ac:#37d98b;--ac2:#0b3a4f;--blue:#4aa8ff;--hero-a:#052e26;--hero-b:#0b5b78;--ws-a:#0b2340;--ws-b:#1457a6;--hero-glow:rgba(74,168,255,.32);--sh:0 10px 30px rgba(0,0,0,.35)}
+.hero{background:radial-gradient(circle at 15% 20%,var(--hero-glow),transparent 42%),linear-gradient(135deg,var(--hero-a),var(--hero-b) 70%)}
+.wholesale-hero{background:radial-gradient(circle at 15% 20%,var(--hero-glow),transparent 42%),linear-gradient(135deg,var(--ws-a),var(--ws-b) 70%)}
+/* نور لبهٔ کناری (فقط تم تیره): سبز چپ، آبی راست */
+body::before,body::after{content:"";position:fixed;top:14%;bottom:14%;width:3px;border-radius:3px;pointer-events:none;z-index:1;opacity:0}
+body::before{left:0;background:var(--glow-g);box-shadow:0 0 22px 5px var(--glow-g)}
+body::after{right:0;background:var(--glow-b);box-shadow:0 0 22px 5px var(--glow-b)}
+:root[data-theme="dark"] body::before,:root[data-theme="dark"] body::after{opacity:.75}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) body::before,:root:not([data-theme="light"]) body::after{opacity:.75}}
+/* کارت‌ها: لبهٔ نازک + درخشش هنگام hover */
+.ad{border-radius:16px;transition:transform .15s,box-shadow .2s,border-color .2s}
+:root[data-theme="dark"] .ad:hover{border-color:color-mix(in srgb,var(--ac) 55%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--ac) 30%,transparent),0 12px 30px -10px var(--glow-b)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ad:hover{border-color:color-mix(in srgb,var(--ac) 55%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--ac) 30%,transparent),0 12px 30px -10px var(--glow-b)}}
+/* دکمه‌ها و ناوبری: گرادیان سبز→آبی */
+.capsule-btn.primary,.capsule-btn.primary:hover{background:var(--grad)}
+.capsule-btn.primary:hover{filter:brightness(1.08)}
+.bnav-item.active{background:var(--grad);color:var(--on);box-shadow:0 6px 18px -6px var(--glow-g)}
+#post-fab{background:var(--grad);box-shadow:0 8px 22px -6px var(--glow-g)}
+.pagination button.active{background:var(--grad);border-color:transparent}
+/* عنوان بخش‌ها و فوکوس ورودی‌ها */
+.sh h2::before{content:"";display:inline-block;width:4px;height:1em;border-radius:3px;background:var(--grad);margin-inline-end:8px;vertical-align:-2px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 25%,transparent)}
+@media (max-width:480px){body::before,body::after{width:2px;box-shadow:0 0 14px 3px var(--glow-g)}body::after{box-shadow:0 0 14px 3px var(--glow-b)}}
+/* v58: اصلاح خوانایی و رنگ‌بندی */
+#tour-dlg .tour-actions button{color:var(--tx)}
+#tour-dlg .tour-actions .go{background:var(--grad);color:var(--on);border-color:transparent}
+.tile:nth-child(3n+2){background:hsl(180 40% var(--l,92%))}
+.tile:nth-child(3n){background:hsl(208 44% var(--l,92%))}
+:root[data-theme="dark"] .tile:nth-child(3n+2){background:hsl(182 34% var(--ld,19%))}
+:root[data-theme="dark"] .tile:nth-child(3n){background:hsl(210 40% var(--ld,19%))}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tile:nth-child(3n+2){background:hsl(182 34% var(--ld,19%))}:root:not([data-theme="light"]) .tile:nth-child(3n){background:hsl(210 40% var(--ld,19%))}}
+.me-hero{background:radial-gradient(circle at 15% 10%,var(--hero-glow),transparent 45%),linear-gradient(135deg,var(--hero-a),var(--hero-b))}
+/* ===== v59: داشبورد پروفایل + اصلاح هم‌پوشانی هرو ===== */
+.me-dash{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:14px;box-shadow:var(--sh)}
+.md-top{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.md-ring{--p:0;flex:none;width:76px;height:76px;border-radius:50%;display:grid;place-items:center;align-content:center;position:relative;
+ background:conic-gradient(var(--ac),var(--blue) calc(var(--p)*1%),var(--chip) 0)}
+.md-ring::before{content:"";position:absolute;inset:7px;border-radius:50%;background:var(--card)}
+.md-ring b,.md-ring small{position:relative;line-height:1.2}
+.md-ring b{font-size:20px;color:var(--tx)}
+.md-ring small{font-size:12px;color:var(--mu)}
+:root[data-theme="dark"] .md-ring{box-shadow:0 0 18px -4px var(--glow-g)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .md-ring{box-shadow:0 0 18px -4px var(--glow-g)}}
+.md-lv{font-size:16px;font-weight:800;margin-bottom:2px}
+.md-lv.t0{color:var(--t0)}.md-lv.t1{color:var(--t1)}.md-lv.t2{color:var(--t2)}.md-lv.t3{color:var(--t3)}
+.md-info .mu{font-size:13px}
+.md-bars{display:grid;gap:8px;margin-bottom:12px}
+.md-row{display:grid;grid-template-columns:104px 1fr 44px;align-items:center;gap:8px;font-size:13px}
+.md-row em{font-style:normal;color:var(--mu);font-size:12.5px;text-align:left;direction:ltr}
+.md-bar{height:8px;border-radius:99px;background:var(--chip);overflow:hidden}
+.md-bar i{display:block;height:100%;border-radius:99px;background:var(--grad)}
+.md-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.md-tiles div{background:var(--chip);border-radius:12px;padding:8px 4px;text-align:center;line-height:1.35}
+.md-tiles b{display:block;font-size:15px;color:var(--ac)}
+.md-tiles span{font-size:12px;color:var(--mu)}
+.hero,.wholesale-hero{padding-bottom:40px}
+.pre{margin-top:0;padding-top:18px}
 </style>
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -903,7 +1001,7 @@ dialog.lb::backdrop{background:#000}
       <div class="rail-container"><div class="rail" id="recent-rail"></div></div>
     </div>
     <div class="sec">
-      <div class="sh"><h2 data-i18n="featSec">آگهی‌های ویژه پرچون</h2><span class="mu" data-i18n="featSecSub">فوری و تازه</span></div>
+      <div class="sh"><h2 data-i18n="featSec">آگهی‌های ویژه پرچون</h2><span class="mu" data-i18n="featSecSub">فوری و تازه</span><button type="button" class="capsule-btn urg-all" id="urg-all" data-urg-all style="display:none">همه فوری‌ها ›</button></div>
       <div class="rail-container"><div class="rail" id="feat"></div></div>
     </div>
     <div class="sec"><div class="sh"><h2 data-i18n="popCats">دسته‌های محبوب پرچون</h2></div><div class="tiles" id="tiles"></div></div>
@@ -1134,6 +1232,7 @@ dialog.lb::backdrop{background:#000}
     <div><b id="me-stat-favs">۰</b><span>نشان‌شده</span></div>
   </div>
   <div class="me-body">
+    <div class="me-dash" id="me-dash"></div>
     <div class="me-grid menu">
       <button type="button" data-v="mine" class="me-tile"><span class="me-ic"><svg class="icon"><use href="#i-package"></use></svg></span><span data-i18n="myAds">آگهی‌های من و آمار بازدید</span></button>
       <button type="button" data-v="fav" class="me-tile"><span class="me-ic"><svg class="icon"><use href="#i-heart"></use></svg></span><span data-i18n="myFavs">نشان‌شده‌ها و یادداشت‌ها</span></button>
@@ -1277,6 +1376,6 @@ dialog.lb::backdrop{background:#000}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.js" defer></script>
 <script src="./vendor/leaflet/leaflet.js" defer></script>
 <script src="emoji-icons.js?v=53" defer></script>
-<script src="app.js?v=53" defer></script>
+<script src="app.js?v=59" defer></script>
 </body>
 </html>

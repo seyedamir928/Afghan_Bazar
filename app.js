@@ -111,7 +111,7 @@ const i18n = {
     searchPlaceholder: "جستجو در عنوان و توضیحات پرچون: موتر، خانه، موبایل…", searchBtn: "جستجو",
     statAds: "آگهی پرچون", statProv: "ولایت", statCats: "دسته‌بندی",
     recentSec: "اخیراً دیده‌اید", recentSecSub: "برای مرور سریع",
-    featSec: "آگهی‌های ویژه پرچون", featSecSub: "فوری و تازه",
+    featSec: "آگهی‌های ویژه پرچون", featSecSub: "فوری و تازه", urgAll: "همه فوری‌ها",
     popCats: "دسته‌های محبوب پرچون", topProv: "ولایت‌های پرآگهی",
     filterTitle: "قیمت پرچون (افغانی)", from: "از", to: "تا",
     filterAdv: "ویژگی‌های تخصصی", filterCond: "وضعیت کالا", condAll: "همه", condNew: "نو و آکبند", condUsed: "دست دوم / کارکرده",
@@ -141,7 +141,7 @@ const i18n = {
     authPhoneLabel: "شماره موبایل (سلام، روشن، اتصالات)", authOTP: "کد تایید (OTP)", authSendOTP: "ارسال کد",
     authTerms: "قوانین و <a href='#' id='auth-terms-link' style='color:var(--ac);'>حریم خصوصی</a> را می‌پذیرم",
     chatTitle: "گفتگو با فروشنده", chatPh: "پیام خود را بنویسید...", send: "ارسال", chatEmpty: "هنوز پیامی فرستاده نشده است.",
-    seller: "فروشنده", buyer: "خریدار", member: "عضو افغان‌بازار", fldArea:"متراژ (متر مربع)", fldRooms:"تعداد اتاق", fldFloor:"طبقه", fldParking:"پارکینگ", fldDeal:"نوع معامله", fldYear:"سال ساخت", fldKm:"کیلومتر", fldFuel:"سوخت", fldGear:"گیربکس", fldColor:"رنگ", fldBrand:"برند", fldRam:"رم (GB)", fldStorage:"حافظه (GB)", fldBattery:"وضعیت باتری", fldCpu:"پردازنده", fldScreen:"اندازهٔ صفحه", optHas:"دارد", optNotHas:"ندارد", optSell:"فروش", optRent:"کرایه", optMortgage:"گرو", optPetrol:"پترول", optDiesel:"دیزل", optElectric:"برقی", optHybrid:"هایبرید", optGas:"گاز", optAuto:"اتوماتیک", optManual:"دستی", optApple:"Apple", optSamsung:"Samsung", optXiaomi:"Xiaomi", optHuawei:"Huawei", optOther:"سایر", optNew:"نو", optOver80:"۸۰٪ به بالا", optLess:"کمتر", specSection:"📋 مشخصات تخصصی", specFull:"📋 مشخصات کامل:", prevBtn:"قبلی", nextBtn:"بعدی", stepChooseCategory:"دسته‌بندی آگهی", stepChooseHint:"دسته‌ای که آگهی شما در آن قرار می‌گیرد انتخاب کنید تا فیلدهای مناسب ظاهر شوند.", stepContentTitle:"عنوان و تصاویر", stepSpecsTitle:"مشخصات", stepPriceTitle:"قیمت و موقعیت", fldWarranty:"گارانتی", fldUnit:"واحد", fldServiceType:"نوع خدمت", fldHomeService:"خدمات در محل", fldWorkHours:"ساعات کاری", fldJobType:"نوع استخدام", fldSalary:"حقوق ماهانه (افغانی)", fldExperience:"سابقهٔ کار", fldGender:"جنسیت", optToyota:"تویوتا", optHonda:"هوندا", optNissan:"نیسان", optFord:"فورد", optHyundai:"هیوندای", optKia:"کیا", optFullTime:"تمام وقت", optPartTime:"نیمه وقت", optContract:"پروژه‌ای", optAny:"هر دو", optMale:"مرد", optFemale:"زن", optKg:"کیلوگرم", optTon:"تن", optBag:"کیسه", trustReliable: "🟢 قابل اعتماد", trustGood: "🟡 نسبتاً خوب", trustNew: "🟠 فروشنده جدید", trustLow: "⚪ اطلاعات کم", verified: "شماره تاییدشده",
+    seller: "فروشنده", buyer: "خریدار", member: "عضو افغان‌بازار", fldArea:"متراژ (متر مربع)", fldRooms:"تعداد اتاق", fldFloor:"طبقه", fldParking:"پارکینگ", fldDeal:"نوع معامله", fldYear:"سال ساخت", fldKm:"کیلومتر", fldFuel:"سوخت", fldGear:"گیربکس", fldColor:"رنگ", fldBrand:"برند", fldRam:"رم (GB)", fldStorage:"حافظه (GB)", fldBattery:"وضعیت باتری", fldCpu:"پردازنده", fldScreen:"اندازهٔ صفحه", optHas:"دارد", optNotHas:"ندارد", optSell:"فروش", optRent:"کرایه", optMortgage:"گرو", optPetrol:"پترول", optDiesel:"دیزل", optElectric:"برقی", optHybrid:"هایبرید", optGas:"گاز", optAuto:"اتوماتیک", optManual:"دستی", optApple:"Apple", optSamsung:"Samsung", optXiaomi:"Xiaomi", optHuawei:"Huawei", optOther:"سایر", optNew:"نو", optOver80:"۸۰٪ به بالا", optLess:"کمتر", specSection:"📋 مشخصات تخصصی", specFull:"📋 مشخصات کامل:", prevBtn:"قبلی", nextBtn:"بعدی", stepChooseCategory:"دسته‌بندی آگهی", stepChooseHint:"دسته‌ای که آگهی شما در آن قرار می‌گیرد انتخاب کنید تا فیلدهای مناسب ظاهر شوند.", stepContentTitle:"عنوان و تصاویر", stepSpecsTitle:"مشخصات", stepPriceTitle:"قیمت و موقعیت", fldWarranty:"گارانتی", fldUnit:"واحد", fldServiceType:"نوع خدمت", fldHomeService:"خدمات در محل", fldWorkHours:"ساعات کاری", fldJobType:"نوع استخدام", fldSalary:"حقوق ماهانه (افغانی)", fldExperience:"سابقهٔ کار", fldGender:"جنسیت", optToyota:"تویوتا", optHonda:"هوندا", optNissan:"نیسان", optFord:"فورد", optHyundai:"هیوندای", optKia:"کیا", optFullTime:"تمام وقت", optPartTime:"نیمه وقت", optContract:"پروژه‌ای", optAny:"هر دو", optMale:"مرد", optFemale:"زن", optKg:"کیلوگرم", optTon:"تن", optBag:"کیسه", trustReliable: "🏅 فروشنده معتبر", trustGood: "⭐ فروشنده خوب", trustNew: "🔥 فروشنده فعال", trustLow: "🌱 کاربر جدید", verified: "شماره تاییدشده",
     rateShop: "امتیازدهی به این فروشگاه", noReviews: "هنوز نظری ثبت نشده.", writeReviewPh: "نظر خود را درباره فروشگاه بنویسید...", submit: "ثبت",
     viewProfile: "(مشاهده پروفایل)", noteTitle: "یادداشت شخصی شما روی این آگهی:", notePh: "مثلاً: قیمت نهایی توافق شد...", save: "ذخیره",
     adLocation: "موقعیت روی نقشه:", adCall: "تماس:", adClose: "بستن", adEdit: "ویرایش", adRenew: "تمدید", adDelete: "حذف این آگهی",
@@ -179,7 +179,7 @@ const i18n = {
     searchPlaceholder: "په پرچون اعلانونو کې پلټنه: موټر، کور، موبایل…", searchBtn: "پلټنه",
     statAds: "پرچون اعلانونه", statProv: "ولایتونه", statCats: "کټګورۍ",
     recentSec: "وروستي لیدل شوي", recentSecSub: "د چټکې کتنې لپاره",
-    featSec: "ځانګړي پرچون اعلانونه", featSecSub: "بیړني او نوي",
+    featSec: "ځانګړي پرچون اعلانونه", featSecSub: "بیړني او نوي", urgAll: "ټول بیړني",
     popCats: "مشهورې پرچون کټګورۍ", topProv: "ډیر اعلانونه لرونکي ولایتونه",
     filterTitle: "د پرچون بیه (افغانۍ)", from: "له", to: "تر",
     filterAdv: "تخصصي ځانګړتیاوې", filterCond: "د توکي حالت", condAll: "ټول", condNew: "نوی او بکس", condUsed: "دست دوم / کارول شوی",
@@ -209,7 +209,7 @@ const i18n = {
     authPhoneLabel: "د موبایل شمیره (سلام، روشن، اتصالات)", authOTP: "د تایید کوډ (OTP)", authSendOTP: "کوډ ولیږه",
     authTerms: "قوانین او <a href='#' id='auth-terms-link' style='color:var(--ac);'>محرمیت</a> منم",
     chatTitle: "د پلورونکي سره خبرې", chatPh: "خپل پیغام ولیکئ...", send: "لېږل", chatEmpty: "تر دې دمه هیڅ پیغام نه دی لیږل شوی.",
-    seller: "پلورونکی", buyer: "پیرودونکی", member: "د افغان بازار غړی", fldArea:"مساحت (مربع متر)", fldRooms:"د خونو شمېر", fldFloor:"پوړ", fldParking:"پارکینګ", fldDeal:"د معاملې ډول", fldYear:"د جوړېدو کال", fldKm:"کیلومتره", fldFuel:"سوخت", fldGear:"ګیربکس", fldColor:"رنګ", fldBrand:"برانډ", fldRam:"رام (GB)", fldStorage:"حافظه (GB)", fldBattery:"د بیټرۍ حالت", fldCpu:"پروسیسر", fldScreen:"د سکرین اندازه", optHas:"لري", optNotHas:"نلري", optSell:"پلور", optRent:"کرایه", optMortgage:"ګرو", optPetrol:"پټرول", optDiesel:"ډیزل", optElectric:"بریښنایي", optHybrid:"هایبرید", optGas:"ګاز", optAuto:"اتوماتیک", optManual:"لاسي", optApple:"Apple", optSamsung:"Samsung", optXiaomi:"Xiaomi", optHuawei:"Huawei", optOther:"نور", optNew:"نوی", optOver80:"۸۰٪ پورته", optLess:"لږ", specSection:"📋 تخصصي مشخصات", specFull:"📋 بشپړ مشخصات:", prevBtn:"مخکینی", nextBtn:"بل", stepChooseCategory:"د اعلان کټګوري", stepChooseHint:"هغه کټګوري غوره کړئ چې اعلان پکې ځای پرځای کیږي.", stepContentTitle:"سرلیک او عکسونه", stepSpecsTitle:"مشخصات", stepPriceTitle:"بیه او موقعیت", fldWarranty:"تضمین", fldUnit:"واحد", fldServiceType:"د خدمت ډول", fldHomeService:"په کور کې خدمت", fldWorkHours:"کاري ساعتونه", fldJobType:"د استخدام ډول", fldSalary:"میاشتنی معاش (افغانۍ)", fldExperience:"کاري تجربه", fldGender:"جنسیت", optToyota:"تویوتا", optHonda:"هوندا", optNissan:"نیسان", optFord:"فورد", optHyundai:"هیوندای", optKia:"کیا", optFullTime:"بشپړ وخت", optPartTime:"نیمه وخت", optContract:"پروژه", optAny:"دواړه", optMale:"نر", optFemale:"ښځه", optKg:"کیلو", optTon:"ټن", optBag:"بوجۍ", trustReliable: "🟢 د باور وړ", trustGood: "🟡 نسبتاً ښه", trustNew: "🟠 نوی پلورونکی", trustLow: "⚪ لږ معلومات", verified: "تصدیق شوې شمیره",
+    seller: "پلورونکی", buyer: "پیرودونکی", member: "د افغان بازار غړی", fldArea:"مساحت (مربع متر)", fldRooms:"د خونو شمېر", fldFloor:"پوړ", fldParking:"پارکینګ", fldDeal:"د معاملې ډول", fldYear:"د جوړېدو کال", fldKm:"کیلومتره", fldFuel:"سوخت", fldGear:"ګیربکس", fldColor:"رنګ", fldBrand:"برانډ", fldRam:"رام (GB)", fldStorage:"حافظه (GB)", fldBattery:"د بیټرۍ حالت", fldCpu:"پروسیسر", fldScreen:"د سکرین اندازه", optHas:"لري", optNotHas:"نلري", optSell:"پلور", optRent:"کرایه", optMortgage:"ګرو", optPetrol:"پټرول", optDiesel:"ډیزل", optElectric:"بریښنایي", optHybrid:"هایبرید", optGas:"ګاز", optAuto:"اتوماتیک", optManual:"لاسي", optApple:"Apple", optSamsung:"Samsung", optXiaomi:"Xiaomi", optHuawei:"Huawei", optOther:"نور", optNew:"نوی", optOver80:"۸۰٪ پورته", optLess:"لږ", specSection:"📋 تخصصي مشخصات", specFull:"📋 بشپړ مشخصات:", prevBtn:"مخکینی", nextBtn:"بل", stepChooseCategory:"د اعلان کټګوري", stepChooseHint:"هغه کټګوري غوره کړئ چې اعلان پکې ځای پرځای کیږي.", stepContentTitle:"سرلیک او عکسونه", stepSpecsTitle:"مشخصات", stepPriceTitle:"بیه او موقعیت", fldWarranty:"تضمین", fldUnit:"واحد", fldServiceType:"د خدمت ډول", fldHomeService:"په کور کې خدمت", fldWorkHours:"کاري ساعتونه", fldJobType:"د استخدام ډول", fldSalary:"میاشتنی معاش (افغانۍ)", fldExperience:"کاري تجربه", fldGender:"جنسیت", optToyota:"تویوتا", optHonda:"هوندا", optNissan:"نیسان", optFord:"فورد", optHyundai:"هیوندای", optKia:"کیا", optFullTime:"بشپړ وخت", optPartTime:"نیمه وخت", optContract:"پروژه", optAny:"دواړه", optMale:"نر", optFemale:"ښځه", optKg:"کیلو", optTon:"ټن", optBag:"بوجۍ", trustReliable: "🏅 معتبر پلورونکی", trustGood: "⭐ ښه پلورونکی", trustNew: "🔥 فعال پلورونکی", trustLow: "🌱 نوی کارن", verified: "تصدیق شوې شمیره",
     rateShop: "دې پلورنځي ته امتیاز ورکړئ", noReviews: "تر دې دمه هیڅ نظر نه دی ثبت شوی.", writeReviewPh: "د پلورنځي په اړه خپل نظر ولیکئ...", submit: "ثبت",
     viewProfile: "(پروفایل وګورئ)", noteTitle: "په دې اعلان ستاسو شخصي یادښت:", notePh: "لکه: وروستۍ بیه موافقه شوه...", save: "وساتل",
     adLocation: "په نقشه کې موقعیت:", adCall: "زنګ:", adClose: "بندول", adEdit: "سمول", adRenew: "نوي کول", adDelete: "دا اعلان حذف کړئ",
@@ -365,7 +365,7 @@ let messages=get(UK("ab_msgs"),{})||{};
 let shopReviews=get("ab_shop_reviews",{})||{};
 let notifications=Array.isArray(get(UK("ab_notifs"),[]))?get(UK("ab_notifs"),[]):[];
 let cat=0,wholesaleCat=0,view="all",mode="in",after=null;
-let currentPage=1, wholesaleCurrentPage=1, itemsPerPage=8;
+let currentPage=1, wholesaleCurrentPage=1, itemsPerPage=12;
 let currentAppTab = "retail";
 
 let compareList = [];
@@ -715,26 +715,123 @@ function baseTiles(){
 }
 try{ hookLeaflet(); }catch(_){}
 
-// ===== Trust score =====
-function sellerAdCount(a){
+// ===== سقف ثبت آگهی در ۲۴ ساعت =====
+const AD_CAP_NEW=2;          // حساب‌های تازه (هماهنگ با سقف سرور)
+const AD_CAP_ESTABLISHED=6;  // همهٔ حساب‌های دیگر
+function adCapInfo(){
+  const own=(Array.isArray(mine)?mine:[]).filter(x=>x.owner===me && Number(x.ts)>0);
+  const now=Date.now();
+  const oldest=own.reduce((m,x)=>Math.min(m,Number(x.ts)),Infinity);
+  const isNew=oldest===Infinity || (now-oldest)<3*864e5;   // تازه: اولین آگهی کمتر از ۳ روز پیش
+  const cap=isNew?AD_CAP_NEW:AD_CAP_ESTABLISHED;
+  const recent=own.filter(x=>now-Number(x.ts)<864e5).sort((a,b)=>a.ts-b.ts);
+  const waitMs=recent.length>=cap ? recent[recent.length-cap].ts+864e5-now : 0;
+  return {cap,used:recent.length,isNew,waitMs};
+}
+// ===== داشبورد پروفایل =====
+function renderMeDash(myAds,isPhone){
+  const el=document.getElementById("me-dash"); if(!el) return;
+  const shopAd=myAds.find(x=>x.isShop)||{};
+  const ad={verified:isPhone,isShop:!!shopAd.isShop,ph:shopAd.ph||me};
+  const parts=trustParts(me,ad), sc=Math.round(parts.reduce((s,x)=>s+x.p,0)), lv=trustLevelOf(sc);
+  const lo=TRUST_STEPS[lv.lv], hi=TRUST_STEPS[lv.lv+1];
+  const pct=hi==null?100:Math.max(4,Math.round((sc-lo)/(hi-lo)*100));
+  const nextLbl=hi==null?"":t(TRUST_LEVELS[lv.lv+1].key);
+  const calls=myAds.reduce((s,x)=>s+(Number(x.calls)||0),0);
+  const ci=adCapInfo(), ul=urgentCooldownLeft();
+  el.innerHTML=`
+    <div class="md-top">
+      <div class="md-ring ${lv.cls}" style="--p:${pct}"><b>${nf(sc)}</b><small>امتیاز</small></div>
+      <div class="md-info">
+        <div class="md-lv ${lv.cls}">${lv.label}</div>
+        <div class="mu">${hi==null?"به بالاترین سطح رسیده‌اید 🎉":"تا «"+nextLbl+"» "+nf(hi-sc)+" امتیاز مانده"}</div>
+      </div>
+    </div>
+    <div class="md-bars">${parts.map(x=>`<div class="md-row"><span>${x.l}</span><div class="md-bar"><i style="width:${Math.round(x.p/x.m*100)}%"></i></div><em>${nf(x.p)}/${nf(x.m)}</em></div>`).join("")}</div>
+    <div class="md-tiles">
+      <div><b>${nf(calls)}</b><span>تماس دریافتی</span></div>
+      <div><b>${nf(ci.used)}/${nf(ci.cap)}</b><span>آگهی در ۲۴ ساعت</span></div>
+      <div><b>${ul>0?urgLeftText(ul):"آماده"}</b><span>آگهی فوری بعدی</span></div>
+    </div>`;
+}
+// ===== آگهی فوری: سقف و انقضا =====
+const URGENT_COOLDOWN_DAYS=2;  // هر کاربر هر ۲ روز فقط یک آگهی فوری می‌تواند بسازد (۱ / ۲ / ۳ را همین‌جا عوض کنید)
+const URGENT_LIFE_DAYS=3;      // نشان فوری بعد از ۳ روز خودکار برداشته می‌شود
+const URGENT_RAIL_MAX=8;       // حداکثر تعداد فوری‌ها در نوار صفحهٔ اصلی
+function isUrgent(a){
+  if(!a||!a.u) return false;
+  const t0=Number(a.ut)||Number(a.ts)||0;
+  return !t0 || (Date.now()-t0) < URGENT_LIFE_DAYS*864e5;   // نمونه/قدیمی بدون زمان: همیشه فوری
+}
+function urgentCooldownLeft(){
+  if(!me) return 0;
+  let last=Number(get("ab_urg_last_"+me,0))||0;
+  (Array.isArray(mine)?mine:[]).forEach(x=>{ if((!x.owner||x.owner===me) && x.u && Number(x.ut)>last) last=Number(x.ut); });
+  return Math.max(0,last+URGENT_COOLDOWN_DAYS*864e5-Date.now());
+}
+function urgLeftText(ms){ const h=Math.ceil(ms/36e5); return h>=24?nf(Math.ceil(h/24))+" روز":nf(h)+" ساعت"; }
+function urgGate(ad){
+  const cb=document.getElementById("form-urg"); if(!cb) return;
+  const lab=cb.closest("label"); let hint=document.getElementById("urg-hint");
+  if(!hint){ hint=document.createElement("small"); hint.id="urg-hint"; hint.className="mu"; hint.style.cssText="display:block;margin-top:4px"; lab.appendChild(hint); }
+  const left=urgentCooldownLeft(), keep=!!(ad&&isUrgent(ad));
+  if(left>0 && !keep && !adminFlag){ cb.checked=false; cb.disabled=true; hint.textContent="⏳ آگهی فوری بعدی شما: "+urgLeftText(left)+" دیگر"; }
+  else { cb.disabled=false; hint.textContent="هر "+nf(URGENT_COOLDOWN_DAYS)+" روز یک آگهی فوری؛ نشان "+nf(URGENT_LIFE_DAYS)+" روز می‌ماند."; }
+}
+document.addEventListener("click",e=>{
+  if(!e.target.closest("[data-urg-all]")) return;
+  const cb=document.getElementById("urg"); if(!cb) return;
+  cb.checked=true; currentPage=1; draw(); go();
+});
+
+// ===== Trust score (automatic, activity-based) =====
+// سطح: 0 کاربر جدید → 1 فروشنده فعال → 2 فروشنده خوب → 3 فروشنده معتبر
+const TRUST_STEPS=[0,20,45,70];
+const TRUST_LEVELS=[
+  {key:"trustLow",cls:"t0"},{key:"trustNew",cls:"t1"},{key:"trustGood",cls:"t2"},{key:"trustReliable",cls:"t3"}
+];
+function _sellerStats(key){
   const arr=all();
-  if(_trustArr!==arr){ _trustMap=new Map(); arr.forEach(x=>{ if((x.status||'approved')!=='approved') return; const k=String(x.owner||x.ph); _trustMap.set(k,(_trustMap.get(k)||0)+1); }); _trustArr=arr; }
-  return _trustMap.get(String(a.owner||a.ph))||0;
+  if(_trustArr!==arr){
+    _trustMap=new Map();
+    arr.forEach(x=>{
+      if((x.status||'approved')!=='approved') return;
+      const k=String(x.owner||x.ph);
+      let s=_trustMap.get(k); if(!s){ s={n:0,views:0,calls:0,oldest:Infinity}; _trustMap.set(k,s); }
+      s.n++; s.views+=Number(x.views)||0; s.calls+=Number(x.calls)||0;
+      const ts=Number(x.ts)||(x.age!=null?Date.now()-x.age*36e5:Date.now());
+      if(ts<s.oldest) s.oldest=ts;
+    });
+    _trustArr=arr;
+  }
+  return _trustMap.get(String(key))||{n:0,views:0,calls:0,oldest:Infinity};
+}
+function sellerAdCount(a){ return _sellerStats(a.owner||a.ph).n; }
+function trustParts(key,ad){
+  const st=_sellerStats(key);
+  let shop=0;
+  if(ad&&ad.isShop){ shop=15; const r=getShopAverageRating(ad.ph); if(r.avg!=="—") shop+=Math.min(20,(parseFloat(r.avg)/5)*20); }
+  const eng=st.views+st.calls*5;
+  const days=st.oldest===Infinity?0:(Date.now()-st.oldest)/864e5;
+  return [
+    {l:"شماره تاییدشده",p:(ad&&ad.verified)?20:0,m:20},
+    {l:"فروشگاه و نظرها",p:Math.round(shop),m:35},
+    {l:"تعداد آگهی",p:st.n>=6?20:st.n>=3?15:st.n>=1?8:0,m:20},
+    {l:"بازدید و تماس",p:eng>=200?10:eng>=50?5:0,m:10},
+    {l:"قدمت عضویت",p:days>=90?10:days>=30?5:0,m:10}
+  ];
+}
+function trustScoreFor(key,ad){ return Math.round(trustParts(key,ad).reduce((s,x)=>s+x.p,0)); }
+function trustLevelOf(sc){
+  let lv=0; TRUST_STEPS.forEach((m,i)=>{ if(sc>=m) lv=i; });
+  const nextAt=TRUST_STEPS[lv+1];
+  return {lv,sc,next:nextAt==null?null:nextAt-sc,cls:TRUST_LEVELS[lv].cls,label:t(TRUST_LEVELS[lv].key)};
 }
 function calculateTrustScore(ad){
-  let sc=0;
-  if(ad.verified) sc+=25;
-  if(ad.isShop) sc+=25;
-  const r=ad.isShop?getShopAverageRating(ad.ph):{avg:"—"};
-  if(r.avg!=="—") sc+=Math.min(25,(parseFloat(r.avg)/5)*25);
-  const n=sellerAdCount(ad);
-  sc+= n>=3?15:(n>=1?8:0);
-  if(sc>=75) return {label:t("trustReliable"),color:"#0e7a4b"};
-  if(sc>=50) return {label:t("trustGood"),color:"#e08c00"};
-  if(sc>=25) return {label:t("trustNew"),color:"#d97706"};
-  return {label:t("trustLow"),color:"var(--mu)"};
+  const r=trustLevelOf(trustScoreFor(ad.owner||ad.ph,ad));
+  return {label:r.label,cls:r.cls,lv:r.lv,score:r.sc};
 }
-function trustBadgeHTML(a){ const r=calculateTrustScore(a); return `<div style="font-size:12px;font-weight:600;color:${r.color};margin-top:2px;">${r.label}</div>`; }
+function trustBadgeHTML(a){ const r=calculateTrustScore(a); return `<div class="trust ${r.cls}">${r.label}</div>`; }
 
 // ===== OG tags (client-side only; crawlers of WhatsApp/Telegram need a server page) =====
 const _ogDefaults={};
@@ -898,7 +995,7 @@ function renderCard(a){
     <div class="ph" style="--h:${(a.c||1)*23}">
       ${mainImg ? `<img src="${esc(thumbOf(a,mainImg))}" alt="${esc(a.t)}" loading="lazy" decoding="async">` : `<span>${a.isWholesale ? '📦' : (cats[a.c]?.[1] || '📦')}</span>`}
     </div>
-    ${a.u?'<span class="badge">فوری</span>':''}
+    ${isUrgent(a)?'<span class="badge">فوری</span>':''}
     ${(() => {
       const pi = priceInsight(a);
       if (!pi || +pi.diff > -5) return '';
@@ -927,6 +1024,37 @@ document.addEventListener("click",e=>{
   try{ localStorage.setItem("ab_vm",b.dataset.vm); }catch(_){}
   applyViewMode();
 });
+// ===== بارگذاری تدریجی فهرست‌ها (صفحهٔ فعلی + بعدی) — خرده‌فروشی 'r' و عمده 'w' =====
+const _MORE={
+  r:{list:null,obs:null,busy:false,pager:"pagination",host:"list",get page(){return currentPage},set page(v){currentPage=v}},
+  w:{list:null,obs:null,busy:false,pager:"wholesale-pagination",host:"wholesale-list",get page(){return wholesaleCurrentPage},set page(v){wholesaleCurrentPage=v}}
+};
+function renderMorePager(k){
+  k=k||"r"; const m=_MORE[k], el=document.getElementById(m.pager); if(!el) return;
+  if(m.obs){ m.obs.disconnect(); m.obs=null; }
+  const total=m.list?m.list.length:0, loaded=Math.min(total,m.page*itemsPerPage), left=total-loaded;
+  if(left>0){
+    el.innerHTML=`<div id="more-sentinel-${k}" class="more-sentinel" aria-hidden="true"></div><button type="button" class="capsule-btn more-btn" id="more-btn-${k}">نمایش بیشتر (${nf(left)})</button>`;
+    document.getElementById("more-btn-"+k).onclick=()=>loadMoreAds(k);
+    if("IntersectionObserver" in window){
+      m.obs=new IntersectionObserver(es=>{ if(es.some(x=>x.isIntersecting)) loadMoreAds(k); },{rootMargin:"0px 0px 1100px 0px"});
+      m.obs.observe(document.getElementById("more-sentinel-"+k));
+    }
+  } else {
+    el.innerHTML = total>itemsPerPage ? `<div class="mu more-end">همهٔ ${nf(total)} آگهی نمایش داده شد</div>` : "";
+  }
+}
+function loadMoreAds(k){
+  k=k||"r"; const m=_MORE[k];
+  if(m.busy||!m.list) return;
+  const from=m.page*itemsPerPage; if(from>=m.list.length) return;
+  m.busy=true;
+  document.getElementById(m.host).insertAdjacentHTML("beforeend",m.list.slice(from,from+itemsPerPage).map(renderCard).join(""));
+  m.page=m.page+1;
+  renderMorePager(k);
+  m.busy=false;
+}
+
 function draw(){
   try{ applyViewMode(); }catch(_){}
   if(view==="admin" && !adminFlag){ view="all"; adminTab="all"; }
@@ -951,7 +1079,7 @@ function draw(){
     if(city >= 0 && a.ci != city) return false;
     if(q && !(a._hay || normFa((a.t||"")+" "+(a.d||"")+" "+(a.brand||"")+" "+(a.spec||""))).includes(qNorm)) return false;
     if(pf && (afn(a) < mn || afn(a) > mx)) return false;
-    if(u && !a.u) return false;
+    if(u && !isUrgent(a)) return false;
     if(condFilter && a.cond != condFilter) return false;
     if(hasPhotoFilter && !((Array.isArray(a.imgs)&&a.imgs.length>0) || a.img)) return false;
     if(shopOnlyFilter && !a.isShop) return false;
@@ -1091,8 +1219,9 @@ function draw(){
   }
   const totalPages = Math.ceil(r.length / itemsPerPage) || 1;
   if(currentPage > totalPages) currentPage = totalPages;
-  const start = (currentPage - 1) * itemsPerPage;
-  const paginatedItems = r.slice(start, start + itemsPerPage);
+  // اسکرول بی‌نهایت: currentPage = تعداد دسته‌های بارگذاری‌شده؛ بقیه تا نزدیک شدن به پایین در انتظار می‌مانند
+  _MORE.r.list = r;
+  const paginatedItems = r.slice(0, currentPage * itemsPerPage);
 
   if (paginatedItems.length) {
     document.getElementById("list").innerHTML = paginatedItems.map(renderCard).join("");
@@ -1146,27 +1275,7 @@ function draw(){
     </div>`;
   }
   
-  let paginationHTML = '';
-  if(totalPages > 1) {
-    paginationHTML += `<button ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})">قبلی</button>`;
-    let pages = [];
-    for(let i=1; i<=totalPages; i++) {
-      if(i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
-        pages.push(i);
-      } else if(pages[pages.length - 1] !== '...') {
-        pages.push('...');
-      }
-    }
-    pages.forEach(p => {
-      if(p === '...') {
-        paginationHTML += `<span style="padding:0 4px;color:var(--mu);">…</span>`;
-      } else {
-        paginationHTML += `<button class="${p === currentPage ? 'active' : ''}" onclick="changePage(${p})">${nf(p)}</button>`;
-      }
-    });
-    paginationHTML += `<button ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1})">بعدی</button>`;
-  }
-  document.getElementById("pagination").innerHTML = paginationHTML;
+  renderMorePager();
 
   const qWholesale = (document.getElementById("q-wholesale").value || "").trim();
   const sortWholesale = document.getElementById("sort-wholesale").value;
@@ -1214,8 +1323,8 @@ function draw(){
 
   const wholesaleTotalPages = Math.ceil(filteredWholesale.length / itemsPerPage) || 1;
   if(wholesaleCurrentPage > wholesaleTotalPages) wholesaleCurrentPage = wholesaleTotalPages;
-  const wStart = (wholesaleCurrentPage - 1) * itemsPerPage;
-  const wPaginated = filteredWholesale.slice(wStart, wStart + itemsPerPage);
+  _MORE.w.list = filteredWholesale;
+  const wPaginated = filteredWholesale.slice(0, wholesaleCurrentPage * itemsPerPage);
 
   if (wPaginated.length) {
     document.getElementById("wholesale-list").innerHTML = wPaginated.map(renderCard).join("");
@@ -1228,27 +1337,7 @@ function draw(){
     </div>`;
   }
 
-  let wPaginationHTML = '';
-  if(wholesaleTotalPages > 1) {
-    wPaginationHTML += `<button ${wholesaleCurrentPage === 1 ? 'disabled' : ''} onclick="changeWholesalePage(${wholesaleCurrentPage - 1})">قبلی</button>`;
-    let wPages = [];
-    for(let i=1; i<=wholesaleTotalPages; i++) {
-      if(i === 1 || i === wholesaleTotalPages || (i >= wholesaleCurrentPage - 2 && i <= wholesaleCurrentPage + 2)) {
-        wPages.push(i);
-      } else if(wPages[wPages.length - 1] !== '...') {
-        wPages.push('...');
-      }
-    }
-    wPages.forEach(p => {
-      if(p === '...') {
-        wPaginationHTML += `<span style="padding:0 4px;color:var(--mu);">…</span>`;
-      } else {
-        wPaginationHTML += `<button class="${p === wholesaleCurrentPage ? 'active' : ''}" onclick="changeWholesalePage(${p})">${nf(p)}</button>`;
-      }
-    });
-    wPaginationHTML += `<button ${wholesaleCurrentPage === wholesaleTotalPages ? 'disabled' : ''} onclick="changeWholesalePage(${wholesaleCurrentPage + 1})">بعدی</button>`;
-  }
-  document.getElementById("wholesale-pagination").innerHTML = wPaginationHTML;
+  renderMorePager('w');
 
   document.getElementById("wholesale-stats").innerHTML = [[wholesaleAds.length, currentLang==='ps'?'عمده اعلانونه':'آگهی عمده'],[34, currentLang==='ps'?'سوداګریز ولایتونه':'ولایت تجاری'],[wholesaleCats.length-1, currentLang==='ps'?'عمده کټګورۍ':'دسته‌بندی عمده']].map(x=>`<div><b>${nf(x[0])}</b><span>${x[1]}</span></div>`).join("");
 
@@ -2036,12 +2125,16 @@ document.getElementById("acc").onclick=()=>{
   let badges = isPhone
     ? '<span class="badge-verified"><svg class="icon icon-sm"><use href="#i-check"></use></svg> شماره تاییدشده</span>'
     : '<span class="badge-verified">✓ حساب تاییدشده</span>';
+  { const _mine=(typeof mine!=="undefined"?mine:[]).find(x=>!x.owner||x.owner===me)||{};
+    const _lv=trustLevelOf(trustScoreFor(me,{verified:isPhone,isShop:!!_mine.isShop,ph:me}));
+    badges += `<span class="badge-verified trust-chip ${_lv.cls}" title="${_lv.next!=null?'تا سطح بعد '+nf(_lv.next)+' امتیاز':'بالاترین سطح'}">${_lv.label}</span>`; }
   if(adminFlag) badges += '<span class="badge-verified" style="background:rgba(244,183,63,.9);color:#2a1d00;border-color:transparent;"><svg class="icon icon-sm"><use href="#i-shield"></use></svg> مدیر</span>';
   document.getElementById("me-verified-badge-box").innerHTML = badges;
   const myAds = mine.filter(a => !a.owner || a.owner === me);
   document.getElementById("me-stat-ads").textContent = nf(myAds.length);
   document.getElementById("me-stat-views").textContent = nf(myAds.reduce((s,x)=>s+(Number(x.views)||0),0));
   document.getElementById("me-stat-favs").textContent = nf(Array.isArray(favs)?favs.length:0);
+  renderMeDash(myAds,isPhone);
 
   const adminBtn = document.getElementById("admin-btn");
   adminBtn.hidden = !adminFlag;
@@ -2306,6 +2399,7 @@ document.getElementById("header-post-btn").onclick = () => need(()=>{
   document.getElementById("retail-spec-row").style.display = isWholesaleMode ? "none" : "grid"; 
   document.getElementById("wholesale-row").style.display = isWholesaleMode ? "grid" : "none"; 
   document.getElementById("form-urg").closest("label").style.display = isWholesaleMode ? "none" : "";
+  urgGate(null);
   document.getElementById("form-shop-name").style.display = isWholesaleMode ? "block" : "none";
   
   if(isWholesaleMode) {
@@ -2392,6 +2486,7 @@ function openEditModal(ad) {
   document.getElementById("retail-spec-row").style.display = isWholesaleMode ? "none" : "grid"; 
   document.getElementById("wholesale-row").style.display = isWholesaleMode ? "grid" : "none"; 
   document.getElementById("form-urg").closest("label").style.display = isWholesaleMode ? "none" : "";
+  urgGate(ad);
   document.getElementById("form-lat").value = ad.lat || provinceCoords[ad.ci]?.lat || 34.5553;
   document.getElementById("form-lng").value = ad.lng || provinceCoords[ad.ci]?.lng || 69.2075;
   
@@ -2537,6 +2632,10 @@ document.getElementById("save").onclick=async()=>{
   const phv = normalizePhone(document.getElementById("f-ph").value);
   if(!/^07\d{8}$/.test(phv)){ toast("شماره تماس را به‌صورت ۷… وارد کنید."); document.getElementById("f-ph").focus(); return; }
   put("ab_last_ph_"+me,phv);
+  if(!document.getElementById("edit-ad-id").value && !adminFlag){
+    const ci=adCapInfo();
+    if(ci.waitMs>0){ toast("⛔ سقف "+nf(ci.cap)+" آگهی در ۲۴ ساعت پر شده است؛ "+urgLeftText(ci.waitMs)+" دیگر دوباره می‌توانید آگهی بگذارید."); return; }
+  }
   const saveBtn = document.getElementById("save");
   const _origSaveText = saveBtn.textContent;
   let imgUrls; let thMap = {};
@@ -2581,7 +2680,11 @@ document.getElementById("save").onclick=async()=>{
   const editId = document.getElementById("edit-ad-id").value;
   const isShopChecked = document.getElementById("form-is-shop").checked;
   const shopNameVal = document.getElementById("form-shop-name").value.trim() || ((users[me]?.name||"کاربر") + " فروشگاه");
-  const isUrg = document.getElementById("form-urg").checked ? 1 : 0;
+  let isUrg = document.getElementById("form-urg").checked ? 1 : 0;
+  const _prevAd = editId ? mine.find(x=>String(x.id)===String(editId)) : null;
+  let _newUrg = !!isUrg && !isUrgent(_prevAd);
+  if(_newUrg && !adminFlag && urgentCooldownLeft()>0){ isUrg=0; _newUrg=false; toast("⏳ آگهی فوری بعدی شما "+urgLeftText(urgentCooldownLeft())+" دیگر ممکن است؛ آگهی به‌صورت عادی ثبت شد."); }
+  if(_newUrg) put("ab_urg_last_"+me, Date.now());
   const isWholesaleVal = (document.getElementById("form-is-wholesale-hidden").value === "true");
   let latVal = parseFloat(document.getElementById("form-lat").value);
   let lngVal = parseFloat(document.getElementById("form-lng").value);
@@ -2615,7 +2718,7 @@ document.getElementById("save").onclick=async()=>{
         targetAd.mapLoc = document.getElementById("form-map").value.trim();
         targetAd.isShop = isShopChecked;
         targetAd.shopName = shopNameVal;
-        targetAd.u = isUrg;
+        targetAd.u = isUrg; if(_newUrg) targetAd.ut = Date.now(); if(!isUrg) delete targetAd.ut;
         targetAd.isWholesale = isWholesaleVal;
         targetAd.lat = latVal;
         targetAd.lng = lngVal;
@@ -2640,7 +2743,7 @@ document.getElementById("save").onclick=async()=>{
         provinces: isWholesaleVal ? selectedProvinces : undefined,
         p:+document.getElementById("f-p").value||0,
         d:document.getElementById("f-d").value.trim(),
-        ph:phv, u: isUrg, owner:me, ownerId: myId,
+        ph:phv, u: isUrg, ut: isUrg?ts:undefined, owner:me, ownerId: myId,
         imgs: imgUrls, th: thMap,
         cond: document.getElementById("form-cond").value,
         mapLoc: document.getElementById("form-map").value.trim(),
@@ -2690,7 +2793,11 @@ function extras(){
   document.getElementById("stats").style.display = A.length>=20 ? "flex" : "none";
   document.getElementById("stats").innerHTML=[[A.length,t('statAds')],[provinceCoords.length,t('statProv')],[cats.length-1,t('statCats')]].map(x=>`<div><b data-count="${x[0]}">${nf(x[0])}</b><span>${x[1]}</span></div>`).join("");
   if(!window._statsAnimated && A.length){ window._statsAnimated=true; document.querySelectorAll("#stats b[data-count]").forEach(b=>animateNumber(b,+b.dataset.count)); }
-  document.getElementById("feat").innerHTML=A.filter(a=>a.u).sort((a,b)=>a.age-b.age).map(card).join("")||'<div class="mu">فعلاً آگهی ویژه‌ای نیست.</div>';
+  { const U=A.filter(isUrgent).sort((a,b)=>a.age-b.age), more=U.length-URGENT_RAIL_MAX;
+    document.getElementById("feat").innerHTML=U.slice(0,URGENT_RAIL_MAX).map(card).join("")
+      +(more>0?`<button type="button" class="urg-more" data-urg-all><b>+${nf(more)}</b><span>${t('urgAll')}</span></button>`:"")
+      ||'<div class="mu">فعلاً آگهی ویژه‌ای نیست.</div>';
+    const ub=document.getElementById("urg-all"); if(ub){ ub.style.display=more>0?"":"none"; ub.textContent=t('urgAll')+" ("+nf(U.length)+") ›"; } }
   document.getElementById("tiles").innerHTML=cats.slice(1,13).map((x,i)=>`<button class="tag tile" style="--l:${92-(i%4)*2.5}%;--ld:${16+(i%4)*2}%" data-i="${i+1}"><span>${x[1]}</span>${x[0]}</button>`).join("");
   const cc={};A.forEach(a=>cc[a.ci]=(cc[a.ci]||0)+1);
   document.getElementById("tc").innerHTML=Object.entries(cc).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([i,n])=>`<button class="ccity" data-i="${i}">${cities[i]}<span>${nf(n)}</span></button>`).join("")
@@ -2776,7 +2883,7 @@ async function syncAd(ad){
     let {data,error} = await put1(wanted);
     if(error && wanted!=="pending" && !/RATE_LIMIT|USER_BLOCKED/.test(error.message||"")){ console.warn("status="+wanted+" refused, retry pending:",error); ({data,error} = await put1("pending")); }
     if(error && /USER_BLOCKED/.test(error.message||"")){ toast("⛔ ثبت آگهی برای حساب شما موقتاً متوقف شده است (ارسال مکرر آگهی ممنوعه). چند روز بعد دوباره تلاش کنید."); return null; }
-    if(error && /RATE_LIMIT/.test(error.message||"")){ toast("⛔ به سقف تعداد آگهی مجاز در ۲۴ ساعت رسیده‌اید (حساب‌های تازه حداکثر ۲ آگهی). بعداً دوباره تلاش کنید."); return null; }
+    if(error && /RATE_LIMIT/.test(error.message||"")){ toast("⛔ به سقف تعداد آگهی مجاز در ۲۴ ساعت رسیده‌اید (حساب‌های تازه حداکثر ۲ آگهی، بقیه ۶ آگهی). بعداً دوباره تلاش کنید."); return null; }
     if(error){console.warn(error);toast("ذخیره روی سرور انجام نشد؛ فقط در این دستگاه ذخیره شد.");return null;}
     ad.status=data.status; return data.status;
   }catch(e){
@@ -3047,6 +3154,7 @@ function cleanAd(r){
   if("ci" in a) a.ci=Math.trunc(num(a.ci,0,500));
   ["views","calls","u"].forEach(k=>{ if(k in a) a[k]=num(a[k],0,1e9); });
   if("ts" in a){ const ts=Number(a.ts); a.ts=(Number.isFinite(ts)&&ts>1.5e12&&ts<Date.now()+864e5)?ts:0; }
+  if("ut" in a){ const ut=Number(a.ut); a.ut=(Number.isFinite(ut)&&ut>1.5e12&&ut<Date.now()+864e5)?ut:0; }
   ["lat","lng"].forEach(k=>{ if(k in a) a[k]=num(a[k],-180,180); });
   ["isWholesale","isShop","neg"].forEach(k=>{ if(k in a) a[k]=!!a[k]; });
   // متن‌ها همیشه رشته و با طول محدود
