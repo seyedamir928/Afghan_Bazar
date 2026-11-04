@@ -111,7 +111,7 @@ const i18n = {
     searchPlaceholder: "جستجو در عنوان و توضیحات پرچون: موتر، خانه، موبایل…", searchBtn: "جستجو",
     statAds: "آگهی پرچون", statProv: "ولایت", statCats: "دسته‌بندی",
     recentSec: "اخیراً دیده‌اید", recentSecSub: "برای مرور سریع",
-    featSec: "آگهی‌های ویژه پرچون", featSecSub: "فوری و تازه", urgAll: "همه فوری‌ها",
+    featSec: "آگهی‌های ویژه پرچون", featSecSub: "فوری و تازه", urgAll: "همه فوری‌ها", heroChip1: "🆓 رایگان", heroChip2: "📍 نقشه شعاعی", heroChip3: "⚖️ مقایسه کالاها",
     popCats: "دسته‌های محبوب پرچون", topProv: "ولایت‌های پرآگهی",
     filterTitle: "قیمت پرچون (افغانی)", from: "از", to: "تا",
     filterAdv: "ویژگی‌های تخصصی", filterCond: "وضعیت کالا", condAll: "همه", condNew: "نو و آکبند", condUsed: "دست دوم / کارکرده",
@@ -179,7 +179,7 @@ const i18n = {
     searchPlaceholder: "په پرچون اعلانونو کې پلټنه: موټر، کور، موبایل…", searchBtn: "پلټنه",
     statAds: "پرچون اعلانونه", statProv: "ولایتونه", statCats: "کټګورۍ",
     recentSec: "وروستي لیدل شوي", recentSecSub: "د چټکې کتنې لپاره",
-    featSec: "ځانګړي پرچون اعلانونه", featSecSub: "بیړني او نوي", urgAll: "ټول بیړني",
+    featSec: "ځانګړي پرچون اعلانونه", featSecSub: "بیړني او نوي", urgAll: "ټول بیړني", heroChip1: "🆓 وړیا", heroChip2: "📍 شعاعي نقشه", heroChip3: "⚖️ د توکو پرتله",
     popCats: "مشهورې پرچون کټګورۍ", topProv: "ډیر اعلانونه لرونکي ولایتونه",
     filterTitle: "د پرچون بیه (افغانۍ)", from: "له", to: "تر",
     filterAdv: "تخصصي ځانګړتیاوې", filterCond: "د توکي حالت", condAll: "ټول", condNew: "نوی او بکس", condUsed: "دست دوم / کارول شوی",
@@ -870,29 +870,64 @@ function checkExpiringAds(){
 }
 
 // ===== Voice search =====
+const MIC_SVG='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/></svg>';
+let _vpTimer=null;
+function voicePopHide(){ clearTimeout(_vpTimer); const el=document.getElementById("voice-pop"); if(el) el.classList.remove("show"); }
+function voicePop(title,sub,ms,mode){
+  let el=document.getElementById("voice-pop");
+  if(!el){ el=document.createElement("div"); el.id="voice-pop"; el.setAttribute("role","status"); el.setAttribute("aria-live","polite"); el.onclick=voicePopHide; document.body.appendChild(el); }
+  el.className="show "+(mode||"");
+  el.textContent="";
+  const ic=document.createElement("div");
+  if(mode==="listen"){ ic.className="vp-wave"; ic.innerHTML="<i></i><i></i><i></i><i></i>"; }
+  else { ic.className="vp-ic"; ic.textContent=mode==="ok"?"✓":mode==="err"?"!":"🎤"; }
+  const tx=document.createElement("div"); tx.className="vp-tx";
+  const b=document.createElement("b"); b.textContent=title; tx.appendChild(b);
+  if(sub){ const sm=document.createElement("small"); sm.textContent=sub; tx.appendChild(sm); }
+  el.append(ic,tx);
+  clearTimeout(_vpTimer);
+  if(ms) _vpTimer=setTimeout(voicePopHide,ms);
+}
 function initVoiceSearch(inputId){
   const input=document.getElementById(inputId);
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!input||!SR||input.parentNode.querySelector('[data-mic]')) return;
   const host=input.parentNode;
   if(getComputedStyle(host).position==='static') host.style.position='relative';
-  input.style.paddingRight='38px';
+  input.style.paddingRight='50px';
   const mic=document.createElement('button');
-  mic.type='button'; mic.setAttribute('data-mic','1'); mic.textContent='🎤'; mic.title='جستجوی صوتی'; mic.setAttribute('aria-label','جستجوی صوتی');
-  mic.style.cssText='position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;font-size:18px;cursor:pointer;padding:2px 4px;z-index:2;';
+  const ps=()=>currentLang==='ps';
+  mic.type='button'; mic.setAttribute('data-mic','1'); mic.className='mic-btn'; mic.innerHTML=MIC_SVG;
+  mic.title='جستجوی صوتی'; mic.setAttribute('aria-label','جستجوی صوتی'); mic.setAttribute('aria-pressed','false');
   host.appendChild(mic);
   let recog=null;
+  const setOn=v=>{ mic.classList.toggle('on',v); mic.setAttribute('aria-pressed',v?'true':'false'); };
   const start=lang=>{
-    recog=new SR(); recog.lang=lang; recog.interimResults=false; recog.continuous=false;
-    mic.textContent='⏺️';
-    recog.onresult=ev=>{ input.value=ev.results[0][0].transcript; input.dispatchEvent(new Event('input',{bubbles:true})); };
-    recog.onerror=ev=>{
-      if(ev.error==='not-allowed'||ev.error==='service-not-allowed') toast('اجازهٔ میکروفون داده نشد. در تنظیمات مرورگر (قفل کنار آدرس سایت ← مجوزها) میکروفون را «اجازه» بدهید.');
-      else if(ev.error==='language-not-supported'&&lang!=='fa-IR'){ recog=null; start('fa-IR'); return; }
-      else if(ev.error!=='aborted') toast('صدا شنیده نشد، دوباره تلاش کن.');
+    const r=new SR(); recog=r; r.lang=lang; r.interimResults=true; r.continuous=false;
+    let heard='', failed=false;
+    setOn(true);
+    voicePop(ps()?'په اوریدلو یم…':'در حال گوش دادن…', ps()?'د توکي یا ښار نوم ووایاست':'نام کالا یا شهر را بگویید؛ مثلاً «موبایل کابل»', 15000, 'listen');
+    r.onresult=ev=>{
+      let txt='', fin=false;
+      for(let i=0;i<ev.results.length;i++){ txt+=ev.results[i][0].transcript; if(ev.results[i].isFinal) fin=true; }
+      heard=txt;
+      if(fin){ input.value=txt; input.dispatchEvent(new Event('input',{bubbles:true})); }
+      else if(txt) voicePop(txt, ps()?'د پای لپاره بیا مایک ته لاس واچوئ':'برای پایان دوباره روی میکروفون بزنید', 15000, 'listen');
     };
-    recog.onend=()=>{ if(recog){ mic.textContent='🎤'; recog=null; } };
-    try{ recog.start(); }catch(_){ mic.textContent='🎤'; recog=null; }
+    r.onerror=ev=>{
+      if(ev.error==='language-not-supported'&&lang!=='fa-IR'){ failed=true; if(recog===r) recog=null; start('fa-IR'); return; }
+      failed=true;
+      if(ev.error==='not-allowed'||ev.error==='service-not-allowed') voicePop('اجازهٔ میکروفون داده نشد','قفل کنار آدرس سایت ← مجوزها ← میکروفون را «اجازه» بدهید.',7000,'err');
+      else if(ev.error!=='aborted') voicePop(ps()?'غږ ونه اورېدل شو':'صدا شنیده نشد','دوباره روی میکروفون بزنید.',3500,'err');
+    };
+    r.onend=()=>{
+      if(recog!==r) return;
+      recog=null; setOn(false);
+      if(failed) return;
+      if(heard) voicePop(ps()?'اورېدل شو':'شنیده شد','«'+heard+'»',2200,'ok');
+      else voicePop(ps()?'غږ ونه اورېدل شو':'صدایی شنیده نشد','دوباره روی میکروفون بزنید.',3200,'err');
+    };
+    try{ r.start(); }catch(_){ if(recog===r) recog=null; setOn(false); voicePopHide(); }
   };
   mic.onclick=e=>{ e.preventDefault(); if(recog){ try{recog.stop();}catch(_){} return; } start(currentLang==='ps'?'ps-AF':'fa-IR'); };
 }
