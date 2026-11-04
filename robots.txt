@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://afghan-bazar.pages.dev/sitemap.xml
