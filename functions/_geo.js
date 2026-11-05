@@ -123,7 +123,7 @@ export async function renderLanding({ origin, env, cat, prov }) {
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(desc)}">
 <meta property="og:url" content="${esc(pageUrl)}">
-<meta property="og:image" content="${esc(items[0] && items[0].img ? items[0].img : origin + "/icon-512.png")}">
+<meta property="og:image" content="${esc(items[0] && items[0].img ? items[0].img : origin + "/icon-maskable-512.png")}">
 <script type="application/ld+json">${jsonLd}</script>
 <style>body{font-family:system-ui,Tahoma,sans-serif;max-width:860px;margin:0 auto;padding:16px;line-height:1.8}ul.l{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}ul.l a{display:block;text-decoration:none;color:inherit;border:1px solid #dfe8e2;border-radius:14px;padding:8px;height:100%}ul.l img{width:100%;height:130px;object-fit:cover;border-radius:10px}ul.l b{display:block;font-size:14px}.p{color:#0e7a4b;font-weight:700;font-size:14px}small{display:block;color:#55665d}nav.r{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}nav.r a{font-size:13px;padding:4px 12px;border:1px solid #dfe8e2;border-radius:99px;text-decoration:none;color:#0e7a4b}</style>
 </head><body>
