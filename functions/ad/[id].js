@@ -1,7 +1,6 @@
 // Cloudflare Pages Function: /ad/<id>  → صفحهٔ پیش‌نمایش (Open Graph) برای WhatsApp / Telegram / Google
 // متغیرهای محیطی (اختیاری): SUPABASE_URL, SUPABASE_KEY (anon key), SITE_NAME
 // اگر تنظیم نشوند، همان مقادیر عمومی داخل app.js استفاده می‌شوند (anon key عمومی است).
-import { CATS, PROVS, landingPath } from "../_geo.js";
 const DEFAULT_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNuaHl6bXdnYXppZmRxeXZxc251Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMyOTkxNjEsImV4cCI6MjEwODg3NTE2MX0.TuvApVWN-fTtd3aLQy0aerNgy3vJq1ZXuZehtytpNNo"; // anon key عمومی است (همان کلید داخل app.js)
 const SAFE_ID = /^[A-Za-z0-9_-]{1,60}$/;
 const DEFAULT_URL = "https://snhyzmwgazifdqyvqsnu.supabase.co";
@@ -9,7 +8,7 @@ const IMG_PREFIX = DEFAULT_URL + "/storage/v1/object/public/ad-images/";
 const SAFE_IMG = /^[A-Za-z0-9_./-]+$/;
 
 const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const CSP = "default-src 'none'; script-src 'none'; style-src 'unsafe-inline'; img-src https:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'";
+const CSP = "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src https:; base-uri 'none'; form-action 'none'; frame-ancestors 'none'";
 // آگهی حذف‌شده / منقضی / تاییدنشده: کد ۴۱۰ + noindex تا گوگل آن را از نتایج بردارد (به‌جای ریدایرکت به صفحهٔ اصلی)
 const gone = (origin, site) => new Response(`<!DOCTYPE html>
 <html lang="fa" dir="rtl"><head><meta charset="utf-8">
@@ -72,18 +71,6 @@ export async function onRequestGet({ params, request, env }) {
     offers: Number.isFinite(priceNum) && priceNum > 0
       ? { "@type": "Offer", price: priceNum, priceCurrency: ad.cur === "USD" ? "USD" : "AFN", availability: "https://schema.org/InStock", url: pageUrl } : undefined
   }).replace(/</g, "\\u003c");
-  // همهٔ عکس‌های معتبر (حداکثر ۸)
-  const gallery = (Array.isArray(ad.imgs) ? ad.imgs : []).filter(okImg).slice(0, 8);
-  const ci = Number(ad.ci), cat = Number(ad.c);
-  const prov = Number.isInteger(ci) && ci >= 0 && ci < PROVS.length ? PROVS[ci] : null;
-  const catO = Number.isInteger(cat) && cat > 0 && cat < CATS.length ? CATS[cat] : null;
-  const crumbs = [];
-  if (catO) crumbs.push(`<a href="${esc(origin + landingPath(cat, -1))}">${esc(catO.name)}</a>`);
-  if (prov) crumbs.push(catO ? `<a href="${esc(origin + landingPath(cat, ci))}">${esc(prov.short)}</a>` : `<a href="${esc(origin + "/p/" + prov.slug)}">${esc(prov.short)}</a>`);
-  const phone = String(ad.ph || "").replace(/[^\d+]/g, "").slice(0, 16);
-  const wa = phone ? (/^\+?93/.test(phone) ? phone.replace(/\D/g, "") : "93" + phone.replace(/\D/g, "").replace(/^0/, "")) : "";
-  const waText = encodeURIComponent(`سلام، این آگهی را دیدم: ${String(ad.t || "").slice(0, 80)}\n${pageUrl}`);
-
   const html = `<!DOCTYPE html>
 <html lang="fa" dir="rtl"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -98,31 +85,14 @@ export async function onRequestGet({ params, request, env }) {
 <meta property="og:url" content="${esc(pageUrl)}">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">${jsonLd}</script>
-<style>
-*{box-sizing:border-box}body{font-family:system-ui,Tahoma,sans-serif;max-width:720px;margin:0 auto;padding:16px;line-height:1.9;color:#14231b;background:#fff}
-a{color:#0e7a4b}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:14px}
-.crumbs a{margin-inline-end:6px}.crumbs a+a::before{content:"‹ ";color:#777}
-h1{font-size:22px;margin:8px 0}.p{font-size:22px;font-weight:700;color:#0e7a4b;margin:4px 0 12px}
-.g{display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory}
-.g img{flex:0 0 100%;max-width:100%;max-height:420px;object-fit:contain;background:#f3f6f4;border-radius:12px;scroll-snap-align:center}
-.d{white-space:pre-line;margin:12px 0}.btns{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
-.b{flex:1 1 140px;text-align:center;padding:12px 16px;border-radius:99px;text-decoration:none;font-weight:700;color:#fff;background:#0e7a4b}
-.b.w{background:#25d366}.b.o{background:#fff;color:#0e7a4b;border:2px solid #0e7a4b}
-.f{margin-top:24px;font-size:13px;color:#667}
-@media(prefers-color-scheme:dark){body{background:#0f1a14;color:#e8f0ec}.g img{background:#1a2820}.b.o{background:transparent}.f{color:#9ab}}
-</style>
+<style>body{font-family:system-ui,Tahoma,sans-serif;max-width:720px;margin:0 auto;padding:16px;line-height:1.8}img{max-width:100%;height:auto;border-radius:12px}.p{font-size:20px;font-weight:700;color:#0e7a4b}</style>
 </head><body>
-<div class="top"><a href="${esc(origin)}/"><b>${esc(site)}</b></a><span class="crumbs">${crumbs.join("")}</span></div>
 <h1>${esc(ad.t || "آگهی")}</h1>
+${first && okImg(first) ? `<img src="${esc(first)}" alt="${esc(ad.t || "")}">` : ""}
 <p class="p">${esc(price)}</p>
-${gallery.length ? `<div class="g">${gallery.map((u, i) => `<img src="${esc(u)}" alt="${esc((ad.t || "") + " " + (i + 1))}"${i ? ' loading="lazy"' : ""}>`).join("")}</div>` : ""}
-<p class="d">${esc(String(ad.d || "").slice(0, 3000))}</p>
-<div class="btns">
-${phone ? `<a class="b" href="tel:${esc(phone)}" rel="nofollow">تماس: ${esc(phone)}</a><a class="b w" href="https://wa.me/${esc(wa)}?text=${waText}" rel="nofollow noopener">واتساپ</a>` : ""}
-<a class="b o" href="${esc(spa)}" rel="nofollow">چت با فروشنده و امکانات بیشتر در برنامه</a>
-</div>
-<p class="f">قبل از پرداخت، کالا را حضوری ببینید و از پرداخت پیش‌پرداخت به افراد ناشناس خودداری کنید.</p>
-</body></html>`;
+<p>${esc(String(ad.d || "").slice(0, 1500))}</p>
+<p><a href="${esc(spa)}">مشاهدهٔ آگهی و تماس با فروشنده در ${esc(site)}</a></p>
+<script>if(!/bot|crawl|spider|slurp|google|inspection|lighthouse|bing|yandex|duckduck|baidu|facebook|whatsapp|telegram|twitter|linkedin|slack|discord|skype|pinterest|embedly|vkshare|preview/i.test(navigator.userAgent))location.replace(${JSON.stringify(spa).replace(/</g, "\\u003c")});</script></body></html>`;
 
   return new Response(html, {
     headers: {
