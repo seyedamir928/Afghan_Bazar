@@ -48,7 +48,24 @@
     wifi:'<path d="M2 9a15 15 0 0 1 20 0M5 12.5a10 10 0 0 1 14 0M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19.5" r=".7" fill="currentColor"/>',
     help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.7-2.5 2-2.5 4M12 17h.01"/>',
     zap:'<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',
-    dot:'<circle cx="12" cy="12" r="7" fill="currentColor" stroke="none"/>'
+    dot:'<circle cx="12" cy="12" r="7" fill="currentColor" stroke="none"/>',
+    /* طبابت و صحت */
+    medcross:'<path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z"/>',
+    pill:'<rect x="2.5" y="8.5" width="19" height="7" rx="3.5" transform="rotate(-45 12 12)"/><path d="M8.5 8.5l7 7"/>',
+    steth:'<path d="M6 3v5a4 4 0 0 0 8 0V3"/><path d="M10 12v3a5 5 0 0 0 10 0v-2"/><circle cx="20" cy="11" r="2"/>',
+    hbed:'<path d="M3 6v13M21 19v-6a3 3 0 0 0-3-3H10v6M3 16h18"/><circle cx="6.5" cy="12" r="2"/><path d="M15 3v4M13 5h4"/>',
+    glove:'<path d="M7 21v-5L4.5 12.5a1.5 1.5 0 0 1 2.4-1.8L8 12V5a1.5 1.5 0 0 1 3 0v5V3.5a1.5 1.5 0 0 1 3 0V10V5a1.5 1.5 0 0 1 3 0v6.5c0 3-1 5-3 6.5v3"/>',
+    micro:'<path d="M6 21h14M9 18h8M12 18a6 6 0 0 0 6-6"/><path d="M9 4l3-1 2.5 7-3 1z"/><path d="M10.5 11.5L12 15"/><circle cx="12" cy="15" r="1.5"/>',
+    tooth:'<path d="M7 3c-2.5 0-4 2-4 4.5 0 3 1.5 4.5 2 7 .6 3 1 6.5 3 6.5s1.5-5 4-5 2 5 4 5 2.4-3.5 3-6.5c.5-2.5 2-4 2-7C21 5 19.5 3 17 3c-2 0-3 1-5 1S9 3 7 3z"/>',
+    glasses:'<circle cx="6.5" cy="14.5" r="3.5"/><circle cx="17.5" cy="14.5" r="3.5"/><path d="M10 14.5c1.3-1 2.7-1 4 0M3 14l2-7h2M21 14l-2-7h-2"/>',
+    lungs:'<path d="M12 3v8M12 11l-3 2M12 11l3 2"/><path d="M8.5 7C6 7 3 12 3 17c0 2 1 3 2.5 3 2 0 3.5-1.5 3.5-4V9a2 2 0 0 0-.5-2zM15.5 7C18 7 21 12 21 17c0 2-1 3-2.5 3-2 0-3.5-1.5-3.5-4V9a2 2 0 0 1 .5-2z"/>',
+    wheel:'<circle cx="10" cy="4" r="1.6"/><path d="M10 7v6h6l3 6"/><path d="M10 10h5"/><path d="M7.5 10.5A5.5 5.5 0 1 0 15 18"/>',
+    bottle:'<path d="M10 2h4M9.5 5h5M10 5V3.5M14 5V3.5"/><path d="M9 5h6l1 4v10a3 3 0 0 1-3 3h-2a3 3 0 0 1-3-3V9z"/><path d="M8 12h4M8 15.5h3"/>',
+    vitamin:'<rect x="7" y="2" width="10" height="20" rx="5"/><path d="M7 12h10"/><path d="M12 6v2M12 15v3"/>',
+    leaf:'<path d="M5 21c0-9 5-15 15-17-1 10-6 15-15 15"/><path d="M5 21c2-5 5-8 9-10"/>',
+    cow:'<path d="M5 6L3 4M19 6l2-2"/><path d="M6 8c0-2 2.5-3 6-3s6 1 6 3v5c0 3-1 5-2 6.5-.5.8-1.7 1.5-4 1.5s-3.5-.7-4-1.5C7 18 6 16 6 13z"/><circle cx="9.5" cy="10.5" r=".6" fill="currentColor"/><circle cx="14.5" cy="10.5" r=".6" fill="currentColor"/><ellipse cx="12" cy="16" rx="3" ry="2"/>',
+    hospital:'<path d="M3 21h18M5 21V7l7-4 7 4v14"/><path d="M12 8v5M9.5 10.5h5"/><path d="M10 21v-4h4v4"/>',
+    coat:'<path d="M8 3l4 3 4-3 4 3v15H4V6z"/><path d="M12 6v15M8 3l-1 6 2 2M16 3l1 6-2 2"/><path d="M15 15h2"/>'
   };
   // ایموجی → [شناسهٔ symbol, رنگ اختیاری]. شناسه‌های i-* از sprite موجود صفحه می‌آیند.
   var MAP={
@@ -61,7 +78,9 @@
     '📝':['i-note'],'❌':['e-xc','var(--dg)'],'📋':['e-clip'],'🟢':['e-dot','#0e7a4b'],'🟡':['e-dot','#e0a800'],'🟠':['e-dot','#e0701a'],
     '🔴':['e-dot','var(--dg)'],'⚪':['e-dot','#aab7b0'],'🚩':['e-flag','var(--dg)'],'🔄':['i-refresh'],'💬':['i-chat'],'⛔':['e-ban','var(--dg)'],
     '🚫':['e-ban','var(--dg)'],'👋':['e-smile'],'🔍':['i-search'],'📭':['i-inbox'],'💔':['i-heart'],'🏪':['i-store'],'👤':['i-user'],'🗺':['e-map'],
-    '🎤':['e-mic'],'⏺':['e-rec','var(--dg)'],'📡':['e-wifi'],'🔗':['i-link'],'❓':['e-help'],'⚡':['e-zap','#e0a800']
+    '🎤':['e-mic'],'⏺':['e-rec','var(--dg)'],'📡':['e-wifi'],'🔗':['i-link'],'❓':['e-help'],'⚡':['e-zap','#e0a800'],
+    '⚕':['e-medcross'],'💊':['e-pill'],'🩺':['e-steth'],'🛏':['e-hbed'],'🧤':['e-glove'],'🔬':['e-micro'],'🦷':['e-tooth'],'👓':['e-glasses'],
+    '🫁':['e-lungs'],'♿':['e-wheel'],'🍼':['e-bottle'],'💪':['e-vitamin'],'🌿':['e-leaf'],'🐄':['e-cow'],'🏥':['e-hospital'],'🥼':['e-coat']
   };
   var keys=Object.keys(MAP).sort(function(a,b){return b.length-a.length});
   var RE=new RegExp('('+keys.join('|')+')[\\uFE0E\\uFE0F]?','g');

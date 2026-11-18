@@ -942,6 +942,49 @@ dialog::backdrop{background:var(--scrim);backdrop-filter:blur(8px) saturate(1.2)
 #voice-pop .vp-wave i:nth-child(2){animation-delay:.15s}#voice-pop .vp-wave i:nth-child(3){animation-delay:.3s}#voice-pop .vp-wave i:nth-child(4){animation-delay:.45s}
 @keyframes vpWave{0%,100%{height:8px}50%{height:26px}}
 @media (prefers-reduced-motion:reduce){.mic-btn.on,#voice-pop .vp-wave i{animation:none}}
+
+/* ===== طبابت و صحت: رنگ اختصاصی ارغوانی-تمشکی، جدا از سبز پرچون و آبی عمده ===== */
+:root{--med:#b0186a;--med2:#6d0f45;--med-bg:#fdf0f6;--med-bd:#f3c6dc}
+:root[data-theme="dark"]{--med:#f06aaf;--med2:#7a1650;--med-bg:#2a1522;--med-bd:#5a2745}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--med:#f06aaf;--med2:#7a1650;--med-bg:#2a1522;--med-bd:#5a2745}}
+.med-zone{margin:4px 0 12px;padding:10px 12px 2px;border:1px solid var(--med-bd);border-radius:16px;background:linear-gradient(135deg,var(--med-bg),var(--card));border-inline-start:4px solid var(--med)}
+.med-zone-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px}
+.med-zone-head b{color:var(--med);font-size:14px}
+.med-zone-head .mu{font-size:11px}
+.med-clear{margin-inline-start:auto;border:0;background:var(--med);color:#fff;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:11px;display:none}
+.med-zone.active .med-clear{display:inline-block}
+.med-zone.active{box-shadow:0 0 0 3px color-mix(in srgb,var(--med) 18%,transparent)}
+.cats.med-cats{padding-bottom:10px}
+.cat.med-cat{border-color:var(--med-bd);background:var(--card);color:var(--med)}
+.cat.med-cat .emo{color:var(--med)}
+.cat.med-cat.med-all{font-weight:700;background:var(--med-bg)}
+.cat.med-cat.on{background:var(--med)!important;border-color:var(--med)!important;color:#fff!important}
+.cat.med-cat.on .emo{color:#fff}
+.med-sec .sh h2{color:var(--med)}
+.med-sec{border-radius:18px;padding:12px;background:linear-gradient(160deg,var(--med-bg),transparent 70%);border:1px solid var(--med-bd)}
+.med-all-btn{margin-inline-start:auto;background:var(--med);color:#fff;border:0;font-size:12px;padding:5px 12px}
+.tile.med-tile{background:var(--card)!important;border:1px solid var(--med-bd);color:var(--tx);position:relative}
+.tile.med-tile .emo{color:var(--med)!important}
+.tile.med-tile small{position:absolute;top:6px;left:8px;background:var(--med);color:#fff;border-radius:9px;padding:0 6px;font-size:10px;line-height:16px}
+.step-cat-group{grid-column:1/-1;font-size:12px;font-weight:700;color:var(--mu);margin:6px 2px 0}
+.step-cat-group.med{color:var(--med);border-top:1px dashed var(--med-bd);padding-top:10px;margin-top:10px}
+.step-cat-tile.med{border-color:var(--med-bd);background:var(--med-bg)}
+.step-cat-tile.med .emo{color:var(--med)!important}
+.step-cat-tile.med.on{border-color:var(--med);color:var(--med);background:color-mix(in srgb,var(--med) 12%,var(--card));box-shadow:0 0 0 3px color-mix(in srgb,var(--med) 18%,transparent)}
+.med-notice{margin:12px 0 4px;padding:10px 12px;border-radius:12px;background:var(--med-bg);border:1px solid var(--med-bd);color:var(--tx);font-size:12px;line-height:1.8}
+.med-notice b{display:block;color:var(--med);margin-top:4px;font-weight:600}
+.med-fields select:focus,.med-fields input:focus{border-color:var(--med);outline-color:var(--med)}
+.med-req{color:var(--med);font-weight:700}
+#add.med-form .step-dot.active,#add.med-form .step-dot.done{background:var(--med)}
+.med-badge{position:absolute;top:40px;right:10px;z-index:3;background:var(--med);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.med-badge .emo{color:#fff}
+.ad.med-ad{border-color:var(--med-bd)}
+.med-specs{margin-top:8px;padding:10px;border-radius:10px;background:var(--med-bg);border:1px solid var(--med-bd);border-inline-start:4px solid var(--med)}
+.med-specs b{color:var(--med)}
+.med-signup-toggle{margin:10px 0 4px;font-size:12px;color:var(--med);font-weight:600}
+.med-signup{padding:10px;border:1px solid var(--med-bd);background:var(--med-bg);border-radius:12px;margin-bottom:6px}
+.med-signup-title{font-weight:700;color:var(--med);font-size:13px;margin-bottom:2px}
+.med-profile-badge{background:var(--med)!important;color:#fff!important;border-color:transparent!important}
 </style>
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1041,11 +1084,14 @@ dialog::backdrop{background:var(--scrim);backdrop-filter:blur(8px) saturate(1.2)
       <div class="rail-container"><div class="rail" id="feat"></div></div>
     </div>
     <div class="sec"><div class="sh"><h2 data-i18n="popCats">دسته‌های محبوب پرچون</h2></div><div class="tiles" id="tiles"></div></div>
+    <div class="sec med-sec"><div class="sh"><h2>⚕️ <span data-i18n="medGroup">طبابت و صحت</span></h2><span class="mu" data-i18n="medGroupSub">دوا، تجهیزات طبی، داکتران و خدمات صحی</span><button type="button" class="capsule-btn med-all-btn" id="med-all-btn"><span data-i18n="medGroup">طبابت و صحت</span> ›</button></div><div class="tiles med-tiles" id="med-tiles"></div></div>
     <div class="sec"><div class="sh"><h2 data-i18n="topProv">ولایت‌های پرآگهی</h2></div><div class="cities" id="tc"></div></div>
   </div>
 
   <div class="wrap">
     <div class="cats-container"><div class="cats" id="cats" role="tablist" aria-label="دسته‌های پرچون"></div></div>
+    <div class="med-zone" id="med-zone-r"><div class="med-zone-head"><b>⚕️ <span data-i18n="medGroup">طبابت و صحت</span></b><span class="mu" data-i18n="medGroupSub">دوا، تجهیزات طبی، داکتران و خدمات صحی</span><button type="button" class="med-clear" data-med-clear="r" aria-label="حذف فیلتر طبابت">✕</button></div>
+      <div class="cats med-cats" id="med-cats" role="tablist" aria-label="دسته‌های طبابت پرچون"></div></div>
     <div class="layout" id="listing">
       <aside class="filters" id="flt">
         <div class="filter-mobile-close">
@@ -1128,6 +1174,8 @@ dialog::backdrop{background:var(--scrim);backdrop-filter:blur(8px) saturate(1.2)
   <div class="wrap" style="padding-top:24px;">
     <div id="dynamic-shop-banner-wholesale"></div>
     <div class="cats-container"><div class="cats" id="wholesale-cats" role="tablist" aria-label="دسته‌های عمده"></div></div>
+    <div class="med-zone" id="med-zone-w"><div class="med-zone-head"><b>⚕️ <span data-i18n="medWholesaleGroup">طبابت و صحت (عمده)</span></b><span class="mu" data-i18n="medGroupSub">دوا، تجهیزات طبی، داکتران و خدمات صحی</span><button type="button" class="med-clear" data-med-clear="w" aria-label="حذف فیلتر طبابت">✕</button></div>
+      <div class="cats med-cats" id="med-wholesale-cats" role="tablist" aria-label="دسته‌های طبابت عمده"></div></div>
     <div class="bar" style="margin-top:14px;">
       <h2 id="wholesale-title" data-i18n="wholesaleTitleShort">آگهی‌های عمده و تناژ بالا</h2>
       <div class="vm-toggle" role="group" aria-label="نحوه‌ی نمایش آگهی‌ها">
@@ -1230,7 +1278,14 @@ dialog::backdrop{background:var(--scrim);backdrop-filter:blur(8px) saturate(1.2)
   <div class="dialog-content-pad">
     <h2 data-i18n="authTitle">حساب کاربری و احراز هویت</h2>
     <div class="tabs"><button class="on" data-m="in" data-i18n="authIn">ورود</button><button data-m="up" data-i18n="authUp">ثبت‌نام</button></div>
-    <div id="nm-w" hidden><label for="a-n" data-i18n="authName">نام کامل</label><input id="a-n" maxlength="30" autocomplete="name"></div>
+    <div id="nm-w" hidden><label for="a-n" data-i18n="authName">نام کامل</label><input id="a-n" maxlength="30" autocomplete="name">
+      <label class="chk med-signup-toggle"><input type="checkbox" id="a-med"> <span data-i18n="medSignupToggle">⚕️ حساب صحی / طبی</span></label>
+      <div id="a-med-box" class="med-signup" hidden>
+        <div class="med-signup-title" data-i18n="medSignupTitle">مشخصات تخصصی صحی</div>
+        <div class="mu" style="font-size:11px;margin-bottom:4px;" data-i18n="medSignupHint"></div>
+        <div id="a-med-fields"></div>
+      </div>
+    </div>
     <button class="capsule-btn" id="g-login" type="button" style="width:100%;margin:10px 0 2px;border:1px solid var(--bd);text-align:center;" data-i18n="authGoogle">🔐 ورود با حساب گوگل</button>
     <div class="mu" style="text-align:center;font-size:11px;" data-i18n="authOr">یا با کد تایید:</div>
     <div class="mtabs" id="auth-methods"><button class="on" data-am="email" type="button" data-i18n="authEmail">ایمیل</button><button data-am="phone" type="button" disabled style="opacity:.5;cursor:not-allowed" data-i18n="authPhone">پیامک...</button></div>
@@ -1411,7 +1466,8 @@ dialog::backdrop{background:var(--scrim);backdrop-filter:blur(8px) saturate(1.2)
 <!-- اسکریپت‌های بوت‌استرپ در head -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.js" defer></script>
 <script src="./vendor/leaflet/leaflet.js" defer></script>
-<script src="emoji-icons.js?v=53" defer></script>
-<script src="app.js?v=62" defer></script>
+<script src="emoji-icons.js?v=54" defer></script>
+<script src="medical.js?v=1" defer></script>
+<script src="app.js?v=63" defer></script>
 </body>
 </html>

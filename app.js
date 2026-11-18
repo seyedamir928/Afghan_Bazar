@@ -255,6 +255,18 @@ const wholesaleCatsLocalized = {
   ps: [["ټول عمده","📦"],["خوراکي توکي (وریجې، غوړي، اوړه)","🌾"],["وچه مېوه (ممیز، بادام، پسته)","🌰"],["موبایل او ډیجیټل توکي (کارتن)","📱"],["کورني او بریښنایي توکي (کارتن)","🧺"],["جامې او ټوکر (عمده پلورنځی)","👕"],["اوسپنه او ساختماني توکي (لویه اندازه)","🏗️"],["د موټر پرزې او ماشین الات","⚙️"],["پاکوونکي او روغتیایي توکي","🧼"]]
 };
 
+// ===== طبابت و صحت (medical.js): دسته‌های طبی به آخر فهرست‌ها اضافه می‌شوند تا اندیس دسته‌های قبلی تغییر نکند =====
+const MED = window.AB_MED || null;
+const MED_R = MED ? MED.R0 : Infinity, MED_W = MED ? MED.W0 : Infinity;   // اندیس «همه طبابت» در پرچون / عمده
+if (MED) {
+  ["fa","ps"].forEach(l => {
+    catsLocalized[l] = catsLocalized[l].concat(MED.retail[l]);
+    wholesaleCatsLocalized[l] = wholesaleCatsLocalized[l].concat(MED.wholesale[l]);
+    Object.assign(i18n[l], MED.i18n[l]);
+  });
+}
+const isMedAd = a => !!(MED && MED.isAd(a));
+
 let cats = catsLocalized[currentLang];
 let wholesaleCats = wholesaleCatsLocalized[currentLang];
 
@@ -438,9 +450,9 @@ document.getElementById("close-notif-dlg").onclick = () => document.getElementBy
 function populateModalCategorySelect(isWholesale) {
   const selectEl = document.getElementById("f-c");
   if(isWholesale) {
-    selectEl.innerHTML = wholesaleCats.slice(1).map((x,i)=>`<option value="${i+1}">${x[0]}</option>`).join("");
+    selectEl.innerHTML = wholesaleCats.map((x,i)=>(i>0&&i!==MED_W)?`<option value="${i}">${x[0]}</option>`:"").join("");
   } else {
-    selectEl.innerHTML = cats.slice(1).map((x,i)=>`<option value="${i+1}">${x[0]}</option>`).join("");
+    selectEl.innerHTML = cats.map((x,i)=>(i>0&&i!==MED_R)?`<option value="${i}">${x[0]}</option>`:"").join("");
   }
 }
 
@@ -495,8 +507,13 @@ window.resetAllFilters = (e) => {
 };
 
 function drawCats(){
-  document.getElementById("cats").innerHTML=cats.map((x,i)=>`<button class="cat ${i==cat?'on':''}" data-i="${i}" role="tab" aria-selected="${i==cat}"><i>${x[1]}</i>${x[0]}</button>`).join("");
-  document.getElementById("wholesale-cats").innerHTML=wholesaleCats.map((x,i)=>`<button class="cat wholesale-cat ${i==wholesaleCat?'on':''}" data-i="${i}" role="tab" aria-selected="${i==wholesaleCat}"><i>${x[1]}</i>${x[0]}</button>`).join("");
+  const btn=(x,i,cur,cls)=>`<button class="cat ${cls} ${i==cur?'on':''}" data-i="${i}" role="tab" aria-selected="${i==cur}"><i>${x[1]}</i>${x[0]}</button>`;
+  document.getElementById("cats").innerHTML=cats.map((x,i)=>i<MED_R?btn(x,i,cat,""):"").join("");
+  document.getElementById("wholesale-cats").innerHTML=wholesaleCats.map((x,i)=>i<MED_W?btn(x,i,wholesaleCat,"wholesale-cat"):"").join("");
+  const mr=document.getElementById("med-cats"), mw=document.getElementById("med-wholesale-cats");
+  if(mr) mr.innerHTML=cats.map((x,i)=>i>=MED_R?btn(x,i,cat,"med-cat"+(i===MED_R?" med-all":"")):"").join("");
+  if(mw) mw.innerHTML=wholesaleCats.map((x,i)=>i>=MED_W?btn(x,i,wholesaleCat,"med-cat"+(i===MED_W?" med-all":"")):"").join("");
+  document.querySelectorAll(".med-zone").forEach(z=>z.classList.toggle("active", z.id==="med-zone-r" ? cat>=MED_R : wholesaleCat>=MED_W));
 }
 
 window.openTextPrompt = function(title, defaultValue = "") {
@@ -945,30 +962,66 @@ const categoryMeta = {
   "11": {condition:false,specRow:false,fields:[{k:"serviceType",lKey:"fldServiceType",ty:"text",ph:"مثلاً تعمیر موبایل"},{k:"homeService",lKey:"fldHomeService",ty:"select",oKeys:["optHas","optNotHas"]},{k:"workHours",lKey:"fldWorkHours",ty:"text",ph:"مثلاً ۸ صبح تا ۵ عصر"}]},
   "12": {condition:false,specRow:false,fields:[{k:"jobType",lKey:"fldJobType",ty:"select",oKeys:["optFullTime","optPartTime","optContract"]},{k:"salary",lKey:"fldSalary",ty:"number",ph:"مثلاً ۲۰۰۰۰"},{k:"experience",lKey:"fldExperience",ty:"text",ph:"مثلاً ۲ سال"},{k:"gender",lKey:"fldGender",ty:"select",oKeys:["optAny","optMale","optFemale"]}]}
 };
+if (MED) Object.assign(categoryMeta, MED.retailMeta);
+const wholesaleCategoryMeta = MED ? MED.wholesaleMeta : {};   // فیلدهای تخصصی عمده (فعلاً فقط دسته‌های طبی)
 const DEFAULT_CAT_META = {condition:true,specRow:true,fields:[]};
 const getCatMeta = id => categoryMeta[String(id)] || DEFAULT_CAT_META;
+const getWholesaleMeta = id => wholesaleCategoryMeta[String(id)] || DEFAULT_CAT_META;
 const categoryFields = Object.fromEntries(Object.entries(categoryMeta).map(([k,v])=>[k,v.fields]));
+const wholesaleCategoryFields = Object.fromEntries(Object.entries(wholesaleCategoryMeta).map(([k,v])=>[k,v.fields]));
+function currentFormMeta(){
+  const wholesale=document.getElementById("form-is-wholesale-hidden").value==="true", c=document.getElementById("f-c").value;
+  return wholesale?getWholesaleMeta(c):getCatMeta(c);
+}
+// رنگ سربرگ فرم: سبز پرچون، آبی عمده، ارغوانی طبابت
+function paintFormHeader(){
+  const h=document.getElementById("modal-header-bg"); if(!h) return;
+  const wholesale=document.getElementById("form-is-wholesale-hidden").value==="true";
+  const med=currentFormMeta().medical;
+  h.style.background = med ? "linear-gradient(135deg, var(--med), var(--med2))" : wholesale ? "linear-gradient(135deg, #1b3b6f, #152c48)" : "linear-gradient(135deg, var(--ac), var(--ac2))";
+  document.getElementById("add").classList.toggle("med-form", !!med);
+}
+const MED_NOTICE = {rx:"medNoticeRx", cold:"medNoticeCold"};
 // select values are stored as language-neutral keys (optPetrol…) and translated on display
 const extraLabel=v=>/^opt[A-Z]/.test(String(v))?t(String(v)):String(v);
 function refreshCategoryFields(values){
   const box=document.getElementById("category-fields"); if(!box) return;
   const wholesale=document.getElementById("form-is-wholesale-hidden").value==="true";
-  const meta=wholesale?DEFAULT_CAT_META:getCatMeta(document.getElementById("f-c").value);
+  const meta=currentFormMeta();
+  try{ paintFormHeader(); }catch(_){}
   if(values===undefined){ values={}; document.querySelectorAll("#category-fields [data-extra-key]").forEach(el=>{ if(el.value) values[el.dataset.extraKey]=el.value; }); }
   values=values||{};
   const condRow=document.getElementById("retail-cond-row"), specRow=document.getElementById("retail-spec-row");
   if(condRow) condRow.style.display=(!wholesale&&meta.condition)?"grid":"none";
   if(specRow) specRow.style.display=(!wholesale&&meta.specRow)?"grid":"none";
   if(!wholesale&&!meta.condition) document.getElementById("form-cond").value="new";
-  const fields=wholesale?[]:meta.fields;
+  const fields=meta.fields||[];
   if(!fields.length){ box.innerHTML=""; return; }
-  box.innerHTML=`<div style="margin:12px 0 2px;font-size:13px;font-weight:700;color:var(--ac);">${t('specSection')}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:0 8px;">`+fields.map(f=>{
+  const medHead = meta.medical
+    ? `<div class="med-notice">⚕️ ${esc(t('medNoticeGeneral'))}${meta.notice?`<b>${esc(t(MED_NOTICE[meta.notice]))}</b>`:""}</div>`
+    : "";
+  box.innerHTML=medHead+`<div style="margin:12px 0 2px;font-size:13px;font-weight:700;color:${meta.medical?'var(--med)':'var(--ac)'};">${t(meta.medical?'medSpecSection':'specSection')}</div><div class="${meta.medical?'med-fields ':''}" style="display:grid;grid-template-columns:1fr 1fr;gap:0 8px;">`+fields.map(f=>{
     const v=values[f.k]==null?"":String(values[f.k]);
     const inp=f.ty==="select"
       ? `<select data-extra-key="${f.k}"><option value="">—</option>${f.oKeys.map(k=>`<option value="${k}"${(v===k||v===t(k))?" selected":""}>${esc(t(k))}</option>`).join("")}</select>`
       : `<input data-extra-key="${f.k}" type="${f.ty}" maxlength="40" value="${esc(v)}" placeholder="${esc(f.ph||"")}"${f.ty==="number"?' inputmode="numeric" min="0"':""}>`;
-    return `<div><label>${t(f.lKey)}</label>${inp}</div>`;
+    return `<div><label>${t(f.lKey)}${f.req?` <span class="med-req">*</span>`:""}</label>${inp}</div>`;
   }).join("")+"</div>";
+}
+// اگر کاربر در ثبت‌نام پروفایل صحی ساخته، شمارهٔ جواز در آگهی طبی خودکار پر شود
+function prefillMedFromProfile(){
+  const p=(typeof users!=="undefined"&&me&&users[me]&&users[me].med)||null; if(!p||!p.license) return;
+  const el=document.querySelector('#category-fields [data-extra-key="license"]'); if(el&&!el.value) el.value=p.license;
+}
+function validateMedFields(){
+  const meta=currentFormMeta(); if(!meta.medical) return true;
+  for(const f of meta.fields||[]){
+    const el=document.querySelector(`#category-fields [data-extra-key="${f.k}"]`); if(!el) continue;
+    if(f.req&&!el.value.trim()){ toast(t('medErrRequired').replace("{f}",t(f.lKey))); el.focus(); return false; }
+    if(f.k==="expiry"&&el.value){ const now=new Date(), cur=now.getFullYear()*100+now.getMonth()+1, [y,m]=el.value.split("-").map(Number);
+      if(y&&m&&(y*100+m)<cur){ toast(t('medErrExpired')); el.focus(); return false; } }
+  }
+  return true;
 }
 function collectExtras(){
   const out={};
@@ -976,8 +1029,9 @@ function collectExtras(){
   return Object.keys(out).length?out:undefined;
 }
 function extrasHTML(a){
-  const fields=categoryFields[String(a.c)]; if(!fields||!a.extras||typeof a.extras!=="object") return "";
+  const fields=a.isWholesale?wholesaleCategoryFields[String(a.wholesaleCat)]:categoryFields[String(a.c)]; if(!fields||!a.extras||typeof a.extras!=="object") return "";
   const rows=fields.filter(f=>a.extras[f.k]!=null&&a.extras[f.k]!=="").map(f=>`<div class="kv"><span class="mu">${t(f.lKey)}</span><span>${esc(extraLabel(a.extras[f.k]))}</span></div>`).join("");
+  if(rows&&isMedAd(a)) return `<div class="med-specs"><b style="font-size:12px;">${t('medSpecSection')}</b>${rows}</div>`;
   return rows?`<div style="margin-top:8px;padding:10px;background:var(--bg);border-radius:10px;"><b style="font-size:12px;">${t('specFull')}</b>${rows}</div>`:"";
 }
 document.getElementById("category-fields").addEventListener("input",()=>saveFormDraft());
@@ -1026,11 +1080,11 @@ function renderCard(a){
     const names = a.provinces.map(idx => cities[idx]).filter(Boolean);
     locLabel = names.length > 2 ? names.slice(0,2).join("، ") + " +" + (names.length - 2) : names.join("، ");
   }
-  return `<div class="ad" data-id="${a.id}" tabindex="0" role="button">
+  return `<div class="ad${isMedAd(a)?' med-ad':''}" data-id="${a.id}" tabindex="0" role="button">
     <div class="ph" style="--h:${(a.c||1)*23}">
-      ${mainImg ? `<img src="${esc(thumbOf(a,mainImg))}" alt="${esc(a.t)}" loading="lazy" decoding="async">` : `<span>${a.isWholesale ? '📦' : (cats[a.c]?.[1] || '📦')}</span>`}
+      ${mainImg ? `<img src="${esc(thumbOf(a,mainImg))}" alt="${esc(a.t)}" loading="lazy" decoding="async">` : `<span>${a.isWholesale ? (isMedAd(a) ? (wholesaleCats[a.wholesaleCat]?.[1]||'📦') : '📦') : (cats[a.c]?.[1] || '📦')}</span>`}
     </div>
-    ${isUrgent(a)?'<span class="badge">فوری</span>':''}
+    ${isUrgent(a)?'<span class="badge">فوری</span>':''}${isMedAd(a)?`<span class="med-badge">⚕️ ${t('medGroupBadge')}</span>`:''}
     ${(() => {
       const pi = priceInsight(a);
       if (!pi || +pi.diff > -5) return '';
@@ -1110,7 +1164,7 @@ function draw(){
   const qNorm = q ? normFa(q) : "";
 
   let r = retailAds.filter(a=>{
-    if(cat && a.c != cat) return false;
+    if(cat===MED_R){ if(!(a.c>MED_R)) return false; } else if(cat && a.c != cat) return false;
     if(city >= 0 && a.ci != city) return false;
     if(q && !(a._hay || normFa((a.t||"")+" "+(a.d||"")+" "+(a.brand||"")+" "+(a.spec||""))).includes(qNorm)) return false;
     if(pf && (afn(a) < mn || afn(a) > mx)) return false;
@@ -1316,7 +1370,7 @@ function draw(){
   const sortWholesale = document.getElementById("sort-wholesale").value;
   
   let filteredWholesale = wholesaleAds.filter(a => {
-    if(wholesaleCat && a.wholesaleCat != wholesaleCat) return false;
+    if(wholesaleCat===MED_W){ if(!(a.wholesaleCat>MED_W)) return false; } else if(wholesaleCat && a.wholesaleCat != wholesaleCat) return false;
     if(city >= 0) {
       const matchSingle = (a.ci === city);
       const matchMulti = (Array.isArray(a.provinces) && a.provinces.includes(city));
@@ -1393,6 +1447,12 @@ document.getElementById("wholesale-cats").onclick = e => {
   const b = e.target.closest(".cat");
   if(b) { wholesaleCat = +b.dataset.i; wholesaleCurrentPage = 1; draw(); }
 };
+// نوار جداگانهٔ «طبابت و صحت» در هر دو تب
+{ const mw=document.getElementById("med-wholesale-cats"), mr=document.getElementById("med-cats");
+  if(mw) mw.onclick = e => { const b=e.target.closest(".cat"); if(!b) return; const i=+b.dataset.i; wholesaleCat = (wholesaleCat===i&&i!==MED_W) ? MED_W : i; wholesaleCurrentPage = 1; draw(); };
+  if(mr) mr.onclick = e => { const b=e.target.closest(".cat"); if(!b) return; const i=+b.dataset.i; cat = (cat===i&&i!==MED_R) ? MED_R : i; view="all"; currentPage = 1; draw(); document.getElementById("listing").scrollIntoView({behavior:"smooth"}); };
+  document.querySelectorAll("[data-med-clear]").forEach(x=>x.onclick=()=>{ if(x.dataset.medClear==="w"){ wholesaleCat=0; wholesaleCurrentPage=1; } else { cat=0; currentPage=1; } draw(); });
+}
 
 document.querySelectorAll(".bnav-item").forEach(btn => {
   btn.onclick = () => {
@@ -1732,7 +1792,7 @@ function openAd(id){
   document.getElementById("det").innerHTML=`
     <div class="ph" id="main-photo-box" style="aspect-ratio:4/3;max-height:62vh;--h:${(a.c||1)*23};cursor:${initialImg?'zoom-in':'default'}">
       ${initialImg ? `<img id="active-modal-img" src="${esc(initialImg)}" alt="${esc(a.t)}" style="width:100%;height:100%;object-fit:contain;position:absolute;inset:0;background:var(--bg)">
-      <span class="zoom-hint" aria-hidden="true">⛶ تمام‌صفحه</span>` : `<span>${a.isWholesale ? '📦' : (cats[a.c]?.[1] || '📦')}</span>`}
+      <span class="zoom-hint" aria-hidden="true">⛶ تمام‌صفحه</span>` : `<span>${a.isWholesale ? (isMedAd(a) ? (wholesaleCats[a.wholesaleCat]?.[1]||'📦') : '📦') : (cats[a.c]?.[1] || '📦')}</span>`}
     </div>
     ${imgList.length > 1 ? `<div class="thumbs-row" id="modal-thumbs">${imgList.map((im, idx)=>`<img src="${esc(thumbOf(a,im))}" data-full="${esc(im)}" class="${idx===0?'active':''}" data-idx="${idx}" loading="lazy" alt="">`).join("")}</div>` : ''}
     
@@ -2072,10 +2132,32 @@ function setMode(m){
   mode=m;
   document.querySelectorAll(".tabs button").forEach(b=>b.classList.toggle("on",b.dataset.m==m));
   document.getElementById("nm-w").hidden=m!="up";
+  renderMedSignup();
   document.getElementById("otp-section").style.display = "block";
   document.getElementById("a-go").textContent = m=="up" ? t('authUp') : t('authIn');
   document.getElementById("a-e").textContent="";
 }
+// ===== پروفایل صحی در ثبت‌نام (داکتر، دواخانه، شرکت دوا، کلینیک…) =====
+function renderMedSignup(){
+  const box=document.getElementById("a-med-fields"), chk=document.getElementById("a-med"); if(!box||!chk||!MED) return;
+  document.getElementById("a-med-box").hidden=!chk.checked;
+  if(box.dataset.lang===currentLang) return;
+  const old={}; box.querySelectorAll("[data-med-key]").forEach(el=>{ if(el.value) old[el.dataset.medKey]=el.value; });
+  box.dataset.lang=currentLang;
+  box.innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 8px;">`+MED.profileFields.map(f=>{
+    const v=old[f.k]||"";
+    const inp=f.ty==="select"
+      ? `<select data-med-key="${f.k}"><option value="">—</option>${f.oKeys.map(k=>`<option value="${k}"${v===k?" selected":""}>${esc(t(k))}</option>`).join("")}</select>`
+      : `<input data-med-key="${f.k}" type="${f.ty}" maxlength="40" value="${esc(v)}" placeholder="${esc(f.ph||"")}"${f.ty==="tel"?' inputmode="tel" dir="ltr"':""}>`;
+    return `<div><label>${t(f.lKey)}${f.req?' <span class="med-req">*</span>':""}</label>${inp}</div>`;
+  }).join("")+"</div>";
+}
+function collectMedSignup(){
+  const chk=document.getElementById("a-med"); if(!chk||!chk.checked||!MED) return null;
+  const out={}; document.querySelectorAll("#a-med-fields [data-med-key]").forEach(el=>{ const v=el.value.trim().slice(0,40); if(v) out[el.dataset.medKey]=v; });
+  return out;
+}
+{ const chk=document.getElementById("a-med"); if(chk) chk.onchange=renderMedSignup; }
 function openAuth(){
   setMode("in");
   document.getElementById("auth").showModal();
@@ -2119,12 +2201,15 @@ async function verifyEmailOtp(){
   if(!otp) return er("کد تایید را وارد کنید.");
   if(mode=="up" && n.length<2) return er("نام را وارد کنید.");
   if (mode === "up" && !document.getElementById("a-terms").checked) return er("لطفاً قوانین و حریم خصوصی را بپذیرید.");
+  const medProfile = mode==="up" ? collectMedSignup() : null;
+  if (medProfile && !medProfile.role) return er(t('medErrRequired').replace("{f}", t(MED.profileFields[0].lKey)));
   er("در حال بررسی کد...");
   const {data,error}=await supabaseClient.auth.verifyOtp({email:em,token:otp,type:"email"});
   if(error) return er("خطا: کد اشتباه یا منقضی شده است.");
   const user=data.user, base=String(em).split("@")[0];
   me=em; myId=user.id;
   if(!users[me]) users[me]={name:n||base,verified:true,shopName:(n||base)+" دکان"}; else if(n) users[me].name=n;
+  if(medProfile){ users[me].med=medProfile; if(medProfile.org) users[me].shopName=medProfile.org; }
   put("ab_users",users); put("ab_sess",me); loadFavs();
   toast("خوش آمدید "+users[me].name);
   document.getElementById("auth").close(); ["#a-n","#a-mail","#a-p","#a-otp"].forEach(x=>document.querySelector(x).value="");
@@ -2163,6 +2248,7 @@ document.getElementById("acc").onclick=()=>{
   { const _mine=(typeof mine!=="undefined"?mine:[]).find(x=>!x.owner||x.owner===me)||{};
     const _lv=trustLevelOf(trustScoreFor(me,{verified:isPhone,isShop:!!_mine.isShop,ph:me}));
     badges += `<span class="badge-verified trust-chip ${_lv.cls}" title="${_lv.next!=null?'تا سطح بعد '+nf(_lv.next)+' امتیاز':'بالاترین سطح'}">${_lv.label}</span>`; }
+  { const mp=users[me]&&users[me].med; if(mp&&mp.role) badges += `<span class="badge-verified med-profile-badge" title="${esc([mp.org,mp.license].filter(Boolean).join(' · '))}">⚕️ ${esc(t('medProfileBadge'))}: ${esc(t(mp.role))}${mp.specialty?' · '+esc(t(mp.specialty)):''}</span>`; }
   if(adminFlag) badges += '<span class="badge-verified" style="background:rgba(244,183,63,.9);color:#2a1d00;border-color:transparent;"><svg class="icon icon-sm"><use href="#i-shield"></use></svg> مدیر</span>';
   document.getElementById("me-verified-badge-box").innerHTML = badges;
   const myAds = mine.filter(a => !a.owner || a.owner === me);
@@ -2301,7 +2387,7 @@ document.getElementById("f-ci").onchange = function() {
 
 const DRAFT_KEY = () => "ab_ad_draft_" + (me || "anon");
 
-document.getElementById("f-c").addEventListener("change", () => refreshCategoryFields());
+document.getElementById("f-c").addEventListener("change", () => { refreshCategoryFields(); prefillMedFromProfile(); });
 document.getElementById("f-t").addEventListener("input", function(){
   const c = document.getElementById("title-counter");
   if (!c) return;
@@ -2360,7 +2446,12 @@ function buildCategoryTiles(){
   const box=document.getElementById("step-cat-tiles"); if(!box) return;
   const wholesale=document.getElementById("form-is-wholesale-hidden").value==="true";
   const cur=String(document.getElementById("f-c").value);
-  box.innerHTML=(wholesale?wholesaleCats:cats).slice(1).map((x,i)=>`<button type="button" class="step-cat-tile${String(i+1)===cur?" on":""}" data-val="${i+1}"><span class="tile-icon">${x[1]}</span><span>${esc(x[0])}</span></button>`).join("");
+  const list=wholesale?wholesaleCats:cats, m0=wholesale?MED_W:MED_R;
+  const tile=(x,i,cls)=>`<button type="button" class="step-cat-tile${cls}${String(i)===cur?" on":""}" data-val="${i}"><span class="tile-icon">${x[1]}</span><span>${esc(x[0])}</span></button>`;
+  const gen=list.map((x,i)=>(i>0&&i<m0)?tile(x,i,""):"").join(""), med=list.map((x,i)=>i>m0?tile(x,i," med"):"").join("");
+  box.innerHTML=med
+    ? `<div class="step-cat-group">${esc(t('medGeneral'))}</div>${gen}<div class="step-cat-group med">⚕️ ${esc(t(wholesale?'medWholesaleGroup':'medGroup'))}</div>${med}`
+    : gen;
   box.onclick=e=>{
     const b=e.target.closest(".step-cat-tile"); if(!b) return;
     box.querySelectorAll(".step-cat-tile").forEach(x=>x.classList.remove("on")); b.classList.add("on");
@@ -2373,6 +2464,7 @@ function validateStep(page){
 }
 function validateInner(n){
   if(n===1&&!document.getElementById("f-c").value){ toast("لطفاً یک دسته‌بندی انتخاب کنید"); return false; }
+  if(n===3&&!validateMedFields()) return false;
   if(n===4){
     const pv=document.getElementById("f-p").value;
     if(pv!==""&&(!Number.isFinite(+pv)||+pv<0)){ toast("قیمت نامعتبر است."); document.getElementById("f-p").focus(); return false; }
@@ -2826,7 +2918,7 @@ function extras(){
   })();
   const A=all().filter(a => !a.isWholesale);
   document.getElementById("stats").style.display = A.length>=20 ? "flex" : "none";
-  document.getElementById("stats").innerHTML=[[A.length,t('statAds')],[provinceCoords.length,t('statProv')],[cats.length-1,t('statCats')]].map(x=>`<div><b data-count="${x[0]}">${nf(x[0])}</b><span>${x[1]}</span></div>`).join("");
+  document.getElementById("stats").innerHTML=[[A.length,t('statAds')],[provinceCoords.length,t('statProv')],[cats.length-1-(MED?1:0),t('statCats')]].map(x=>`<div><b data-count="${x[0]}">${nf(x[0])}</b><span>${x[1]}</span></div>`).join("");
   if(!window._statsAnimated && A.length){ window._statsAnimated=true; document.querySelectorAll("#stats b[data-count]").forEach(b=>animateNumber(b,+b.dataset.count)); }
   { const U=A.filter(isUrgent).sort((a,b)=>a.age-b.age), more=U.length-URGENT_RAIL_MAX;
     document.getElementById("feat").innerHTML=U.slice(0,URGENT_RAIL_MAX).map(card).join("")
@@ -2834,11 +2926,16 @@ function extras(){
       ||'<div class="mu">فعلاً آگهی ویژه‌ای نیست.</div>';
     const ub=document.getElementById("urg-all"); if(ub){ ub.style.display=more>0?"":"none"; ub.textContent=t('urgAll')+" ("+nf(U.length)+") ›"; } }
   document.getElementById("tiles").innerHTML=cats.slice(1,13).map((x,i)=>`<button class="tag tile" style="--l:${92-(i%4)*2.5}%;--ld:${16+(i%4)*2}%" data-i="${i+1}"><span>${x[1]}</span>${x[0]}</button>`).join("");
+  { const mt=document.getElementById("med-tiles");
+    if(mt){ const mc={}; A.forEach(a=>{ if(a.c>MED_R) mc[a.c]=(mc[a.c]||0)+1; });
+      mt.innerHTML=cats.map((x,i)=>i>MED_R?`<button class="tag tile med-tile" data-i="${i}"><span>${x[1]}</span>${x[0]}${mc[i]?`<small>${nf(mc[i])}</small>`:""}</button>`:"").join(""); } }
   const cc={};A.forEach(a=>cc[a.ci]=(cc[a.ci]||0)+1);
   document.getElementById("tc").innerHTML=Object.entries(cc).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([i,n])=>`<button class="ccity" data-i="${i}">${cities[i]}<span>${nf(n)}</span></button>`).join("")
 }
 const go=()=>document.getElementById("listing").scrollIntoView({behavior:"smooth"});
 document.getElementById("tiles").onclick=e=>{const b=e.target.closest(".tile");if(b){cat=+b.dataset.i;view="all";currentPage=1;draw();go()}};
+{ const mt=document.getElementById("med-tiles"); if(mt) mt.onclick=e=>{const b=e.target.closest(".tile");if(b){cat=+b.dataset.i;view="all";currentPage=1;draw();go()}};
+  const ma=document.getElementById("med-all-btn"); if(ma) ma.onclick=()=>{cat=MED_R;view="all";currentPage=1;draw();go()}; }
 document.getElementById("tc").onclick=e=>{const b=e.target.closest(".ccity");if(b){document.getElementById("header-city-select").value=+b.dataset.i;currentPage=1;draw();go()}};
 
 document.getElementById("dlg").addEventListener("close", () => {

@@ -3,13 +3,14 @@
    - بقیه فایل‌های ثابت همین سایت: کش + به‌روزرسانی پس‌زمینه
    - هیچ درخواستی به Supabase یا CDN کش نمی‌شود
    - پشتیبانی از اعلان پوش */
-const VERSION = 'v62';
+const VERSION = 'v63';
 const CACHE = 'ab-shell-' + VERSION;
 const ASSETS = [
   './',
   './index.html',
   './app.js',
-  './emoji-icons.js',              /* ← اضافه شد */
+  './emoji-icons.js',
+  './medical.js',                  /* دسته‌های طبابت و صحت */
   './manifest.json',
   './icon-maskable-512.png'
 ];
